@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cow tests</title>
+  <link rel="stylesheet" media="all" href="res/mocha.css">
+</head>
+<body>
+  <div id="mocha"><p><a href="./browser_test.html">browser tests</a></p></div>
+  <div id="messages"></div>
+  <div id="fixtures"></div>
+  <script src="res/mocha.js"></script>
+  <script src="res/chai.js"></script>
+  <script src="res/blanket.min.js" data-cover-adapter="res/mocha-blanket.js"></script>
+  <script src="res/mocha-blanket.js"></script>
+  <script src="cow.js" data-cover></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="cow_test.js"></script>
+  <script>mocha.run();</script>
+</body>
+</html>

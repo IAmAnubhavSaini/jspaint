@@ -1,23 +1,12 @@
----
-layout: default
----
+js-paint > home
 
-<div class="home">
+Welcome
+========
 
-  <h1 class="page-heading">Posts</h1>
+Do you remember mspaint? A very small utility that you first learned to doodle on? Well, *js-paint* is the web version of it.
 
-  <ul class="post-list">
-    {% for post in site.posts %}
-      <li>
-        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+> Hope you love it more!
 
-        <h2>
-          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-        </h2>
-      </li>
-    {% endfor %}
-  </ul>
+In upcoming days, there will be another page to look after the actual usage.
 
-  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
-
-</div>
+First beta version of this application will be launched 24th August. If everything goes right, by September 1, we would have it's first version out.

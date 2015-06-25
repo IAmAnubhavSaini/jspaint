@@ -1,0 +1,11 @@
+body{
+  margin: 0;
+  padding:0;
+}
+
+#jspaint-paint-area{
+  height: 100%;
+  width: 80%;
+  min-height: 400px;
+  min-width: 600px;
+}

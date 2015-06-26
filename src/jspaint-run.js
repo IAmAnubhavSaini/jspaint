@@ -22,17 +22,21 @@ $(function(){
 
   $('#SpeedDotFreeStyle')
     .bind('click', function(){
-      $(this).trigger("contextmenu");
-      jspaintTools.ActivateSpeedDotFreeStyle({tool: this});
+      $(this).trigger("start");
     })
     .bind("dblclick", function(){
-      $(this).trigger("contextmenu");
       jspaintTools.ShowOptionsForSpeedDotFreeStyle({tool: this});
     })
     .bind('contextmenu', function(e){
       e.preventDefault();
-      jspaintTools.DeactivateSpeedDotFreeStyle({tool: this});
-      jspaintTools.HideOptionsForSpeedDotFreeStyle({tool: this});
+      jspaintTools.stopSpeedDotFreeStyle({tool: this});
+      jspaintTools.hideOptionsForSpeedDotFreeStyle({tool: this});
       return false;
+    })
+    .bind('stop', function(){
+      $(this).trigger("contextmenu");
+    })
+    .bind('start', function(){
+      jspaintTools.startSpeedDotFreeStyle({tool: this});
     });
 });

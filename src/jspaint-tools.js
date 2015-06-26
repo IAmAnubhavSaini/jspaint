@@ -15,12 +15,12 @@ var JSPaintTools = function($, options){
   var ActivateSpeedDotFreeStyle = function(options){
     $('#'+canvasId).addClass(cursorWhenActive);
     $(options.tool).addClass('active-tool');
-    jspaintMouseTools.MouseTrack({'currentCanvas': canvasId, 'trackCallback': function(e){}});
+    jspaintMouseTools.MouseTrack({tool: options.tool, 'currentCanvas': canvasId, 'trackCallback': function(e){}});
   }
   var DeactivateSpeedDotFreeStyle = function(options){
     $('#'+canvasId).removeClass(cursorWhenActive);
     $(options.tool).removeClass('active-tool');
-    jspaintMouseTools.StopMouseTrack(canvasId);
+    jspaintMouseTools.StopMouseTrack({tool: options.tool, canvasId: canvasId});
   }
   var ShowOptionsForSpeedDotFreeStyle = function(options){
     $(options.tool).addClass('tool-sub-menu-active');
@@ -29,17 +29,16 @@ var JSPaintTools = function($, options){
         subMenuContainerId: toolSubMenuBar,
         context: context
       });
-      
   }
   var HideOptionsForSpeedDotFreeStyle = function(options){
     $(options.tool).removeClass('tool-sub-menu-active');
     jspaintMouseTools.DestroyOptionsForSpeedDotFreeStyle(toolSubMenuBar);
   }
   return {
-    ActivateSpeedDotFreeStyle : ActivateSpeedDotFreeStyle,
-    DeactivateSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle,
+    startSpeedDotFreeStyle : ActivateSpeedDotFreeStyle,
+    stopSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle,
     ShowOptionsForSpeedDotFreeStyle: ShowOptionsForSpeedDotFreeStyle,
-    HideOptionsForSpeedDotFreeStyle: HideOptionsForSpeedDotFreeStyle
+    hideOptionsForSpeedDotFreeStyle: HideOptionsForSpeedDotFreeStyle
   }
   // var workingWithToolsClass = options.workingWithToolsClassName,
   //     allMainToolsClass = options.allMainToolsClass,

@@ -14,20 +14,28 @@ var JSPaintMouse = function($){
                                 2, 2);
           });
       };
-      var StopMouseTrack = function(currentCanvas){
-        $('#'+currentCanvas).off("mousemove");
+      var StopMouseTrack = function(options){
+        $('#'+options.canvasId).off("mousemove");
       };
+
       var CreateOptionsForSpeedDotFreeStyle = function(options){
         var container = $('#'+options.subMenuContainerId),
+            stopButton = $('<div id="StopCurrentTool">Close</div>'),
             drawColor = '<input type="color" id="drawColor" />',
             submit = '<input type="submit" id="submitOptions" />',
             context = options.context;
 
+        $(stopButton)
+          .addClass('stopToolButton')
+          .bind('click', function(){
+            DestroyOptionsForSpeedDotFreeStyle(options.subMenuContainerId);
+          });
+        $(stopButton).appendTo(container);
         $(drawColor).appendTo(container);
         $(submit)
             .bind("click", function(){
                 context.fillStyle = $('#drawColor').val();
-                container.hide();
+                DestroyOptionsForSpeedDotFreeStyle(options.subMenuContainerId);
             })
             .appendTo(container);
         container.children().css({'padding':'10px', 'margin':'10px'});
@@ -35,8 +43,9 @@ var JSPaintMouse = function($){
       };
 
       var DestroyOptionsForSpeedDotFreeStyle = function(subMenuContainerId){
-        $('#'+subMenuContainerId).html('');
-        $('#'+subMenuContainerId).hide();
+        $('#drawColor').remove();
+        $('#submitOptions').remove();
+        $('#'+subMenuContainerId).html('').hide();
       };
 
 

@@ -1,19 +1,33 @@
 ;
-var JSPaint = function($){
+var JSPaint = function(options){
   "use strict";
-  var InitializePaintArea = function(containerId, canvasId){
-    var width = $('#'+containerId).css('width').replace('px','');
-    var height = $('#'+containerId).css('height').replace('px','');
-    console.log(width+", "+height);
-    var canvas = $('<canvas/>', { id: canvasId })
+  var Tools = null,
+
+  InitializeCanvas = function(options){
+    var width = $('#'+options.containerId).css('width').replace('px','');
+    var height = $('#'+options.containerId).css('height').replace('px','');
+    var context = null;
+    var canvas = $('<canvas/>', { id: options.canvasId })
                       .prop({
                         'width': width,
                         'height': height
                        });
-    $('#'+containerId).append(canvas);
-    return $('#'+canvasId)[0].getContext('2d');
-  }
+    $('#'+options.containerId).append(canvas);
+    return $('#'+options.canvasId)[0].getContext('2d');
+  };
+
+  (function(options){
+    Tools = JSPaintTools({
+        $ : options.$,
+        canvasId: options.canvasId,
+        context: InitializeCanvas(options),
+        cursorWhenActive: "working-with-tools",
+        allMainToolsClass: "main-tool",
+        subMenuContainerId: "ToolSubMenuBar"
+      });
+  })(options)
+
   return{
-    InitializePaintArea : InitializePaintArea
+    Tools: Tools
   }
 };

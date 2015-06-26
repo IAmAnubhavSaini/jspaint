@@ -1,53 +1,52 @@
 ;
-var JSPaintMouse = function($){
- var MouseTrack = function (options) {
-          var canvas = $('#'+options.currentCanvas),
-              context = $(canvas)[0].getContext("2d"),
-              trackCallback = options.trackCallback,
-              color = "#000000",
-              backgroundColor = "#FFffFF";
+var JSPaintMouse = function(options){
+  var $ = options.$,
+      context = options.context,
+      canvasId = options.canvasId,
+      subMenuContainerId = options.subMenuContainerId;
 
-          $(canvas).on("mousemove", function (event) {
-              trackCallback(event);
-              context.fillRect( (event.pageX - $(this).offset().left),
-                                (event.pageY - $(this).offset().top),
-                                2, 2);
-          });
-      };
-      var StopMouseTrack = function(options){
-        $('#'+options.canvasId).off("mousemove");
-      };
+  var MouseTrack = function () {
+    var color = "#000000",
+        backgroundColor = "#FFffFF";
 
-      var CreateOptionsForSpeedDotFreeStyle = function(options){
-        var container = $('#'+options.subMenuContainerId),
+      $('#'+canvasId).on("mousemove", function (event) {
+        context.fillRect( (event.pageX - $(this).offset().left),
+                          (event.pageY - $(this).offset().top),
+                           2, 2);
+      });
+  },
+  StopMouseTrack = function(){
+    $('#'+canvasId).off("mousemove");
+  },
+
+  CreateOptionsForSpeedDotFreeStyle = function(){
+        var container = $('#'+subMenuContainerId),
             stopButton = $('<div id="StopCurrentTool">Close</div>'),
             drawColor = '<input type="color" id="drawColor" />',
-            submit = '<input type="submit" id="submitOptions" />',
-            context = options.context;
+            submit = '<input type="submit" id="submitOptions" />';
 
         $(stopButton)
           .addClass('stopToolButton')
           .bind('click', function(){
-            DestroyOptionsForSpeedDotFreeStyle(options.subMenuContainerId);
+            DestroyOptionsForSpeedDotFreeStyle();
           });
         $(stopButton).appendTo(container);
         $(drawColor).appendTo(container);
         $(submit)
             .bind("click", function(){
                 context.fillStyle = $('#drawColor').val();
-                DestroyOptionsForSpeedDotFreeStyle(options.subMenuContainerId);
+                DestroyOptionsForSpeedDotFreeStyle();
             })
             .appendTo(container);
         container.children().css({'padding':'10px', 'margin':'10px'});
         container.show();
       };
 
-      var DestroyOptionsForSpeedDotFreeStyle = function(subMenuContainerId){
+      var DestroyOptionsForSpeedDotFreeStyle = function(){
         $('#drawColor').remove();
         $('#submitOptions').remove();
         $('#'+subMenuContainerId).html('').hide();
       };
-
 
       return {
         MouseTrack: MouseTrack,

@@ -1,12 +1,24 @@
 ;
-var JSPaintTools = function($, options){
+var JSPaintTools = function(options){
   "use strict";
-  var canvasId = options.canvasId,
+  var $ = options.$,
+      canvasId = options.canvasId,
       context = options.context,
       cursorWhenActive = options.cursorWhenActive,
-      jspaintMouseTools = options.jspaintMouseTools,
       selectAllTools = options.allMainToolsClass,
-      toolSubMenuBar = options.toolSubMenuBar;
+      subMenuContainerId = options.subMenuContainerId,
+      MouseTools = null;
+
+  (function(){
+    MouseTools = JSPaintMouse({
+      $: $,
+      canvasId: canvasId,
+      context: context,
+      cursorWhenActive: cursorWhenActive,
+      selectAllTools: selectAllTools,
+      subMenuContainerId: subMenuContainerId
+    });
+  })();
 
   var InitAllMainToolsTitle = function(){
     $('.'+selectAllTools).attr('title', 'Click to activate;\nRight-click to deactivate;\nDouble-click to see special menu.');
@@ -15,29 +27,29 @@ var JSPaintTools = function($, options){
   var ActivateSpeedDotFreeStyle = function(options){
     $('#'+canvasId).addClass(cursorWhenActive);
     $(options.tool).addClass('active-tool');
-    jspaintMouseTools.MouseTrack({tool: options.tool, 'currentCanvas': canvasId, 'trackCallback': function(e){}});
+    MouseTools.MouseTrack({tool: options.tool, 'currentCanvas': canvasId, 'trackCallback': function(e){}});
   }
   var DeactivateSpeedDotFreeStyle = function(options){
     $('#'+canvasId).removeClass(cursorWhenActive);
     $(options.tool).removeClass('active-tool');
-    jspaintMouseTools.StopMouseTrack({tool: options.tool, canvasId: canvasId});
+    MouseTools.StopMouseTrack({tool: options.tool, canvasId: canvasId});
   }
   var ShowOptionsForSpeedDotFreeStyle = function(options){
     $(options.tool).addClass('tool-sub-menu-active');
-    jspaintMouseTools.CreateOptionsForSpeedDotFreeStyle(
+    MouseTools.CreateOptionsForSpeedDotFreeStyle(
       {
-        subMenuContainerId: toolSubMenuBar,
+        subMenuContainerId: subMenuContainerId,
         context: context
       });
   }
   var HideOptionsForSpeedDotFreeStyle = function(options){
     $(options.tool).removeClass('tool-sub-menu-active');
-    jspaintMouseTools.DestroyOptionsForSpeedDotFreeStyle(toolSubMenuBar);
+    MouseTools.DestroyOptionsForSpeedDotFreeStyle(subMenuContainerId);
   }
   return {
     startSpeedDotFreeStyle : ActivateSpeedDotFreeStyle,
     stopSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle,
-    ShowOptionsForSpeedDotFreeStyle: ShowOptionsForSpeedDotFreeStyle,
+    showOptionsForSpeedDotFreeStyle: ShowOptionsForSpeedDotFreeStyle,
     hideOptionsForSpeedDotFreeStyle: HideOptionsForSpeedDotFreeStyle
   }
   // var workingWithToolsClass = options.workingWithToolsClassName,

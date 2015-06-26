@@ -6,15 +6,41 @@
   <link rel="stylesheet" type="text/css" href="./jspaint.css" />
 </head>
 <body>
-    <div id="jspaint-tools"></div>
+    <div id="ActiveToolMenuBar">tool</div>
+    <div id="jspaint-tools">
+      <div id="SpeedDotFreeStyle" class="main-tool ">speed-dot,   free-style</div>
+      <div id="CircleStampStyle" class="main-tool ">Circle stamp</div>
+    </div>
     <div id="jspaint-paint-area"></div>
     <script src="./jquery-2.1.4.min.js" type="text/javascript"></script>
     <script src="./jspaint.js" type="text/javascript"></script>
+    <script src="./jspaint-mouse.js" type="text/javascript"></script>
+    <script src="./jspaint-tools.js" type="text/javascript"></script>
     <script type="text/javascript">
       $(function(){
         "use strict";
-        var context = JSPaint(jQuery).InitializePaintArea("jspaint-paint-area", "jspaint-canvas");
+        var canvasId = "jspaint-canvas";
+        var canvasContainer = "jspaint-paint-area";
+        var context = JSPaint(jQuery).InitializePaintArea(canvasContainer, canvasId);
         console.log("Initialized");
+        var jspaintMouse = JSPaintMouse(jQuery);
+        var jspaintTools = JSPaintTools(jQuery,
+          {
+            canvasId: canvasId,
+            context:context,
+            cursorWhenActive: "working-with-tools",
+            jspaintMouseTools: jspaintMouse,
+            allMainToolsClass: "main-tool"
+          });
+
+        $('#SpeedDotFreeStyle').click(function(){
+          jspaintTools.ActivateSpeedDotFreeStyle({tool: this});
+        });
+        $('#SpeedDotFreeStyle').bind('contextmenu', function(e){
+          e.preventDefault();
+          jspaintTools.DeactivateSpeedDotFreeStyle({tool: this});
+          return false;
+        });
       });
     </script>
 </body>

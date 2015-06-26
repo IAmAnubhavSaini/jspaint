@@ -13,10 +13,26 @@ module.exports = function(grunt) {
         ext: '.min.js',
         extDot: 'first'
       }
+    },
+    replace: {
+      jsCssToMinJsCSS: {
+        src: 'src/*.html',
+        dest: 'build/',
+        replacements: [{
+            from: '.js',
+            to: '.min.js'
+          },
+          {
+            from: '.css',
+            to: '.min.css'
+          }
+        ]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-text-replace');
 
-  grunt.registerTask('default', ['uglify']);
+  grunt.registerTask('default', ['uglify', 'replace']);
 };

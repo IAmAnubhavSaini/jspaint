@@ -13,16 +13,6 @@ var JSPaintMouse = function($){
                                 (event.pageY - $(this).offset().top),
                                 2, 2);
           });
-
-          // $("#Clear").click(function () {
-          //     context.clearRect(0, 0, canvas.width, canvas.height);
-          // });
-          //
-          // $("#Apply").click(function () {
-          //     pixelSize = $("#Size").val();
-          //     context.fillStyle = $("#Color").val();
-          // });
-
       };
       var StopMouseTrack = function(currentCanvas){
         $('#'+currentCanvas).off("mousemove");

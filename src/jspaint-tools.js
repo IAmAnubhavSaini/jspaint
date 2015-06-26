@@ -21,9 +21,17 @@ var JSPaintTools = function($, options){
     $(options.tool).removeClass('active-tool');
     jspaintMouseTools.StopMouseTrack(canvasId);
   }
+  var ShowOptionsForSpeedDotFreeStyle = function(options){
+    $(options.tool).addClass('tool-sub-menu-active');
+  }
+  var HideOptionsForSpeedDotFreeStyle = function(options){
+    $(options.tool).removeClass('tool-sub-menu-active');
+  }
   return {
     ActivateSpeedDotFreeStyle : ActivateSpeedDotFreeStyle,
-    DeactivateSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle
+    DeactivateSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle,
+    ShowOptionsForSpeedDotFreeStyle: ShowOptionsForSpeedDotFreeStyle,
+    HideOptionsForSpeedDotFreeStyle: HideOptionsForSpeedDotFreeStyle
   }
   // var workingWithToolsClass = options.workingWithToolsClassName,
   //     allMainToolsClass = options.allMainToolsClass,

@@ -47,7 +47,9 @@ body{
 .active-tool{
   background-color: #77aa77;
 }
-
+.tool-sub-menu-active{
+  background-color: #337733;
+}
 .main-tool{
   border-bottom: thick solid rgba(0,0,0, .5);
   float:left;

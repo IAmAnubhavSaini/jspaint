@@ -34,11 +34,18 @@
           });
 
         $('#SpeedDotFreeStyle').click(function(){
+          $(this).trigger("contextmenu");
           jspaintTools.ActivateSpeedDotFreeStyle({tool: this});
         });
+        $('#SpeedDotFreeStyle').bind("dblclick", function(){
+          $(this).trigger("contextmenu");
+          jspaintTools.ShowOptionsForSpeedDotFreeStyle({tool: this});
+        });
+
         $('#SpeedDotFreeStyle').bind('contextmenu', function(e){
           e.preventDefault();
           jspaintTools.DeactivateSpeedDotFreeStyle({tool: this});
+          jspaintTools.HideOptionsForSpeedDotFreeStyle({tool: this});
           return false;
         });
       });

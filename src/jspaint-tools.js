@@ -1,6 +1,6 @@
-;
 var JSPaintTools = function(options){
   "use strict";
+
   var $ = options.$,
       canvasId = options.canvasId,
       context = options.context,
@@ -10,7 +10,7 @@ var JSPaintTools = function(options){
       MouseTools = null;
 
   (function(){
-    MouseTools = JSPaintMouse({
+    MouseTools = new JSPaintMouse({
       $: $,
       canvasId: canvasId,
       context: context,
@@ -28,41 +28,29 @@ var JSPaintTools = function(options){
     $('#'+canvasId).addClass(cursorWhenActive);
     $(options.tool).addClass('active-tool');
     MouseTools.MouseTrack({tool: options.tool, 'currentCanvas': canvasId, 'trackCallback': function(e){}});
-  }
-  var DeactivateSpeedDotFreeStyle = function(options){
+  },
+  DeactivateSpeedDotFreeStyle = function(options){
     $('#'+canvasId).removeClass(cursorWhenActive);
     $(options.tool).removeClass('active-tool');
     MouseTools.StopMouseTrack({tool: options.tool, canvasId: canvasId});
-  }
-  var ShowOptionsForSpeedDotFreeStyle = function(options){
+  },
+  ShowOptionsForSpeedDotFreeStyle = function(options){
     $(options.tool).addClass('tool-sub-menu-active');
     MouseTools.CreateOptionsForSpeedDotFreeStyle(
       {
         subMenuContainerId: subMenuContainerId,
         context: context
       });
-  }
-  var HideOptionsForSpeedDotFreeStyle = function(options){
+  },
+  HideOptionsForSpeedDotFreeStyle = function(options){
     $(options.tool).removeClass('tool-sub-menu-active');
     MouseTools.DestroyOptionsForSpeedDotFreeStyle(subMenuContainerId);
-  }
+  };
+
   return {
     startSpeedDotFreeStyle : ActivateSpeedDotFreeStyle,
     stopSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle,
     showOptionsForSpeedDotFreeStyle: ShowOptionsForSpeedDotFreeStyle,
     hideOptionsForSpeedDotFreeStyle: HideOptionsForSpeedDotFreeStyle
-  }
-  // var workingWithToolsClass = options.workingWithToolsClassName,
-  //     allMainToolsClass = options.allMainToolsClass,
-  // ActivateTool = function(toolId){
-  //   var elementId = '#'+toolId;
-  //   if($(elementId)[0]===undefined){
-  //     var errorMessage = 'Error - toolId: ' + toolId + ' not found!';
-  //     console.log(errorMessage);
-  //     throw new Error(errorMessage);
-  //   } else{
-  //     $('.'+allMainToolsClass).DeactivateTool();
-  //     $
-  //   }
-  // }
+  };
 };

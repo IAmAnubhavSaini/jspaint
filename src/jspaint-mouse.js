@@ -1,5 +1,6 @@
-;
 var JSPaintMouse = function(options){
+  "use strict";
+
   var $ = options.$,
       context = options.context,
       canvasId = options.canvasId,
@@ -28,14 +29,14 @@ var JSPaintMouse = function(options){
         $(stopButton)
           .addClass('stopToolButton')
           .bind('click', function(){
-            DestroyOptionsForSpeedDotFreeStyle();
+            new DestroyOptionsForSpeedDotFreeStyle();
           });
         $(stopButton).appendTo(container);
         $(drawColor).appendTo(container);
         $(submit)
             .bind("click", function(){
                 context.fillStyle = $('#drawColor').val();
-                DestroyOptionsForSpeedDotFreeStyle();
+                new DestroyOptionsForSpeedDotFreeStyle();
             })
             .appendTo(container);
         container.children().css({'padding':'10px', 'margin':'10px'});
@@ -53,5 +54,5 @@ var JSPaintMouse = function(options){
         StopMouseTrack: StopMouseTrack,
         CreateOptionsForSpeedDotFreeStyle: CreateOptionsForSpeedDotFreeStyle,
         DestroyOptionsForSpeedDotFreeStyle: DestroyOptionsForSpeedDotFreeStyle
-      }
+      };
 };

@@ -1,6 +1,6 @@
-;
 var JSPaint = function(options){
   "use strict";
+
   var Tools = null,
 
   InitializeCanvas = function(options){
@@ -17,17 +17,17 @@ var JSPaint = function(options){
   };
 
   (function(options){
-    Tools = JSPaintTools({
+    Tools = new JSPaintTools({
         $ : options.$,
         canvasId: options.canvasId,
-        context: InitializeCanvas(options),
+        context: new InitializeCanvas(options),
         cursorWhenActive: "working-with-tools",
         allMainToolsClass: "main-tool",
         subMenuContainerId: "ToolSubMenuBar"
       });
-  })(options)
+  })(options);
 
   return{
     Tools: Tools
-  }
+  };
 };

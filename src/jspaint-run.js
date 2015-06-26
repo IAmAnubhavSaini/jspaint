@@ -1,8 +1,9 @@
 $(function(){
   "use strict";
+
   var canvasId = "jspaint-canvas";
   var containerId = "jspaint-paint-area";
-  var jspaint = JSPaint({$: jQuery, containerId: containerId, canvasId: canvasId});
+  var jspaint = new JSPaint({$: jQuery, containerId: containerId, canvasId: canvasId});
 
 
   (function (){

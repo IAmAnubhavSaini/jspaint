@@ -28,11 +28,28 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      },
+      target: {
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: ['*.css', '!*.min.css'],
+          dest: 'build/',
+          ext: '.min.css',
+          extDot: 'first'
+        }]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-  grunt.registerTask('default', ['uglify', 'replace']);
+  grunt.registerTask('default', ['uglify', 'cssmin', 'replace']);
 };

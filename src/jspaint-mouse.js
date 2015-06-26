@@ -10,10 +10,8 @@ var JSPaintMouse = function($){
 
           $(canvas).on("mousemove", function (event) {
               cursorPositionNotifier(event);
-              console.log((event.pageX - parseInt(parentOffset.left))+", "+(event.pageY - parseInt(parentOffset.top))+", "+
-              pixelSize + ", "+ pixelSize);
-              context.fillRect( (event.pageX - parseInt(parentOffset.left)),
-                                (event.pageY - parseInt(parentOffset.top)),
+              context.fillRect( (event.pageX - $(this).offset().left),
+                                (event.pageY - $(this).offset().top),
                                 pixelSize, pixelSize);
           });
 
@@ -29,8 +27,8 @@ var JSPaintMouse = function($){
       };
       var StopMouseTrack = function(currentCanvas){
         $('#'+currentCanvas).off("mousemove");
-
       };
+
       return {
         MouseTrack: MouseTrack,
         StopMouseTrack: StopMouseTrack

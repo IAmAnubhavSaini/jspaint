@@ -12,7 +12,7 @@ body{
 
 }
 
-#ActiveToolMenuBar{
+#ToolSubMenuBar{
   position: fixed;
   top:0;
   z-index: 100;
@@ -35,6 +35,10 @@ body{
   position: fixed;
   z-index: 0;
 }
+#jspaint-tools:hover{
+  outline: 5px solid rgba(0, 0, 255, 0.5);
+
+}
 #jspaint-paint-area{
   height: 100%;
   width: 80%;
@@ -49,7 +53,8 @@ body{
 
 }
 #jspaint-canvas.working-with-tools:hover{
-  border: thin solid #667700;
+  outline: 5px solid rgba(255, 0, 0, 0.5);
+  outline-offset: -5px;
 }
 
 .active-tool{

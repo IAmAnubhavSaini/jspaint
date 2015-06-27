@@ -101,4 +101,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', ['copy','bootlint', 'jshint', 'uglify', 'cssmin', 'replace']);
+  grunt.registerTask('setup-dev', ['copy', 'replace:updateReference']);
+  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

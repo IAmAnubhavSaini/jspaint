@@ -5,12 +5,9 @@ $(function(){
   var containerId = "jspaint-paint-area";
   var jspaint = new JSPaint({$: jQuery, containerId: containerId, canvasId: canvasId});
 
-
   (function (){
     $('#ToolSubMenuBar').hide();
   })();
-
-
 
   $('#SpeedDotFreeStyle')
     .bind('click', function(){

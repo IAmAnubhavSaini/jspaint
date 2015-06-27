@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           jquery: true
         }
       },
-      files: ['src/*.js', '!src/jquery.js']
+      files: ['src/*.js', '!src/jquery.js', '!src/bootstrap.js']
     },
     uglify: {
       options: {
@@ -42,6 +42,15 @@ module.exports = function(grunt) {
             to: '.min.css'
           }
         ]
+      },
+      updateReference: {
+        src: 'src/bootstrap.css',
+        dest: 'src/bootstrap.css',
+        replacements: [{
+            from: '../fonts/',
+            to: ''
+          }
+        ]
       }
     },
     cssmin: {
@@ -59,6 +68,28 @@ module.exports = function(grunt) {
           extDot: 'first'
         }]
       }
+    },
+    copy: {
+      main:{
+        files:[
+          {
+            expand: true,
+            flatten: true,
+            src: [
+              'node_modules/bootstrap/dist/css/bootstrap.css',
+              'node_modules/bootstrap/dist/js/bootstrap.js',
+              'node_modules/jquery/dist/jquery.js'
+            ],
+            dest: 'src/'
+          },
+          {
+            expand: true,
+            flatten: true,
+            src: 'node_modules/bootstrap/dist/fonts/*',
+            dest: 'src/'
+          }
+        ]
+      }
     }
   });
 
@@ -67,6 +98,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bootlint');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['bootlint', 'jshint', 'uglify', 'cssmin', 'replace']);
+  grunt.registerTask('default', ['copy','bootlint', 'jshint', 'uglify', 'cssmin', 'replace']);
 };

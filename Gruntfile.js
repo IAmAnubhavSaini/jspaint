@@ -1,6 +1,13 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    bootlint:{
+      options: {
+        stoponerror: false,
+        relaxerror: []
+      },
+      files: 'src/*.html'
+    },
     jshint:{
       options:{
         globals:{
@@ -59,6 +66,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-bootlint');
 
-  grunt.registerTask('default', ['jshint', 'uglify', 'cssmin', 'replace']);
+  grunt.registerTask('default', ['bootlint', 'jshint', 'uglify', 'cssmin', 'replace']);
 };

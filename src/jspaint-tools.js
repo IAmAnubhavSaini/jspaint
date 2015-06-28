@@ -31,10 +31,22 @@ var JSPaintTools = function(options){
     $('#'+canvasId).removeClass(cursorWhenActive);
     $(options.tool).removeClass('active-tool');
     MouseTools.StopMouseTrack({tool: options.tool, canvasId: canvasId});
+  },
+  ActivateCircleStampTool = function(options){
+    $('#'+canvasId).addClass(cursorWhenActive);
+    $(options.tool).addClass('active-tool');
+    MouseTools.StartCircleStamp({tool: options.tool, 'currentCanvas': canvasId, 'trackCallback': function(e){}});
+  },
+  DeactivateCircleStampTool = function(options){
+    $('#'+canvasId).removeClass(cursorWhenActive);
+    $(options.tool).removeClass('active-tool');
+    MouseTools.StopCircleStamp({tool: options.tool, canvasId: canvasId});
   };
 
   return {
     startSpeedDotsFreeStyleTool : ActivateSpeedDotsFreeStyleTool,
-    stopSpeedDotsFreeStyleTool : DeactivateSpeedDotsFreeStyleTool
+    stopSpeedDotsFreeStyleTool : DeactivateSpeedDotsFreeStyleTool,
+    startCircleStampTool: ActivateCircleStampTool,
+    stopCircleStampTool: DeactivateCircleStampTool
   };
 };

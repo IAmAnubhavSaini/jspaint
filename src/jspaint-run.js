@@ -33,4 +33,18 @@ $(function(){
     .bind('start', function(){
       jspaint.Tools.startSpeedDotsFreeStyleTool({tool: this});
     });
+
+  $('#CircleStampTool')
+    .bind('click', function(){
+      $(this).trigger('start');
+    })
+    .bind('start', function(){
+      jspaint.Tools.startCircleStampTool({tool: this});
+    })
+    .bind('contextmenu', function(){
+      $(this).trigger('stop');
+    })
+    .bind('stop', function(){
+      jspaint.Tools.stopCircleStampTool({tool: this});
+    });
 });

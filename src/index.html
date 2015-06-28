@@ -17,9 +17,74 @@
     <div class="container">
       <h1>Say Hello to jspaint!</h1>
       <p>Online - Offline - Quick - Social Friendly</p>
-      <p><a class="btn btn-primary btn-lg" href="./jspaint.html" role="button">Let's paint</a></p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>
+              Options
+            </th>
+         </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th class="text-nowrap" scope="row">Dimensions of Paint Area</th>
+            <td class="dimension-options">
+              <button type="button" id="408x320" class="btn btn-lg" title="Width: 480px, Height: 320px">480 X 320</button>
+              <button type="button" id="600x400" class="btn btn-lg" title="Width: 600px, Height: 400px">600 X 400</button>
+              <button type="button" id="800x600" class="btn btn-lg" title="Width: 800px, Height: 600px">800 X 600</button>
+              <button type="button" id="Max" class="btn btn-lg" title="Whatever your screen supports.">Maximum</button>
+            </td>
+          </tr>
+          <tr>
+            <th class="text-nowrap" scope="row">All set!</th>
+            <td>
+              <a id="jspaint-action" class="btn btn-primary btn-lg" href="./jspaint.html" role="button">Let's paint</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
   <script src="./jquery.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    "use strict;"
+    $(function(){
+      var setup = function(){
+        $('.dimension-options button').on('click', function(){
+          $('.dimension-options button').removeClass('btn-success');
+          $(this).addClass('btn-success');
+        });
+        $('#jspaint-action').on('click', function(e){
+          e.preventDefault();
+
+          var originalUri = $(this).attr('href'),
+           queryPrfix = '?dimension=',
+           selected = $('.dimension-options button.btn-success').attr('id'),
+           queryValue = '';
+
+           if(selected.localeCompare('Max') === 0){
+             var width = document.documentElement.clientWidth - 21,
+                  height = document.documentElement.clientHeight;
+
+             queryValue = width + 'x' + height;
+           } else {
+             queryValue = $('.dimension-options button.btn-success').attr('id');
+           }
+           window.location = originalUri+queryPrfix+queryValue;
+        });
+      },
+      init = function(){
+        $('#600x400').trigger('click');
+      };
+
+      setup();
+      init();
+    });
+  </script>
 </body>
 </html>

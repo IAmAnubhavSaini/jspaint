@@ -28,17 +28,16 @@ body{
 
 #jspaint-tools{
   background-color: #ddDDdd;
-  position: fixed;
-  z-index: 0;
+  display: block;
+  padding: 2px;
+  margin: 2px;
 }
 
 #jspaint-paint-area{
-  height: 90%;
-  width: 80%;
   min-height: 320px;
   min-width: 480px;
-  position: fixed;
-  right:0;
+  border: thin solid #333;
+  margin: auto;
 }
 
 #jspaint-canvas.working-with-tools{
@@ -51,9 +50,9 @@ body{
   background-color: #337733;
 }
 
-.main-tool{
+.main-tool {
   border-bottom: thick solid rgba(0,0,0, .5);
-  float:left;
+  display: inline-block;
   padding: 10px;
   margin: 0 5px;
   cursor: pointer;

@@ -1,12 +1,19 @@
 $(function(){
   "use strict";
 
-  var canvasId = "jspaint-canvas";
-  var containerId = "jspaint-paint-area";
-  var jspaint = new JSPaint({$: jQuery, containerId: containerId, canvasId: canvasId});
+  var canvasId = "jspaint-canvas",
+      containerId = "jspaint-paint-area",
+      size = window.location.toString().split('?')[1].split('=')[1],
+      sizeX = size.split('x')[0],
+      sizeY = size.split('x')[1],
+      jspaint = null;
 
   (function (){
     $('#ToolSubMenuBar').hide();
+    $('#jspaint-paint-area').css({
+      width: sizeX, height: sizeY
+    });
+    jspaint = new JSPaint({$: jQuery, containerId: containerId, canvasId: canvasId, size: {X:sizeX, Y:sizeY}});
   })();
 
   $('#SpeedDotFreeStyle')

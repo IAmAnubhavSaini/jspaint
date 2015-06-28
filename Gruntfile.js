@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           jquery: true
         }
       },
-      files: ['src/*.js', '!src/jquery.js', '!src/bootstrap.js']
+      files: ['src/*.js', '!src/jquery.js', '!src/bootstrap.js', '!src/jquery-ui.js']
     },
     uglify: {
       options: {
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
         src: '*.js',
         dest: 'build/',
         ext: '.min.js',
-        extDot: 'first'
+        extDot: 'last'
       }
     },
     replace: {
@@ -65,7 +65,7 @@ module.exports = function(grunt) {
           src: ['*.css', '!*.min.css'],
           dest: 'build/',
           ext: '.min.css',
-          extDot: 'first'
+          extDot: 'last'
         }]
       }
     },

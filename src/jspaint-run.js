@@ -14,6 +14,8 @@ $(function(){
       width: sizeX, height: sizeY
     });
     jspaint = new JSPaint({$: jQuery, containerId: containerId, canvasId: canvasId, size: {X:sizeX, Y:sizeY}});
+
+    $('.top-taker').TopTaker({'theme': 'dark'});
   })();
 
   $('#SpeedDotFreeStyle')

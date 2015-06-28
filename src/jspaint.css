@@ -11,21 +11,6 @@ body{
   -ms-user-select: none;
 }
 
-#ToolSubMenuBar{
-  position: fixed;
-  left: 19.9%;
-  z-index: 100;
-  background-color: #eeEEee;
-}
-
-#ToolSubMenuBar .stopToolButton{
-  text-align: center;
-  color: red;
-  font-weight: bold;
-  background-color: black;
-  cursor: pointer;
-}
-
 #jspaint-tools{
   background-color: #ddDDdd;
   display: block;
@@ -45,9 +30,6 @@ body{
 }
 .active-tool{
   background-color: #77aa77;
-}
-.tool-sub-menu-active{
-  background-color: #337733;
 }
 
 .main-tool {

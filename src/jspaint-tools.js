@@ -6,7 +6,6 @@ var JSPaintTools = function(options){
       context = options.context,
       cursorWhenActive = options.cursorWhenActive,
       selectAllTools = options.allMainToolsClass,
-      subMenuContainerId = options.subMenuContainerId,
       MouseTools = null;
 
   (function(){
@@ -15,13 +14,12 @@ var JSPaintTools = function(options){
       canvasId: canvasId,
       context: context,
       cursorWhenActive: cursorWhenActive,
-      selectAllTools: selectAllTools,
-      subMenuContainerId: subMenuContainerId
+      selectAllTools: selectAllTools
     });
   })();
 
   var InitAllMainToolsTitle = function(){
-    $('.'+selectAllTools).attr('title', 'Click to activate;\nRight-click to deactivate;\nDouble-click to see special menu.');
+    $('.'+selectAllTools).attr('title', 'Click to activate;\nRight-click to deactivate;');
   }();
 
   var ActivateSpeedDotFreeStyle = function(options){
@@ -33,24 +31,10 @@ var JSPaintTools = function(options){
     $('#'+canvasId).removeClass(cursorWhenActive);
     $(options.tool).removeClass('active-tool');
     MouseTools.StopMouseTrack({tool: options.tool, canvasId: canvasId});
-  },
-  ShowOptionsForSpeedDotFreeStyle = function(options){
-    $(options.tool).addClass('tool-sub-menu-active');
-    MouseTools.CreateOptionsForSpeedDotFreeStyle(
-      {
-        subMenuContainerId: subMenuContainerId,
-        context: context
-      });
-  },
-  HideOptionsForSpeedDotFreeStyle = function(options){
-    $(options.tool).removeClass('tool-sub-menu-active');
-    MouseTools.DestroyOptionsForSpeedDotFreeStyle(subMenuContainerId);
   };
 
   return {
     startSpeedDotFreeStyle : ActivateSpeedDotFreeStyle,
-    stopSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle,
-    showOptionsForSpeedDotFreeStyle: ShowOptionsForSpeedDotFreeStyle,
-    hideOptionsForSpeedDotFreeStyle: HideOptionsForSpeedDotFreeStyle
+    stopSpeedDotFreeStyle : DeactivateSpeedDotFreeStyle
   };
 };

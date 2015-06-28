@@ -22,13 +22,9 @@ $(function(){
     .bind('click', function(){
       $(this).trigger("start");
     })
-    .bind("dblclick", function(){
-      jspaint.Tools.showOptionsForSpeedDotFreeStyle({tool: this});
-    })
     .bind('contextmenu', function(e){
       e.preventDefault();
       jspaint.Tools.stopSpeedDotFreeStyle({tool: this});
-      jspaint.Tools.hideOptionsForSpeedDotFreeStyle({tool: this});
       return false;
     })
     .bind('stop', function(){

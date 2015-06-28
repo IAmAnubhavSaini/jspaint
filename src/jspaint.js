@@ -20,8 +20,7 @@ var JSPaint = function(options){
         canvasId: options.canvasId,
         context: new InitializeCanvas(options),
         cursorWhenActive: "working-with-tools",
-        allMainToolsClass: "main-tool",
-        subMenuContainerId: "ToolSubMenuBar"
+        allMainToolsClass: "main-tool"
       });
   })(options);
 

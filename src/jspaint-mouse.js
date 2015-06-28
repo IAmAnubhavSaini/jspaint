@@ -3,8 +3,7 @@ var JSPaintMouse = function(options){
 
   var $ = options.$,
       context = options.context,
-      canvasId = options.canvasId,
-      subMenuContainerId = options.subMenuContainerId;
+      canvasId = options.canvasId;
 
   var MouseTrack = function () {
     var color = "#000000",
@@ -18,41 +17,10 @@ var JSPaintMouse = function(options){
   },
   StopMouseTrack = function(){
     $('#'+canvasId).off("mousemove");
-  },
+  };
 
-  CreateOptionsForSpeedDotFreeStyle = function(){
-        var container = $('#'+subMenuContainerId),
-            stopButton = $('<div id="StopCurrentTool">Close</div>'),
-            drawColor = '<input type="color" id="drawColor" />',
-            submit = '<input type="submit" id="submitOptions" />';
-
-        $(stopButton)
-          .addClass('stopToolButton')
-          .bind('click', function(){
-            new DestroyOptionsForSpeedDotFreeStyle();
-          });
-        $(stopButton).appendTo(container);
-        $(drawColor).appendTo(container);
-        $(submit)
-            .bind("click", function(){
-                context.fillStyle = $('#drawColor').val();
-                new DestroyOptionsForSpeedDotFreeStyle();
-            })
-            .appendTo(container);
-        container.children().css({'padding':'10px', 'margin':'10px'});
-        container.show();
-      };
-
-      var DestroyOptionsForSpeedDotFreeStyle = function(){
-        $('#drawColor').remove();
-        $('#submitOptions').remove();
-        $('#'+subMenuContainerId).html('').hide();
-      };
-
-      return {
-        MouseTrack: MouseTrack,
-        StopMouseTrack: StopMouseTrack,
-        CreateOptionsForSpeedDotFreeStyle: CreateOptionsForSpeedDotFreeStyle,
-        DestroyOptionsForSpeedDotFreeStyle: DestroyOptionsForSpeedDotFreeStyle
-      };
+  return {
+    MouseTrack: MouseTrack,
+    StopMouseTrack: StopMouseTrack
+  };
 };

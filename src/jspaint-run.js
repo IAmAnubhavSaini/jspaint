@@ -18,19 +18,19 @@ $(function(){
     $('.top-taker').TopTaker({'theme': 'dark'});
   })();
 
-  $('#SpeedDotFreeStyle')
+  $('#SpeedDotsFreeStyleTool')
     .bind('click', function(){
       $(this).trigger("start");
     })
     .bind('contextmenu', function(e){
       e.preventDefault();
-      jspaint.Tools.stopSpeedDotFreeStyle({tool: this});
+      jspaint.Tools.stopSpeedDotsFreeStyleTool({tool: this});
       return false;
     })
     .bind('stop', function(){
       $(this).trigger("contextmenu");
     })
     .bind('start', function(){
-      jspaint.Tools.startSpeedDotFreeStyle({tool: this});
+      jspaint.Tools.startSpeedDotsFreeStyleTool({tool: this});
     });
 });

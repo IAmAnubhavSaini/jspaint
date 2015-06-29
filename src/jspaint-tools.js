@@ -6,7 +6,9 @@ var JSPaintTools = function(options){
       context = options.context,
       cursorWhenActive = options.cursorWhenActive,
       selectAllTools = options.allMainToolsClass,
-      MouseTools = null;
+      MouseTools = null,
+      currentDrawColor = '#000000',
+      currentAlternativeColor = '#FFffFF';
 
   (function(){
     MouseTools = new JSPaintMouse({
@@ -41,12 +43,20 @@ var JSPaintTools = function(options){
     $('#'+canvasId).removeClass(cursorWhenActive);
     $(options.tool).removeClass('active-tool');
     MouseTools.StopCircleStamp({tool: options.tool, canvasId: canvasId});
+  },
+  updateCurrentDrawColor = function(color){
+    currentDrawColor = color;
+  },
+  updateCurrentAlternativeColor = function(color){
+    currentAlternativeColor = color;
   };
 
   return {
     startSpeedDotsFreeStyleTool : ActivateSpeedDotsFreeStyleTool,
     stopSpeedDotsFreeStyleTool : DeactivateSpeedDotsFreeStyleTool,
     startCircleStampTool: ActivateCircleStampTool,
-    stopCircleStampTool: DeactivateCircleStampTool
+    stopCircleStampTool: DeactivateCircleStampTool,
+    updateCurrentDrawColor: updateCurrentDrawColor,
+    updateCurrentAlternativeColor: updateCurrentAlternativeColor
   };
 };

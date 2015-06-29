@@ -32,22 +32,22 @@
         selectedAlternativeColor = '',
         selectedPrimaryColor = '',
         context= null,
-        GenerateBasicColorPalette = function(){
+        generateBasicColorPalette = function(){
           for(var i = 0, len = CONSTANTS.basicColors.length; i < len; i++){
             var hex = '#'+CONSTANTS.basicColors[i].id;
             var color = $('<div class="color" id="Color-Hex-'+hex+'" style="background-color: '+hex+';"></div>');
             color.appendTo('.BasicColorPalette');
           }
         },
-        SetupStart = function(options){
+        setupStart = function(options){
           $('#'+CONSTANTS.canvasId).addClass(CONSTANTS.activeToolCursorClass);
           $(options.tool).addClass('active-tool');
         },
-        SetupStop = function (options){
+        setupStop = function (options){
           $('#'+CONSTANTS.canvasId).removeClass(CONSTANTS.activeToolCursorClass);
           $(options.tool).removeClass('active-tool');
         },
-        InitializeCanvas = function(){
+        initializeCanvas = function(){
           var width = sizeX,
               height = sizeY;
               $('<canvas/>', { id: CONSTANTS.canvasId })
@@ -67,14 +67,16 @@
         stopSpeedDotsFreeStyleTool = function(){
           $('#'+CONSTANTS.canvasId).off("mousemove");
         },
-        fillCirc = function(x, y, radius){
-          context.beginPath();
-          context.arc(x, y, radius, 0, 2 * Math.PI, false);
-          context.fill();
+        CANVASAPI = {
+          fillCirc: function(x, y, radius){
+            context.beginPath();
+            context.arc(x, y, radius, 0, 2 * Math.PI, false);
+            context.fill();
+          }
         },
         startCircleStampTool = function(){
           $('#'+CONSTANTS.canvasId).on("click", function (event) {
-            fillCirc(
+            CANVASAPI.fillCirc(
               (event.pageX - $(this).offset().left),
               (event.pageY - $(this).offset().top),
               4
@@ -87,25 +89,25 @@
         generateHexColorStringFromThisElementsId = function (element){
           return '#'+element.attr('id').split('#')[1];
         },
-        RegisterEvents = function (){
+        registerEvents = function (){
           $('#SpeedDotsFreeStyleTool').bind('click', function() {
-            new SetupStart({tool: this});
+            setupStart({tool: this});
             startSpeedDotsFreeStyleTool({tool: this});
           })
           .bind('contextmenu', function(e){
             e.preventDefault();
             stopSpeedDotsFreeStyleTool({tool: this});
-            new SetupStop({tool: this});
+            setupStop({tool: this});
             return false;
           });
 
           $('#CircleStampTool').bind('click', function(){
-            new SetupStart({tool: this});
+            setupStart({tool: this});
             startCircleStampTool({tool: this});
           })
           .bind('contextmenu', function(){
             stopCircleStampTool({tool: this});
-            new SetupStop({tool: this});
+            setupStop({tool: this});
           });
 
           $('.color').on('click', function(){
@@ -115,19 +117,25 @@
             selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
           });
         },
-        Init = function (){
+        mustAssignDimensionsToCanvasContainer = function(){
           $('#jspaint-paint-area').css({
             width: sizeX, height: sizeY
           });
-          context = new InitializeCanvas();
+        },
+        initializeToolsInfo = function(){
           $('.'+CONSTANTS.maintoolsClass).attr('title', 'Click to activate;\nRight-click to deactivate;');
+        },
+        initializeTopTakerWidget = function(){
           $('.top-taker').TopTaker({'theme': 'dark'});
-          new GenerateBasicColorPalette();
-          new RegisterEvents();
+        },
+        init = function (){
+          mustAssignDimensionsToCanvasContainer();
+          context = initializeCanvas();
+          initializeToolsInfo();
+          initializeTopTakerWidget();
+          generateBasicColorPalette();
+          registerEvents();
         };
-
-        new Init();
-
-
+        init();
   });
 })(jQuery);

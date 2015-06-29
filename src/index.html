@@ -94,7 +94,7 @@
              width = $('.dimension-options button.btn-success').attr('id').split('x')[0];
              height = $('.dimension-options button.btn-success').attr('id').split('x')[1];
            }
-           queryValue = orientation.localeCompare('horizontal') === 0 ?
+           queryValue = orientation.localeCompare('landscape') === 0 ?
                         width + 'x' + height :
                         height + 'x' + width;
 

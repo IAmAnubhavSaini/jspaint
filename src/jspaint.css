@@ -9,9 +9,6 @@ html,body{
   -moz-user-select: none;
   -ms-user-select: none;
 }
-body{
-  padding: 60px 0 0 0;
-}
 
 #jspaint-tools{
   background-color: #ddDDdd;
@@ -45,16 +42,66 @@ body{
     border-bottom: thick solid rgba(0,0,0, 1);
   }
 
-.BasicColorPalette{
-  margin-left: 80px;
-
-}
 .BasicColorPalette .color{
   width: 20px;
   height: 20px;
   min-width: 20px;
   min-height: 20px;
   display: inline-block;
-  margin: 15px 1px;
+  margin: 0 1px;
   cursor: pointer;
+  border: thin solid white;
+  outline: thin solid black;
+}
+
+.BasicColorPalette .color:hover{
+  border: thin solid black;
+  outline: thin solid white;
+}
+
+.contextual-menu-bar {
+  min-height: 80px;
+  padding: 10px 5px;
+  background-color: #800080;
+}
+
+.contextual-menu-bar a {
+  height: 45px;
+  width: 100px;
+  display: inline-block;
+  color: black;
+  background-color: #DDddDD;
+  text-align: center;
+  line-height: 45px;
+  text-decoration: none;
+  font-weight: bold;
+  border: thin solid white;
+  outline: thin solid black;
+}
+.contextual-menu-bar a:hover {
+  border: thin solid black;
+  outline: thin solid white;
+}
+.contextual-menu-bar .menu-item{
+  float: left;
+  margin: 5px;
+}
+
+.contextual-menu-bar:last-child(.menu-item){
+  clear:both;
+}
+
+.menu-item .menu-item{
+  margin: 0 5px;
+}
+
+#HTML5ColorPicker #allColorsPicker{
+  height: 45px;
+  width: 45px;
+  border: thin solid white;
+  outline: thin solid black;
+}
+#HTML5ColorPicker #allColorsPicker:hover{
+  border: thin solid black;
+  outline: thin solid white;
 }

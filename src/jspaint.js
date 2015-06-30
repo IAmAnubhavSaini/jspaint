@@ -37,11 +37,19 @@
         context= null,
 
         generateBasicColorPalette = function(){
+          var div1 = $('<div></div>');
+          var div2 = $('<div></div>');
+          var appendWhere = div1;
           for(var i = 0, len = CONSTANTS.basicColors.length; i < len; i++){
+            appendWhere = i < len/2 ? div1 : div2;
             var hex = '#'+CONSTANTS.basicColors[i].id;
             var color = $('<div class="color" id="Color-Hex-'+hex+'" style="background-color: '+hex+';"></div>');
-            color.appendTo('.BasicColorPalette');
+            color.appendTo(appendWhere);
+
           }
+          div1.appendTo('.BasicColorPalette');
+          div2.appendTo('.BasicColorPalette');
+
         },
 
         setupStart = function(options){
@@ -185,11 +193,18 @@
             });
         },
 
+        registerAllColorsPickerEvents = function(options){
+          $('#'+options.containerId + ' #'+options.toolId).on('input', function(){
+            selectedPrimaryColor = context.fillStyle = $(this).val();
+          });
+        },
+
         registerEvents = function (){
           registerColorEvents();
           registerPencilToolEvents();
           registerCircleStampToolEvents();
           registerFreeStyleSpeedDotsToolEvents();
+          registerAllColorsPickerEvents({toolId: 'allColorsPicker', containerId:'HTML5ColorPicker'});
         },
 
         mustAssignDimensionsToCanvasContainer = function(){

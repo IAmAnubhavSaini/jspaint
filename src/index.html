@@ -64,51 +64,6 @@
   <script src="./jquery.js" type="text/javascript"></script>
   <script src="./jquery-ui.js" type="text/javascript"></script>
   <script src="./TopTaker.widget.js" type="text/javascript"></script>
-  <script type="text/javascript">
-    "use strict;"
-    $(function(){
-      var setup = function(){
-        $('.dimension-options button').on('click', function(){
-          $('.dimension-options button').removeClass('btn-success');
-          $(this).addClass('btn-success');
-        });
-        $('.orientation-options button').on('click', function(){
-          $('.orientation-options button').removeClass('btn-success');
-          $(this).addClass('btn-success');
-        });
-        $('#jspaint-action').on('click', function(e){
-          e.preventDefault();
-
-          var originalUri = $(this).attr('href'),
-           queryPrfix = '?dimension=',
-           selected = $('.dimension-options button.btn-success').attr('id'),
-           queryValue = '',
-           width = '',
-           height='',
-           orientation = $('.orientation-options button.btn-success').attr('id');
-
-           if(selected.localeCompare('Max') === 0){
-             width = document.documentElement.clientWidth - 21;
-             height = document.documentElement.clientHeight;
-           } else {
-             width = $('.dimension-options button.btn-success').attr('id').split('x')[0];
-             height = $('.dimension-options button.btn-success').attr('id').split('x')[1];
-           }
-           queryValue = orientation.localeCompare('landscape') === 0 ?
-                        width + 'x' + height :
-                        height + 'x' + width;
-
-           window.location = originalUri+queryPrfix+queryValue;
-        });
-      },
-      init = function(){
-        $('#600x400, #landscape').trigger('click');
-        $('.top-taker').TopTaker({'theme': 'dark'});
-      };
-
-      setup();
-      init();
-    });
-  </script>
+  <script src="./index.js" type="text/javascript"></script>
 </body>
 </html>

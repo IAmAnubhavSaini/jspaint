@@ -40,11 +40,11 @@
           }
         },
         setupStart = function(options){
-          $('#'+CONSTANTS.canvasId).addClass(CONSTANTS.activeToolCursorClass);
+          $('#'+CONSTANTS.canvasId).awesomeCursor('pencil', {hotspot: 'bottom left'});
           $(options.tool).addClass('active-tool');
         },
         setupStop = function (options){
-          $('#'+CONSTANTS.canvasId).removeClass(CONSTANTS.activeToolCursorClass);
+          $('#'+CONSTANTS.canvasId).awesomeCursor('ban');
           $(options.tool).removeClass('active-tool');
         },
         initializeCanvas = function(){
@@ -89,6 +89,22 @@
         generateHexColorStringFromThisElementsId = function (element){
           return '#'+element.attr('id').split('#')[1];
         },
+        startFreeStylePencilTool = function(options){
+          $('#'+CONSTANTS.canvasId).on('mousemove', function(event){
+            if(event.buttons !== undefined){
+              if(event.buttons === 1){
+                context.fillRect(
+                  (event.pageX - $(this).offset().left),
+                  (event.pageY - $(this).offset().top),
+                  2, 2
+                );
+              }
+            }
+          });
+        },
+        stopFreeStylePencilTool = function(options){
+          $('#'+CONSTANTS.canvasId).off('mousemove');
+        },
         registerEvents = function (){
           $('#FreeStyleSpeedDotsTool').bind('click', function() {
             setupStart({tool: this});
@@ -107,6 +123,16 @@
           })
           .bind('contextmenu', function(){
             stopCircleStampTool({tool: this});
+            setupStop({tool: this});
+          });
+
+          $('#FreeStylePencilTool')
+          .on('click', function(){
+            setupStart({tool: this});
+            startFreeStylePencilTool({tool: this});
+          })
+          .on('mouseup', function(){
+            stopFreeStylePencilTool({tool: this});
             setupStop({tool: this});
           });
 

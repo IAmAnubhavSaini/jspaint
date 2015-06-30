@@ -103,7 +103,7 @@
           return '#'+element.attr('id').split('#')[1];
         },
 
-        startFreeStylePencilTool = function(options){
+        startPencilTool = function(options){
           $('#'+CONSTANTS.canvasId).on('mousemove', function(event){
             if(event.buttons !== undefined){
               if(event.buttons === 1){
@@ -117,19 +117,34 @@
           });
         },
 
-        stopFreeStylePencilTool = function(options){
+        stopPencilTool = function(options){
           $('#'+CONSTANTS.canvasId).off('mousemove');
         },
+
+        activateTool = function(options, start){
+          if(activeTool !== null){
+            activeTool.trigger('click');
+          }
+          setupStart(options);
+          start(options);
+        },
+
+        deactivateTool = function(options, stop){
+          setupStop(options);
+          stop(options);
+        },
+
+        activeTool = null,
 
         registerFreeStyleSpeedDotsToolEvents = function(){
           $('#FreeStyleSpeedDotsTool').funcToggle('click',
             function(){
-              setupStart({tool: this});
-              startFreeStyleSpeedDotsTool({tool: this});
+              activateTool({tool: this}, startFreeStyleSpeedDotsTool);
+              activeTool = $(this);
             },
             function(){
-              stopFreeStyleSpeedDotsTool({tool: this});
-              setupStop({tool: this});
+              activeTool = null;
+              deactivateTool({tool: this}, stopFreeStyleSpeedDotsTool);
             }
           );
         },
@@ -137,25 +152,25 @@
         registerCircleStampToolEvents = function(){
           $('#CircleStampTool').funcToggle('click',
             function(){
-              setupStart({tool: this});
-              startCircleStampTool({tool: this});
+              activateTool({tool: this}, startCircleStampTool);
+              activeTool = $(this);
             },
             function(){
-              stopCircleStampTool({tool: this});
-              setupStop({tool: this});
+              activeTool = null;
+              deactivateTool({tool: this}, stopCircleStampTool);
             }
           );
         },
 
-        registerFreeStylePencilToolEvents = function(){
-          $('#FreeStylePencilTool').funcToggle('click',
+        registerPencilToolEvents = function(){
+          $('#PencilTool').funcToggle('click',
             function(){
-              setupStart({tool: this});
-              startFreeStylePencilTool({tool: this});
+              activateTool({tool: this}, startPencilTool);
+              activeTool = $(this);
             },
             function(){
-              stopFreeStylePencilTool({tool: this});
-              setupStop({tool: this});
+              activeTool = null;
+              deactivateTool({tool: this}, stopPencilTool);
             }
           );
         },
@@ -172,7 +187,7 @@
 
         registerEvents = function (){
           registerColorEvents();
-          registerFreeStylePencilToolEvents();
+          registerPencilToolEvents();
           registerCircleStampToolEvents();
           registerFreeStyleSpeedDotsToolEvents();
         },

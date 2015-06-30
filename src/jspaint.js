@@ -34,6 +34,7 @@
         jspaint = null,
         selectedAlternativeColor = '',
         selectedPrimaryColor = '',
+        resetCanvasColor = 'white',
         context= null,
 
         generateBasicColorPalette = function(){
@@ -63,8 +64,8 @@
         },
 
         initializeCanvas = function(){
-          var width = sizeX,
-              height = sizeY;
+          var width = sizeX -2,
+              height = sizeY -2;
               $('<canvas/>', { id: CONSTANTS.canvasId })
                 .prop({'width': width,'height': height})
                 .appendTo('#'+CONSTANTS.containerId);
@@ -201,10 +202,23 @@
 
         registerSaveImageEvents = function(options){
           $('#'+options.toolId).on('click', function(){
-            window.open($('#'+CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank")
+            window.open($('#'+CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
           });
         },
+        registerResetCanvasEvents = function(options){
+          $('#'+options.toolId).on('click', function(){
+            var canvas = $('#'+CONSTANTS.canvasId)[0];
+            var canvasHeight = canvas.height;
+            var canvasWidth = canvas.width;
+            var context = canvas.getContext('2d');
+            context.save();
+            context.transform(1, 0, 0, 1, 0, 0);
+            context.fillStyle = resetCanvasColor;
 
+            context.fillRect(0,0, canvasWidth, canvasHeight);
+            context.restore();
+          });
+        },
         registerEvents = function (){
           registerColorEvents();
           registerPencilToolEvents();
@@ -212,6 +226,7 @@
           registerFreeStyleSpeedDotsToolEvents();
           registerAllColorsPickerEvents({toolId: 'allColorsPicker', containerId:'HTML5ColorPicker'});
           registerSaveImageEvents({toolId: 'save-as-image', containerId: 'SaveImageButton'});
+          registerResetCanvasEvents({toolId: 'reset-canvas', containerId: 'ResetCanvas'});
         },
 
         mustAssignDimensionsToCanvasContainer = function(){
@@ -235,6 +250,7 @@
           initializeTopTakerWidget();
           generateBasicColorPalette();
           registerEvents();
+          $('#PencilTool').trigger('click');
         };
         init();
   });

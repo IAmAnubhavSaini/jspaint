@@ -111,7 +111,7 @@ a#jspaint-brand{
   outline: thin solid white;
 }
 
-#SaveImageButton #save-as-image{
+a#save-as-image, a#reset-canvas{
   font-size: 32px;
   width: 50px;
 }

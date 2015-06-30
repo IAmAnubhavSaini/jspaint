@@ -112,6 +112,7 @@ a#jspaint-brand{
 }
 
 a#save-as-image, a#reset-canvas{
-  font-size: 32px;
+  font-size: 31px;
   width: 50px;
+  padding-top: 4px;
 }

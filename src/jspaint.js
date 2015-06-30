@@ -53,16 +53,6 @@
 
         },
 
-        setupStart = function(options){
-          $('#'+CONSTANTS.canvasId).awesomeCursor('pencil', {hotspot: 'bottom left'});
-          $(options.tool).addClass('active-tool');
-        },
-
-        setupStop = function (options){
-          $('#'+CONSTANTS.canvasId).awesomeCursor('ban');
-          $(options.tool).removeClass('active-tool');
-        },
-
         initializeCanvas = function(){
           var width = sizeX -2,
               height = sizeY -2;
@@ -134,12 +124,12 @@
           if(activeTool !== null){
             activeTool.trigger('click');
           }
-          setupStart(options);
+          $(options.tool).toggleClass('active-tool');
           start(options);
         },
 
         deactivateTool = function(options, stop){
-          setupStop(options);
+          $(options.tool).toggleClass('active-tool');
           stop(options);
         },
 

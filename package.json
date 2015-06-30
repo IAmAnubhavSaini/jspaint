@@ -28,9 +28,7 @@
     "blanket": "^1.1.7",
     "bootstrap": "^3.3.5",
     "chai": "^3.0.0",
-    "font-awesome": "^4.3.0",
     "jquery": "^2.1.4",
-    "jquery-awesome-cursor": "^0.1.2",
     "mocha": "^2.2.5"
   },
   "devDependencies": {

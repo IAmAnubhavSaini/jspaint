@@ -55,7 +55,7 @@
                 .appendTo('#'+CONSTANTS.containerId);
           return $('#'+CONSTANTS.canvasId)[0].getContext('2d');
         },
-        startSpeedDotsFreeStyleTool = function(){
+        startFreeStyleSpeedDotsTool = function(){
           $('#'+CONSTANTS.canvasId).on("mousemove", function (event) {
             context.fillRect(
               (event.pageX - $(this).offset().left),
@@ -64,7 +64,7 @@
             );
           });
         },
-        stopSpeedDotsFreeStyleTool = function(){
+        stopFreeStyleSpeedDotsTool = function(){
           $('#'+CONSTANTS.canvasId).off("mousemove");
         },
         CANVASAPI = {
@@ -90,13 +90,13 @@
           return '#'+element.attr('id').split('#')[1];
         },
         registerEvents = function (){
-          $('#SpeedDotsFreeStyleTool').bind('click', function() {
+          $('#FreeStyleSpeedDotsTool').bind('click', function() {
             setupStart({tool: this});
-            startSpeedDotsFreeStyleTool({tool: this});
+            startFreeStyleSpeedDotsTool({tool: this});
           })
           .bind('contextmenu', function(e){
             e.preventDefault();
-            stopSpeedDotsFreeStyleTool({tool: this});
+            stopFreeStyleSpeedDotsTool({tool: this});
             setupStop({tool: this});
             return false;
           });

@@ -30,7 +30,16 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      jsCssToMinJsCSS: {
+      updateReferenceBootstrap: {
+        src: 'src/bootstrap.css',
+        dest: 'src/bootstrap.css',
+        replacements: [{
+            from: '../fonts/',
+            to: ''
+          }
+        ]
+      },
+      jsCssToMinJsCSSMoveToBuild: {
         src: 'src/*.html',
         dest: 'build/',
         replacements: [{
@@ -40,15 +49,6 @@ module.exports = function(grunt) {
           {
             from: '.css',
             to: '.min.css'
-          }
-        ]
-      },
-      updateReferenceBootstrap: {
-        src: 'src/bootstrap.css',
-        dest: 'src/bootstrap.css',
-        replacements: [{
-            from: '../fonts/',
-            to: ''
           }
         ]
       }
@@ -111,6 +111,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'jshint', 'uglify', 'cssmin', 'replace', 'copy:copyFontsToBuild']);
+  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'cssmin', 'copy:copyFontsToBuild']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

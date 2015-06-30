@@ -11,22 +11,24 @@
   <link href="./font-awesome.min.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="./index.html">jspaint</a>
-        <div class="container-fluid">
-          <div class="BasicColorPalette"></div>
+  <header class="contextual-menu-bar">
+      <div class="menu-item">
+        <a href="./index.html">jspaint</a>
+      </div>
+      <div class="menu-item">
+        <div class="contextual-tool-bar">
+          <div class="menu-item">
+            <div class="BasicColorPalette"></div>
+
+          </div>
+          <div class="menu-item">
+            <div id="HTML5ColorPicker">
+              <input type="color" id="allColorsPicker" />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </header>
     <div id="jspaint-tools">
       <div id="FreeStyleSpeedDotsTool" class="main-tool">SpeedDot</div>
       <div id="CircleStampTool" class="main-tool">Circle stamp</div>

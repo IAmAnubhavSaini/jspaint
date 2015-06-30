@@ -43,9 +43,18 @@ module.exports = function(grunt) {
           }
         ]
       },
-      updateReference: {
+      updateReferenceBootstrap: {
         src: 'src/bootstrap.css',
         dest: 'src/bootstrap.css',
+        replacements: [{
+            from: '../fonts/',
+            to: ''
+          }
+        ]
+      },
+      updateReferenceFontAwesome: {
+        src: 'src/font-awesome.css',
+        dest: 'src/font-awesome.css',
         replacements: [{
             from: '../fonts/',
             to: ''
@@ -70,23 +79,35 @@ module.exports = function(grunt) {
       }
     },
     copy: {
-      main:{
+      fromNodeModules:{
         files:[
           {
             expand: true,
             flatten: true,
             src: [
               'node_modules/bootstrap/dist/css/bootstrap.css',
+              'node_modules/font-awesome/css/font-awesome.css',
               'node_modules/bootstrap/dist/js/bootstrap.js',
-              'node_modules/jquery/dist/jquery.js'
+              'node_modules/jquery/dist/jquery.js',
+              'node_modules/jquery-awesome-cursor/dist/jquery.awesome-cursor.js'
             ],
             dest: 'src/'
           },
           {
             expand: true,
             flatten: true,
-            src: 'node_modules/bootstrap/dist/fonts/*',
+            src: ['node_modules/bootstrap/dist/fonts/*', 'node_modules/font-awesome/fonts/*'],
             dest: 'src/'
+          }
+        ]
+      },
+      copyFontsToBuild : {
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            src: ['src/*.eot', 'src/*.svg', 'src/*.ttf', 'src/*.woff', 'src/*.woff2', 'src/*.otf'],
+            dest: 'build/'
           }
         ]
       }
@@ -100,7 +121,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bootlint');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['copy','bootlint', 'jshint', 'uglify', 'cssmin', 'replace']);
-  grunt.registerTask('setup-dev', ['copy', 'replace:updateReference']);
+  grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap', 'replace:updateReferenceFontAwesome']);
+  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'jshint', 'uglify', 'cssmin', 'replace', 'copy:copyFontsToBuild']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

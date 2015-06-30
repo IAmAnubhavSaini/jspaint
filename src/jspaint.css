@@ -67,7 +67,7 @@ html,body{
 
 .contextual-menu-bar a {
   height: 45px;
-  width: 100px;
+  width: 45px;
   display: inline-block;
   color: black;
   background-color: #DDddDD;
@@ -82,6 +82,11 @@ html,body{
   border: thin solid black;
   outline: thin solid white;
 }
+
+a#jspaint-brand{
+  width: 100px;
+}
+
 .contextual-menu-bar .menu-item{
   float: left;
   margin: 5px;
@@ -104,4 +109,9 @@ html,body{
 #HTML5ColorPicker #allColorsPicker:hover{
   border: thin solid black;
   outline: thin solid white;
+}
+
+#SaveImageButton #save-as-image{
+  font-size: 32px;
+  width: 50px;
 }

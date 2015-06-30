@@ -199,12 +199,19 @@
           });
         },
 
+        registerSaveImageEvents = function(options){
+          $('#'+options.toolId).on('click', function(){
+            window.open($('#'+CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank")
+          });
+        },
+
         registerEvents = function (){
           registerColorEvents();
           registerPencilToolEvents();
           registerCircleStampToolEvents();
           registerFreeStyleSpeedDotsToolEvents();
           registerAllColorsPickerEvents({toolId: 'allColorsPicker', containerId:'HTML5ColorPicker'});
+          registerSaveImageEvents({toolId: 'save-as-image', containerId: 'SaveImageButton'});
         },
 
         mustAssignDimensionsToCanvasContainer = function(){

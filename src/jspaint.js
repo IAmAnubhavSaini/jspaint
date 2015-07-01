@@ -84,17 +84,17 @@
           }
         },
 
-        startCircleStampTool = function(){
+        startDiscTool = function(){
           $('#'+CONSTANTS.canvasId).on("click", function (event) {
             CANVASAPI.fillCirc(
               (event.pageX - $(this).offset().left),
               (event.pageY - $(this).offset().top),
-              4
+              10
             );
           });
         },
 
-        stopCircleStampTool = function(){
+        stopDiscTool = function(){
           $('#'+CONSTANTS.canvasId).off("click");
         },
 
@@ -162,15 +162,15 @@
           );
         },
 
-        registerCircleStampToolEvents = function(){
-          $('#CircleStampTool').funcToggle('click',
+        registerDiscToolEvents = function(){
+          $('#DiscTool').funcToggle('click',
             function(){
-              activateTool({tool: this}, startCircleStampTool);
+              activateTool({tool: this}, startDiscTool);
               activeTool = $(this);
             },
             function(){
               activeTool = null;
-              deactivateTool({tool: this}, stopCircleStampTool);
+              deactivateTool({tool: this}, stopDiscTool);
             }
           );
         },
@@ -240,7 +240,7 @@
         registerEvents = function (){
           registerColorEvents();
           registerPencilToolEvents();
-          registerCircleStampToolEvents();
+          registerDiscToolEvents();
           registerFreeStyleSpeedDotsToolEvents();
           registerAllColorsPickerEvents({toolId: 'allColorsPicker', containerId:'HTML5ColorPicker'});
           registerSaveImageEvents({toolId: 'save-as-image', containerId: 'SaveImageButton'});

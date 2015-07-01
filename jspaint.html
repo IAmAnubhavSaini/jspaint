@@ -12,7 +12,7 @@
 <body>
   <header class="contextual-menu-bar">
       <div class="menu-item">
-        <a href="./index.html" id="jspaint-brand">jspaint</a>
+        <a href="./index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
       </div>
       <div class="menu-item">
         <div class="contextual-tool-bar">
@@ -26,7 +26,7 @@
           </div>
           <div class="menu-item">
             <div id="SaveImageButton">
-              <a id="save-as-image"><i class="glyphicon glyphicon-camera"></i></a>
+              <a id="save-as-image" class="string-menu-item">imagify</a>
             </div>
           </div>
           <div class="menu-item">
@@ -39,9 +39,20 @@
     </header>
     <div id="jspaint-tools">
       <div id="FreeStyleSpeedDotsTool" class="main-tool">SpeedDot</div>
-      <div id="CircleStampTool" class="main-tool">Circle stamp</div>
       <div id="PencilTool" class="main-tool">Pencil</div>
-      <div id="SquareTool" class="main-tool">Square</div>
+      <div id="ShapeTool" class="main-tool-menu dropdown">
+        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Shapes
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <li>
+            <div id="DiscTool" class="main-tool">Disc</div>
+            <div id="SquareTool" class="main-tool">Square</div>
+          </li>
+        </ul>
+      </div>
+
     </div>
     <div id="jspaint-paint-area"></div>
     <div>

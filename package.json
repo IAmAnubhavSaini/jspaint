@@ -1,7 +1,7 @@
 {
   "name": "jspaint",
-  "version": "0.0.6",
-  "description": "Don't you want to paint without delay, online, from any device, at any time? Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
+  "version": "0.0.7",
+  "description": "Paint without delay, online, from any device, at any time? Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
   "main": "index.js",
   "directories": {
     "test": "test"

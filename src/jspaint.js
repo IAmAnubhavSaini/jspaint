@@ -98,6 +98,20 @@
           $('#'+CONSTANTS.canvasId).off("click");
         },
 
+        startSquareTool = function(){
+          $('#'+CONSTANTS.canvasId).on("click", function (event) {
+            context.fillRect(
+              (event.pageX - $(this).offset().left),
+              (event.pageY - $(this).offset().top),
+              10, 10
+            );
+          });
+        },
+
+        stopSquareTool = function(){
+          $('#'+CONSTANTS.canvasId).off("click");
+        },
+
         generateHexColorStringFromThisElementsId = function (element){
           return '#'+element.attr('id').split('#')[1];
         },
@@ -209,6 +223,20 @@
             context.restore();
           });
         },
+
+        registerSquareToolEvents = function(options){
+          $('#'+options.toolId).funcToggle('click',
+            function(){
+              activateTool({tool: this}, startSquareTool);
+              activeTool = $(this);
+            },
+            function(){
+              activeTool = null;
+              deactivateTool({tool: this}, stopSquareTool);
+            }
+          );
+        },
+
         registerEvents = function (){
           registerColorEvents();
           registerPencilToolEvents();
@@ -217,6 +245,7 @@
           registerAllColorsPickerEvents({toolId: 'allColorsPicker', containerId:'HTML5ColorPicker'});
           registerSaveImageEvents({toolId: 'save-as-image', containerId: 'SaveImageButton'});
           registerResetCanvasEvents({toolId: 'reset-canvas', containerId: 'ResetCanvas'});
+          registerSquareToolEvents({toolId: 'SquareTool', containerId: 'jspaint-tools'});
         },
 
         mustAssignDimensionsToCanvasContainer = function(){

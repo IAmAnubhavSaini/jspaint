@@ -101,7 +101,7 @@ html,body{
   outline: thin solid white;
 }
 
-a#jspaint-brand{
+a.string-menu-item{
   width: 100px;
 }
 
@@ -129,7 +129,7 @@ a#jspaint-brand{
   outline: thin solid white;
 }
 
-a#save-as-image, a#reset-canvas{
+a#reset-canvas{
   font-size: 31px;
   width: 50px;
   padding-top: 4px;

@@ -42,6 +42,24 @@ html,body{
     border-bottom: thick solid rgba(0,0,0, 1);
   }
 
+.main-tool-menu {
+  border-top: thick solid rgba(0,0,0, .5);
+  display: inline-block;
+}
+  .main-tool-menu:hover{
+    border-top: thick solid rgba(0,0,0, 1);
+  }
+  .main-tool-menu button{
+    background-color: transparent;
+    border: none;
+  }
+  .main-tool-menu button:hover, .main-tool-menu.dropdown.open button.btn-default:active {
+    background-color: transparent;
+  }
+  .main-tool-menu .main-tool{
+    margin-top: 5px;
+  }
+
 .BasicColorPalette .color{
   width: 20px;
   height: 20px;

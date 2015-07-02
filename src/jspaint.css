@@ -134,3 +134,7 @@ a#reset-canvas{
   width: 50px;
   padding-top: 4px;
 }
+
+i.glyphicon:active{
+  color: red;
+}

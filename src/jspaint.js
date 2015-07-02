@@ -399,174 +399,125 @@
           return canvas.getContext('2d');
       },
 
+    generateHexColorStringFromThisElementsId = function (element) {
+        return '#' + element.attr('id').split('#')[1];
+    },
 
+    activateTool = function (options, start) {
+        if (activeTool !== null) {
+            activeTool.trigger('click');
+        }
+        $(options.tool).toggleClass('active-tool');
+        options.start(options);
+    },
 
-          generateHexColorStringFromThisElementsId = function (element) {
-              return '#' + element.attr('id').split('#')[1];
-          },
+    deactivateTool = function (options, stop) {
+        $(options.tool).toggleClass('active-tool');
+        options.stop(options);
+    },
 
+    activeTool = null,
 
+    registerColorEvents = function () {
+        $('.color')
+        .on('click', function () {
+            selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
+        })
+        .on('contextmenu', function () {
+            selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
+        });
+    },
 
-          activateTool = function (options, start) {
-              if (activeTool !== null) {
-                  activeTool.trigger('click');
-              }
-              $(options.tool).toggleClass('active-tool');
-              options.start(options);
-          },
+    registerAllColorsPickerEvents = function (options) {
+        $('#' + options.containerId + ' #' + options.toolId).on('input', function () {
+            selectedPrimaryColor = context.fillStyle = $(this).val();
+        });
+    },
 
-          deactivateTool = function (options, stop) {
-              $(options.tool).toggleClass('active-tool');
-              options.stop(options);
-          },
+    registerSaveImageEvents = function (options) {
+        $('#' + options.toolId).on('click', function () {
+            window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
+        });
+    },
+    registerResetCanvasEvents = function (options) {
+        $('#' + options.toolId).on('click', function () {
+            var canvas = $('#' + CONSTANTS.canvasId)[0];
+            var canvasHeight = canvas.height;
+            var canvasWidth = canvas.width;
+            var context = canvas.getContext('2d');
+            context.save();
+            context.transform(1, 0, 0, 1, 0, 0);
+            context.fillStyle = resetCanvasColor;
 
-          activeTool = null,
+            context.fillRect(0, 0, canvasWidth, canvasHeight);
+            context.restore();
+        });
+    },
 
+    registerEvents = function () {
+        registerColorEvents();
+        Tools.Pencil.Events.register({
+            toolId: Tools.Pencil.CONSTANTS.selectionId,
+            event: CONSTANTS.Events.mousemove,
+            canvasId: CONSTANTS.canvasId,
+            start: Tools.Pencil.start,
+            stop: Tools.Pencil.stop
+        });
+        Tools.Disc.Events.register({
+            toolId: Tools.Disc.CONSTANTS.selectionId,
+            event: CONSTANTS.Events.mouseclick,
+            canvasId: CONSTANTS.canvasId,
+            start: Tools.Disc.start,
+            stop: Tools.Disc.stop
+        });
+        Tools.SpeedDot.Events.register({
+            toolId: Tools.SpeedDot.CONSTANTS.selectionId,
+            event: CONSTANTS.Events.mousemove,
+            canvasId: CONSTANTS.canvasId,
+            start: Tools.SpeedDot.start,
+            stop: Tools.SpeedDot.stop
+        });
+        Tools.Square.Events.register({
+            toolId: Tools.Square.CONSTANTS.selectionId,
+            containerId: 'jspaint-tools',
+            event: CONSTANTS.Events.mouseclick,
+            canvasId: CONSTANTS.canvasId,
+            start: Tools.Square.start,
+            stop: Tools.Square.stop
+        });
+        registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
+        registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });
+        registerResetCanvasEvents({ toolId: 'reset-canvas', containerId: 'ResetCanvas' });
 
+    },
 
+    mustAssignDimensionsToCanvasContainer = function () {
+        $('#jspaint-paint-area').css({
+            width: sizeX, height: sizeY
+        });
+    },
 
-          registerColorEvents = function () {
-              $('.color')
-                .on('click', function () {
-                    selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
-                })
-                .on('contextmenu', function () {
-                    selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
-                });
-          },
+    initializeToolsInfo = function () {
+        $('.' + CONSTANTS.maintoolsClass).attr('title', 'Click to activate;\nRight-click to deactivate;');
+    },
 
-          registerAllColorsPickerEvents = function (options) {
-              $('#' + options.containerId + ' #' + options.toolId).on('input', function () {
-                  selectedPrimaryColor = context.fillStyle = $(this).val();
-              });
-          },
+    initializeTopTakerWidget = function () {
+        $('.top-taker').TopTaker({ 'theme': 'dark' });
+    },
 
-          registerSaveImageEvents = function (options) {
-              $('#' + options.toolId).on('click', function () {
-                  window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
-              });
-          },
-          registerResetCanvasEvents = function (options) {
-              $('#' + options.toolId).on('click', function () {
-                  var canvas = $('#' + CONSTANTS.canvasId)[0];
-                  var canvasHeight = canvas.height;
-                  var canvasWidth = canvas.width;
-                  var context = canvas.getContext('2d');
-                  context.save();
-                  context.transform(1, 0, 0, 1, 0, 0);
-                  context.fillStyle = resetCanvasColor;
+    init = function () {
+        mustAssignDimensionsToCanvasContainer();
+        context = initializeContext({ sizeX: sizeX, sizeY: sizeY, canvasId: CONSTANTS.canvasId, canvasContainerId: CONSTANTS.canvasContainerId });
+        initializeToolsInfo();
+        initializeTopTakerWidget();
+        Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
+        registerEvents();
+        $('#PencilTool').trigger('click');
+    },
 
-                  context.fillRect(0, 0, canvasWidth, canvasHeight);
-                  context.restore();
-              });
-          },
-
-
-          registerEvents = function () {
-              registerColorEvents();
-              Tools.Pencil.Events.register({
-                  toolId: Tools.Pencil.CONSTANTS.selectionId,
-                  event: CONSTANTS.Events.mousemove,
-                  canvasId: CONSTANTS.canvasId,
-                  start: Tools.Pencil.start,
-                  stop: Tools.Pencil.stop
-              });
-              Tools.Disc.Events.register({
-                  toolId: Tools.Disc.CONSTANTS.selectionId,
-                  event: CONSTANTS.Events.mouseclick,
-                  canvasId: CONSTANTS.canvasId,
-                  start: Tools.Disc.start,
-                  stop: Tools.Disc.stop
-              });
-              Tools.SpeedDot.Events.register({
-                  toolId: Tools.SpeedDot.CONSTANTS.selectionId,
-                  event: CONSTANTS.Events.mousemove,
-                  canvasId: CONSTANTS.canvasId,
-                  start: Tools.SpeedDot.start,
-                  stop: Tools.SpeedDot.stop
-              });
-              Tools.Square.Events.register({
-                  toolId: Tools.Square.CONSTANTS.selectionId,
-                  containerId: 'jspaint-tools',
-                  event: CONSTANTS.Events.mouseclick,
-                  canvasId: CONSTANTS.canvasId,
-                  start: Tools.Square.start,
-                  stop: Tools.Square.stop
-              });
-              registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
-              registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });
-              registerResetCanvasEvents({ toolId: 'reset-canvas', containerId: 'ResetCanvas' });
-
-          },
-
-          mustAssignDimensionsToCanvasContainer = function () {
-              $('#jspaint-paint-area').css({
-                  width: sizeX, height: sizeY
-              });
-          },
-
-          initializeToolsInfo = function () {
-              $('.' + CONSTANTS.maintoolsClass).attr('title', 'Click to activate;\nRight-click to deactivate;');
-          },
-
-          initializeTopTakerWidget = function () {
-              $('.top-taker').TopTaker({ 'theme': 'dark' });
-          },
-
-          init = function () {
-              mustAssignDimensionsToCanvasContainer();
-              context = initializeContext({ sizeX: sizeX, sizeY: sizeY, canvasId: CONSTANTS.canvasId, canvasContainerId: CONSTANTS.canvasContainerId });
-              initializeToolsInfo();
-              initializeTopTakerWidget();
-              Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
-              registerEvents();
-              $('#PencilTool').trigger('click');
-          },
-          tests = function () {
-              if (window.location.href.startsWith("file://")) {
-                  mocha.setup('bdd');
-                  mocha.reporter('html');
-                  var assert = chai.assert;
-
-                  var runEventTest = function (options) {
-                      describe("Events are installed properly for " + options.name, function () {
-                          var tool = $(options.selectionCriterion);
-                          var events = $._data(tool[0], "events");
-                          it("There is exactly one event.", function () {
-                              assert(1, events.length);
-                          });
-                          it("There is exactly one click event.", function () {
-                              assert(events.click !== "undefined");
-                          });
-                      });
-                  },
-
-                  checkingForInstalledEvents = function () {
-                      runEventTest({ name: Tools.Pencil.CONSTANTS.id, selectionCriterion: Tools.Pencil.CONSTANTS.selectionId });
-                      runEventTest({ name: Tools.SpeedDot.CONSTANTS.id, selectionCriterion: Tools.SpeedDot.CONSTANTS.selectionId });
-                      runEventTest({ name: Tools.Square.CONSTANTS.id, selectionCriterion: Tools.Square.CONSTANTS.selectionId });
-                      runEventTest({ name: Tools.Square.CONSTANTS.id, selectionCriterion: Tools.Square.CONSTANTS.selectionId });
-                      runEventTest({
-                          name: Tools.Disc.CONSTANTS.id, selectionCriterion: Tools.Disc.CONSTANTS.selectionId
-                      });
-                      runEventTest({ name: "Reset Canvas", selectionCriterion: '#reset-canvas' });
-                      runEventTest({ name: "Save Image", selectionCriterion: '#save-as-image' });
-                      runEventTest({ name: "Color Picker", selectionCriterion: '#allColorsPicker' });
-
-                      runEventTest({ name: "Basic colors", selectionCriterion: '.color' });
-                  };
-                  describe('Testing.', function () {
-                      checkingForInstalledEvents();
-                  });
-              }
-              if (navigator.userAgent.indexOf('PhantomJS') < 0) {
-                  mocha.run();
-              }
-          },
-          mustRunInSequence = function () {
-              init();
-              tests();
-          };
+    mustRunInSequence = function () {
+        init();
+    };
         mustRunInSequence();
     });
 })(jQuery);

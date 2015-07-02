@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Paint without delay, online, from any device, at any time? Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
   "main": "index.js",
   "directories": {
@@ -18,7 +18,7 @@
     "jquery",
     "paint"
   ],
-  "author": "Anubhav Saini",
+  "author": "Anubhav Saini <IAmAnubhavSaini@GMail.com>",
   "license": "GNU GPL v3",
   "bugs": {
     "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"

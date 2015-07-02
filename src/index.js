@@ -62,7 +62,7 @@
         $('.top-taker').TopTaker({'theme': 'dark'});
       },
       tests = function(){
-        if(window.location.href === "file:///D:/projext/jspaint/src/index.html"){
+        if(window.location.href.startsWith("file://")){
           mocha.setup('bdd');
           mocha.reporter('html');
           var assert = chai.assert;

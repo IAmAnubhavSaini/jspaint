@@ -19,7 +19,7 @@ html,body{
 
 #jspaint-paint-area{
   min-height: 320px;
-  min-width: 480px;
+  min-width: 400px;
   border: thin solid #333;
   margin: auto;
 }

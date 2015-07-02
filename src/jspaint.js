@@ -28,38 +28,6 @@
         Events: {
             mousemove: 'mousemove',
             mouseclick: 'click'
-        },
-        Tools: {
-            Pencil: {
-                id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool'
-            },
-            SpeedDot: {
-                id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool'
-            },
-            Disc: {
-                id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool'
-            },
-            Square: {
-                id: 'SquareTool', selectionId: '#SquareTool', class: 'main-tool'
-            }
-        }
-    };
-
-    var VARIABLES = {
-        Pencil: {
-            width: 2,
-            height: 2
-        },
-        Disc: {
-            radius: 10
-        },
-        SpeedDot: {
-            width: 2,
-            height: 2
-        },
-        Square: {
-            width: 10,
-            height: 10
         }
     };
 
@@ -127,6 +95,13 @@
         };
         var Tools = {
             SpeedDot: {
+                CONSTANTS: {
+                    id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool'
+                },
+                VARIABLES: {
+                    width: 2,
+                    height: 2
+                },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mousemove,
                         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
@@ -134,7 +109,11 @@
 
                     $(canvasId).on(event, function (e) {
                         mouseOptions = { event: e, relativeTo: $(this) };
-                        context.fillRect(Actions.Mouse.getX(mouseOptions), Actions.Mouse.getY(mouseOptions), VARIABLES.SpeedDot.width, VARIABLES.SpeedDot.height);
+                        context.fillRect(
+                            Actions.Mouse.getX(mouseOptions),
+                            Actions.Mouse.getY(mouseOptions),
+                            Tools.SpeedDot.VARIABLES.width,
+                            Tools.SpeedDot.VARIABLES.height);
                     });
                 },
                 stop: function (options) {
@@ -164,6 +143,12 @@
                 }
             },
             Square: {
+                CONSTANTS: {
+                    id: 'SquareTool', selectionId: '#SquareTool', class: 'main-tool'
+                },
+                VARIABLES: {
+                    side: 10
+                },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mouseclick,
                                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
@@ -174,8 +159,8 @@
                         context.fillRect(
                             Actions.Mouse.getX(mouseOptions),
                             Actions.Mouse.getY(mouseOptions),
-                            VARIABLES.Square.width,
-                            VARIABLES.Square.height
+                            Tools.Square.VARIABLES.side,
+                            Tools.Square.VARIABLES.side
                         );
                     });
                 },
@@ -203,6 +188,10 @@
                 }
             },
             Disc: {
+                CONSTANTS: {
+                    id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool'
+                },
+                VARIABLES: { radius: 10 },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mouseclick,
                                   canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
@@ -210,7 +199,7 @@
 
                     $(canvasId).on(event, function (e) {
                         mouseOptions = { event: e, relativeTo: $(this) };
-                        CANVASAPI.fillCirc(Actions.Mouse.getX(mouseOptions), Actions.Mouse.getY(mouseOptions), VARIABLES.Disc.radius);
+                        CANVASAPI.fillCirc(Actions.Mouse.getX(mouseOptions), Actions.Mouse.getY(mouseOptions), Tools.Disc.VARIABLES.radius);
                     });
                 },
                 stop: function (options) {
@@ -225,16 +214,16 @@
                         var increase = $('<div></div>').attr('id', options.increaseDiscSize.id).addClass('menu-item');
                         var increaseIcon = $('<i></i>').addClass(options.increaseDiscSize.icon);
                         var anchorIncrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            VARIABLES.Disc.radius += 2;
-                            $(this).attr('title', VARIABLES.Disc.radius);
+                            Tools.Disc.VARIABLES.radius += 2;
+                            $(this).attr('title', Tools.Disc.VARIABLES.radius);
                         });
                         increaseIcon.appendTo(anchorIncrease);
                         anchorIncrease.appendTo(increase);
                         var decrease = $('<div></div>').attr('id', options.decreaseDiscSize.id).addClass('menu-item');
                         var decreaseIcon = $('<i></i>').addClass(options.decreaseDiscSize.icon);
                         var anchorDecrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            VARIABLES.Disc.radius = VARIABLES.Disc.radius - 2 === 0 ? 2 : VARIABLES.Disc.radius - 2;
-                            $(this).attr('title', VARIABLES.Disc.radius);
+                            Tools.Disc.VARIABLES.radius = Tools.Disc.VARIABLES.radius - 2 === 0 ? 2 : Tools.Disc.VARIABLES.radius - 2;
+                            $(this).attr('title', Tools.Disc.VARIABLES.radius);
                         });
                         decreaseIcon.appendTo(anchorDecrease);
                         anchorDecrease.appendTo(decrease);
@@ -287,6 +276,13 @@
                 }
             },
             Pencil: {
+                CONSTANTS: {
+                    id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool'
+                },
+                VARIABLES: {
+                    width: 2,
+                    height: 2
+                },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mousemove,
                     canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
@@ -299,8 +295,8 @@
                                 context.fillRect(
                                     Actions.Mouse.getX(mouseOptions),
                                     Actions.Mouse.getY(mouseOptions),
-                                    VARIABLES.Pencil.width,
-                                    VARIABLES.Pencil.height
+                                    Tools.Pencil.VARIABLES.width,
+                                    Tools.Pencil.VARIABLES.height
                                 );
                             }
                         }
@@ -318,18 +314,18 @@
                         var increase = $('<div></div>').attr('id', options.increaseDotSize.id).addClass('menu-item');
                         var increaseIcon = $('<i></i>').addClass(options.increaseDotSize.icon);
                         var anchorIncrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            VARIABLES.Pencil.width += 2;
-                            VARIABLES.Pencil.height = VARIABLES.Pencil.width;
-                            $(this).attr('title', VARIABLES.Pencil.width);
+                            Tools.Pencil.VARIABLES.width += 2;
+                            Tools.Pencil.VARIABLES.height = Tools.Pencil.VARIABLES.width;
+                            $(this).attr('title', Tools.Pencil.VARIABLES.width);
                         });
                         increaseIcon.appendTo(anchorIncrease);
                         anchorIncrease.appendTo(increase);
                         var decrease = $('<div></div>').attr('id', options.decreaseDotSize.id).addClass('menu-item');
                         var decreaseIcon = $('<i></i>').addClass(options.decreaseDotSize.icon);
                         var anchorDecrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            VARIABLES.Pencil.width = VARIABLES.Pencil.width - 2 === 0 ? 2 : VARIABLES.Pencil.width - 2;
-                            VARIABLES.Pencil.height = VARIABLES.Pencil.width;
-                            $(this).attr('title', VARIABLES.Pencil.width);
+                            Tools.Pencil.VARIABLES.width = Tools.Pencil.VARIABLES.width - 2 === 0 ? 2 : Tools.Pencil.VARIABLES.width - 2;
+                            Tools.Pencil.VARIABLES.height = Tools.Pencil.VARIABLES.width;
+                            $(this).attr('title', Tools.Pencil.VARIABLES.width);
                         });
                         decreaseIcon.appendTo(anchorDecrease);
                         anchorDecrease.appendTo(decrease);
@@ -360,7 +356,7 @@
                 },
                 Events: {
                     register: function (options) {
-                        var toolId = options.toolId || CONSTANTS.Tools.Pencil.selectionId,
+                        var toolId = options.toolId || Tools.Pencil.CONSTANTS.selectionId,
                             tool = $(toolId),
                             contextMenu = Tools.Pencil.ContextMenu;
 
@@ -469,28 +465,28 @@
           registerEvents = function () {
               registerColorEvents();
               Tools.Pencil.Events.register({
-                  toolId: CONSTANTS.Tools.Pencil.selectionId,
+                  toolId: Tools.Pencil.CONSTANTS.selectionId,
                   event: CONSTANTS.Events.mousemove,
                   canvasId: CONSTANTS.canvasId,
                   start: Tools.Pencil.start,
                   stop: Tools.Pencil.stop
               });
               Tools.Disc.Events.register({
-                  toolId: CONSTANTS.Tools.Disc.selectionId,
+                  toolId: Tools.Disc.CONSTANTS.selectionId,
                   event: CONSTANTS.Events.mouseclick,
                   canvasId: CONSTANTS.canvasId,
                   start: Tools.Disc.start,
                   stop: Tools.Disc.stop
               });
               Tools.SpeedDot.Events.register({
-                  toolId: CONSTANTS.Tools.SpeedDot.selectionId,
+                  toolId: Tools.SpeedDot.CONSTANTS.selectionId,
                   event: CONSTANTS.Events.mousemove,
                   canvasId: CONSTANTS.canvasId,
                   start: Tools.SpeedDot.start,
                   stop: Tools.SpeedDot.stop
               });
               Tools.Square.Events.register({
-                  toolId: CONSTANTS.Tools.Square.selectionId,
+                  toolId: Tools.Square.CONSTANTS.selectionId,
                   containerId: 'jspaint-tools',
                   event: CONSTANTS.Events.mouseclick,
                   canvasId: CONSTANTS.canvasId,
@@ -546,12 +542,12 @@
                   },
 
                   checkingForInstalledEvents = function () {
-                      runEventTest({ name: CONSTANTS.Tools.Pencil.id, selectionCriterion: CONSTANTS.Tools.Pencil.selectionId });
-                      runEventTest({ name: CONSTANTS.Tools.SpeedDot.id, selectionCriterion: CONSTANTS.Tools.SpeedDot.selectionId });
-                      runEventTest({ name: CONSTANTS.Tools.Square.id, selectionCriterion: CONSTANTS.Tools.Square.selectionId });
-                      runEventTest({ name: CONSTANTS.Tools.Square.id, selectionCriterion: CONSTANTS.Tools.Square.selectionId });
+                      runEventTest({ name: Tools.Pencil.CONSTANTS.id, selectionCriterion: Tools.Pencil.CONSTANTS.selectionId });
+                      runEventTest({ name: Tools.SpeedDot.CONSTANTS.id, selectionCriterion: Tools.SpeedDot.CONSTANTS.selectionId });
+                      runEventTest({ name: Tools.Square.CONSTANTS.id, selectionCriterion: Tools.Square.CONSTANTS.selectionId });
+                      runEventTest({ name: Tools.Square.CONSTANTS.id, selectionCriterion: Tools.Square.CONSTANTS.selectionId });
                       runEventTest({
-                          name: CONSTANTS.Tools.Disc.id, selectionCriterion: CONSTANTS.Tools.Disc.selectionId
+                          name: Tools.Disc.CONSTANTS.id, selectionCriterion: Tools.Disc.CONSTANTS.selectionId
                       });
                       runEventTest({ name: "Reset Canvas", selectionCriterion: '#reset-canvas' });
                       runEventTest({ name: "Save Image", selectionCriterion: '#save-as-image' });

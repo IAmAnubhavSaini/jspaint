@@ -4,32 +4,11 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script type="text/javascript">
-    if (window.top !== window.self) {
-      var blocker = document.createElement('div');
-      blocker.style.width = '100%';
-      blocker.style.height = '100%';
-      blocker.style.minHeight = '600px';
-      blocker.style.minWidth = '800px';
-      blocker.style.lineHeight = '600px';
-      blocker.style.textAlign = 'center';
-      blocker.style.fontSize = '72px';
-      blocker.style.backgroundColor = 'red';
-      blocker.style.color = 'white';
-      blocker.style.textShadow='2px 2px black';
-      blocker.style.position = 'fixed';
-      blocker.style.top = '0';
-      blocker.innerHTML = 'You are visiting jspaint in an insecure way.'+
-                          'Please visit http://IAmAnubhavSaini.github.io/jspaint';
-      (document.getElementsByTagName('html'))[0].appendChild(blocker);
-      alert('Security risk! Go to original page: '  + window.self.location.href);
-      window.top.location.replace(window.self.location.href);
-    }
-  </script>
   <title>js paint</title>
   <link href="./bootstrap.min.css" type="text/css" rel="stylesheet" />
   <link href="./jspaint.min.css" type="text/css" rel="stylesheet" />
   <link href="./TopTaker.widget.min.css" type="text/css" rel="stylesheet" />
+  <link rel="stylesheet" href="../node_modules/mocha/mocha.min.css" />
 </head>
 <body>
   <header class="contextual-menu-bar">
@@ -79,12 +58,16 @@
     <div id="jspaint-paint-area"></div>
     <div>
       <div class="top-taker"></div>
+      <div id="mocha"></div>
     </div>
     <script src="./jquery.min.js" type="text/javascript"></script>
     <script src="./jquery-ui.min.js" type="text/javascript"></script>
     <script src="./TopTaker.widget.min.js" type="text/javascript"></script>
     <script src="./bootstrap.min.js" type="text/javascript"></script>
     <script src="./jquery.func_toggle.min.js" type="text/javascript"></script>
+    <script src="../node_modules/mocha/mocha.min.js"></script>
+    <script src="../node_modules/chai/chai.min.js"></script>
+    <script src="./iframe-buster.min.js" type="text/javascript"></script>
     <script src="./jspaint.min.js" type="text/javascript"></script>
 </body>
 </html>

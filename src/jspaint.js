@@ -27,7 +27,10 @@
             {id: 'FFFF00', name:"Yellow"},
           ]
         },
-
+        VARIABLES = {
+          pencilToolRectWidth: 2,
+          pencilToolRectHeight: 2
+        },
         size = window.location.toString().split('?')[1].split('=')[1],
         sizeX = size.split('x')[0],
         sizeY = size.split('x')[1],
@@ -123,7 +126,7 @@
                 context.fillRect(
                   (event.pageX - $(this).offset().left),
                   (event.pageY - $(this).offset().top),
-                  2, 2
+                  VARIABLES.pencilToolRectWidth, VARIABLES.pencilToolRectHeight
                 );
               }
             }
@@ -175,15 +178,74 @@
           );
         },
 
+        activatePencilContextMenu = function(options){
+          var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+          var increase = $('<div></div>').attr('id', options.increaseDotSize.id).addClass('menu-item');
+          var increaseIcon = $('<i></i>').addClass(options.increaseDotSize.icon);
+          var anchorIncrease = $('<a></a>').css('font-size', '20px').on('click', function(){
+            VARIABLES.pencilToolRectWidth += 2;
+            VARIABLES.pencilToolRectHeight = VARIABLES.pencilToolRectWidth;
+            $(this).attr('title', VARIABLES.pencilToolRectWidth);
+          });
+          increaseIcon.appendTo(anchorIncrease);
+          anchorIncrease.appendTo(increase);
+          var decrease = $('<div></div>').attr('id', options.decreaseDotSize.id).addClass('menu-item');
+          var decreaseIcon = $('<i></i>').addClass(options.decreaseDotSize.icon);
+          var anchorDecrease = $('<a></a>').css('font-size', '20px').on('click', function(){
+            VARIABLES.pencilToolRectWidth = VARIABLES.pencilToolRectWidth-2===0? 2:VARIABLES.pencilToolRectWidth-2;
+            VARIABLES.pencilToolRectHeight = VARIABLES.pencilToolRectWidth;
+            $(this).attr('title', VARIABLES.pencilToolRectWidth);
+          });
+          decreaseIcon.appendTo(anchorDecrease);
+          anchorDecrease.appendTo(decrease);
+          increase.appendTo(div);
+          decrease.appendTo(div);
+          div.appendTo($(options.containerSelectionCriterion));
+        },
+
+        deactivatePencilContextMenu = function(options){
+          $('#'+options.id).remove();
+        },
+
         registerPencilToolEvents = function(){
           $('#PencilTool').funcToggle('click',
             function(){
               activateTool({tool: this}, startPencilTool);
+              activatePencilContextMenu({
+                tool: this,
+                id: 'PencilContextMenu',
+                increaseDotSize : {
+                  id: 'increaseDotSize',
+                  icon: 'glyphicon glyphicon-circle-arrow-up',
+                  containerId: 'PencilContextMenu'
+                },
+                decreaseDotSize : {
+                  id: 'decreaseDotSize',
+                  icon: 'glyphicon glyphicon-circle-arrow-down',
+                  containerId: 'PencilContextMenu'
+                },
+                containerSelectionCriterion: '.contextual-tool-bar'
+              });
               activeTool = $(this);
             },
             function(){
               activeTool = null;
               deactivateTool({tool: this}, stopPencilTool);
+              deactivatePencilContextMenu({
+                tool: this,
+                id: 'PencilContextMenu',
+                increaseDotSize : {
+                  id: 'increaseDotSize',
+                  icon: 'glyphicon glyphicon-circle-arrow-up',
+                  containerId: 'PencilContextMenu'
+                },
+                decreaseDotSize : {
+                  id: 'decreaseDotSize',
+                  icon: 'glyphicon glyphicon-circle-arrow-down',
+                  containerId: 'PencilContextMenu'
+                },
+                containerSelectionCriterion: '.contextual-tool-bar'
+              });
             }
           );
         },

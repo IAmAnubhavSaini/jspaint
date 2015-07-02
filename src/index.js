@@ -65,10 +65,8 @@
         if(window.location.href === "file:///D:/projext/jspaint/src/index.html"){
           mocha.setup('bdd');
           mocha.reporter('html');
-
           var assert = chai.assert;
-
-          describe('Testing.', function(){
+          var dimensionTests = function(){
             describe('Testing dimension events, as in, do objects have right events attached to them?', function(){
               var opt = $('.dimension-options button');
               var events = $._data(opt[0], "events");
@@ -79,6 +77,8 @@
                 assert(events.click.length === 1);
               });
             });
+          },
+          orientationTests = function(){
             describe('Testing orientation events, as in, do objects have right events attached to them?', function(){
               var opt = $('.orientation-options button');
               var events = $._data(opt[0], "events");
@@ -89,6 +89,8 @@
                 assert(events.click.length === 1);
               });
             });
+          },
+          actionTests = function(){
             describe('Testing jspaint-action events, as in, do objects have right events attached to them?', function(){
               var action = $('#jspaint-action');
               var events = $._data(action[0], "events");
@@ -111,6 +113,8 @@
                 assert(uriObtained = newHref);
               });
             });
+          },
+          defaultOptionTests = function(){
             describe("Default options are selected.", function(){
               var defaultDimension = "600x400",
                   defaultOrientation = "landscape";
@@ -122,6 +126,12 @@
                 assert($('.orientation-options button.btn-success').attr('id') === defaultOrientation);
               });
             });
+          };
+          describe('Testing.', function(){
+            dimensionTests();
+            orientationTests();
+            actionTests();
+            defaultOptionTests();
           });
         }
         if (navigator.userAgent.indexOf('PhantomJS') < 0) {

@@ -255,45 +255,35 @@
           $('#'+options.id).remove();
         },
 
+        getPencilContextMenu = function(){
+          return {
+            tool: this,
+            id: 'PencilContextMenu',
+            increaseDotSize : {
+              id: 'increaseDotSize',
+              icon: 'glyphicon glyphicon-circle-arrow-up',
+              containerId: 'PencilContextMenu'
+            },
+            decreaseDotSize : {
+              id: 'decreaseDotSize',
+              icon: 'glyphicon glyphicon-circle-arrow-down',
+              containerId: 'PencilContextMenu'
+            },
+            containerSelectionCriterion: '.contextual-tool-bar'
+          };
+        },
+
         registerPencilToolEvents = function(){
           $('#PencilTool').funcToggle('click',
             function(){
               activateTool({tool: this}, startPencilTool);
-              activatePencilContextMenu({
-                tool: this,
-                id: 'PencilContextMenu',
-                increaseDotSize : {
-                  id: 'increaseDotSize',
-                  icon: 'glyphicon glyphicon-circle-arrow-up',
-                  containerId: 'PencilContextMenu'
-                },
-                decreaseDotSize : {
-                  id: 'decreaseDotSize',
-                  icon: 'glyphicon glyphicon-circle-arrow-down',
-                  containerId: 'PencilContextMenu'
-                },
-                containerSelectionCriterion: '.contextual-tool-bar'
-              });
+              activatePencilContextMenu(getPencilContextMenu());
               activeTool = $(this);
             },
             function(){
               activeTool = null;
               deactivateTool({tool: this}, stopPencilTool);
-              deactivatePencilContextMenu({
-                tool: this,
-                id: 'PencilContextMenu',
-                increaseDotSize : {
-                  id: 'increaseDotSize',
-                  icon: 'glyphicon glyphicon-circle-arrow-up',
-                  containerId: 'PencilContextMenu'
-                },
-                decreaseDotSize : {
-                  id: 'decreaseDotSize',
-                  icon: 'glyphicon glyphicon-circle-arrow-down',
-                  containerId: 'PencilContextMenu'
-                },
-                containerSelectionCriterion: '.contextual-tool-bar'
-              });
+              deactivatePencilContextMenu(getPencilContextMenu());
             }
           );
         },

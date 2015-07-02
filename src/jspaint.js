@@ -29,7 +29,8 @@
         },
         VARIABLES = {
           pencilToolRectWidth: 2,
-          pencilToolRectHeight: 2
+          pencilToolRectHeight: 2,
+          discRadius: 10
         },
         size = window.location.toString().split('?')[1].split('=')[1],
         sizeX = size.split('x')[0],
@@ -92,7 +93,7 @@
             CANVASAPI.fillCirc(
               (event.pageX - $(this).offset().left),
               (event.pageY - $(this).offset().top),
-              10
+              VARIABLES.discRadius
             );
           });
         },
@@ -165,15 +166,62 @@
           );
         },
 
+        activateDiscContextMenu = function(options){
+          var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+          var increase = $('<div></div>').attr('id', options.increaseDiscSize.id).addClass('menu-item');
+          var increaseIcon = $('<i></i>').addClass(options.increaseDiscSize.icon);
+          var anchorIncrease = $('<a></a>').css('font-size', '20px').on('click', function(){
+            VARIABLES.discRadius += 2;
+            $(this).attr('title', VARIABLES.discRadius);
+          });
+          increaseIcon.appendTo(anchorIncrease);
+          anchorIncrease.appendTo(increase);
+          var decrease = $('<div></div>').attr('id', options.decreaseDiscSize.id).addClass('menu-item');
+          var decreaseIcon = $('<i></i>').addClass(options.decreaseDiscSize.icon);
+          var anchorDecrease = $('<a></a>').css('font-size', '20px').on('click', function(){
+            VARIABLES.discRadius = VARIABLES.discRadius-2===0? 2:VARIABLES.discRadius-2;
+            $(this).attr('title', VARIABLES.discRadius);
+          });
+          decreaseIcon.appendTo(anchorDecrease);
+          anchorDecrease.appendTo(decrease);
+          increase.appendTo(div);
+          decrease.appendTo(div);
+          div.appendTo($(options.containerSelectionCriterion));
+        },
+
+        deactivateDiscContextMenu = function(options){
+          $('#'+options.id).remove();
+        },
+
+        getDiscContextMenuOptions = function(){
+          return {
+            tool: this,
+            id: 'DiscContextMenu',
+            increaseDiscSize : {
+              id: 'increaseDiscSize',
+              icon: 'glyphicon glyphicon-circle-arrow-up',
+              containerId: 'DiscContextMenu'
+            },
+            decreaseDiscSize : {
+              id: 'decreaseDiscSize',
+              icon: 'glyphicon glyphicon-circle-arrow-down',
+              containerId: 'DiscContextMenu'
+            },
+            containerSelectionCriterion: '.contextual-tool-bar'
+          };
+        },
+
         registerDiscToolEvents = function(){
           $('#DiscTool').funcToggle('click',
             function(){
               activateTool({tool: this}, startDiscTool);
+              activateDiscContextMenu(getDiscContextMenuOptions());
               activeTool = $(this);
             },
             function(){
               activeTool = null;
               deactivateTool({tool: this}, stopDiscTool);
+              deactivateDiscContextMenu(getDiscContextMenuOptions());
             }
           );
         },

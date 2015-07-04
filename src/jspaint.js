@@ -524,10 +524,6 @@
         });
     },
 
-    initializeToolsInfo = function () {
-        $('.' + CONSTANTS.maintoolsClass).attr('title', 'Click to activate;\nRight-click to deactivate;');
-    },
-
     initializeTopTakerWidget = function () {
         $('.top-taker').TopTaker({ 'theme': 'dark' });
     },
@@ -535,7 +531,6 @@
     init = function () {
         mustAssignDimensionsToCanvasContainer();
         context = initializeContext({ sizeX: sizeX, sizeY: sizeY, canvasId: CONSTANTS.canvasId, canvasContainerId: CONSTANTS.canvasContainerId });
-        initializeToolsInfo();
         initializeTopTakerWidget();
         Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
         registerEvents();

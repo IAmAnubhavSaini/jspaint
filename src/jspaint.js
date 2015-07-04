@@ -319,11 +319,11 @@
                                 if (last.X != -1) {
                                     drawLineSegmentFromLastPoint(context, last, { X: X, Y: Y }, w);
                                 }
+                                CANVASAPI.fillCirc(X, Y, w/2);
                                 setLastPoint(X, Y);
                             } else {
                                 Tools.Pencil.VARIABLES.LastPoint.X = -1;
                                 Tools.Pencil.VARIABLES.LastPoint.Y = -1;
-                                context.endPath();
                             }
                         }
                     });

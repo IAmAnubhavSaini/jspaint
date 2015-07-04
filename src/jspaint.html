@@ -38,14 +38,24 @@
       </div>
     </header>
     <div id="jspaint-tools">
-      <div id="SpeedDotTool" class="main-tool">SpeedDot</div>
+        <div id="SpeedTools" class="main-tool-menu dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="SpeedToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Speed
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="SpeedToolsMenu">
+                <li>
+                    <div id="SpeedDotTool" class="main-tool">Dot</div>
+                </li>
+            </ul>
+        </div>
       <div id="PencilTool" class="main-tool">Pencil</div>
       <div id="ShapeTool" class="main-tool-menu dropdown">
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-          Shapes
-          <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+          <button class="btn btn-default dropdown-toggle" type="button" id="ShapeToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Shapes
+              <span class="caret"></span>
+          </button>
+        <ul class="dropdown-menu" aria-labelledby="ShapeToolsMenu">
           <li>
             <div id="DiscTool" class="main-tool">Disc</div>
             <div id="SquareTool" class="main-tool">Square</div>

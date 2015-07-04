@@ -281,23 +281,49 @@
                 },
                 VARIABLES: {
                     width: 2,
-                    height: 2
+                    height: 2,
+                    LastPoint: { X: -1, Y: -1 }
                 },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mousemove,
                     canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                    mouseOptions = null;
+                    mouseOptions = null,
+                    X, Y, w, last;
 
+                    function setLastPoint(X, Y) {
+                        Tools.Pencil.VARIABLES.LastPoint.X = X;
+                        Tools.Pencil.VARIABLES.LastPoint.Y = Y;
+                    }
+                    function getLastPoint() {
+                        return {
+                            X: Tools.Pencil.VARIABLES.LastPoint.X,
+                            Y: Tools.Pencil.VARIABLES.LastPoint.Y
+                        };
+                    }
+                    function drawLineSegmentFromLastPoint(context, last, current, width) {
+                        context.beginPath();
+                        context.moveTo(last.X, last.Y);
+                        context.lineTo(current.X, current.Y);
+                        context.lineWidth = width;
+                        context.strokeStyle = selectedPrimaryColor;
+                        context.stroke();
+                    }
                     $(canvasId).on(event, function (e) {
                         mouseOptions = { event: e, relativeTo: $(this) };
                         if (e.buttons !== undefined) {
                             if (e.buttons === 1) {
-                                context.fillRect(
-                                    Actions.Mouse.getX(mouseOptions),
-                                    Actions.Mouse.getY(mouseOptions),
-                                    Tools.Pencil.VARIABLES.width,
-                                    Tools.Pencil.VARIABLES.height
-                                );
+                                X = Actions.Mouse.getX(mouseOptions);
+                                Y = Actions.Mouse.getY(mouseOptions);
+                                w = Tools.Pencil.VARIABLES.width;
+                                last = getLastPoint();
+                                if (last.X != -1) {
+                                    drawLineSegmentFromLastPoint(context, last, { X: X, Y: Y }, w);
+                                }
+                                setLastPoint(X, Y);
+                            } else {
+                                Tools.Pencil.VARIABLES.LastPoint.X = -1;
+                                Tools.Pencil.VARIABLES.LastPoint.Y = -1;
+                                context.endPath();
                             }
                         }
                     });
@@ -305,7 +331,8 @@
                 stop: function (options) {
                     var event = options.event || CONSTANTS.Events.mousemove,
                     canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
-
+                    Tools.Pencil.VARIABLES.LastPoint.X = -1;
+                    Tools.Pencil.VARIABLES.LastPoint.Y = -1;
                     $(canvasId).off(event);
                 },
                 ContextMenu: {

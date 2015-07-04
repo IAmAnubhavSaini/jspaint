@@ -99,27 +99,27 @@
                     id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool'
                 },
                 VARIABLES: {
-                    width: 2,
-                    height: 2
+                    radius: 4
                 },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mousemove,
                         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                        mouseOptions = null;
+                        mouseOptions = null,
+                        X = null,
+                        Y = null,
+                        R = null;
 
                     $(canvasId).on(event, function (e) {
                         mouseOptions = { event: e, relativeTo: $(this) };
-                        context.fillRect(
-                            Actions.Mouse.getX(mouseOptions),
-                            Actions.Mouse.getY(mouseOptions),
-                            Tools.SpeedDot.VARIABLES.width,
-                            Tools.SpeedDot.VARIABLES.height);
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        R = Tools.SpeedDot.VARIABLES.radius;
+                        CANVASAPI.fillCirc(X, Y, R);
                     });
                 },
                 stop: function (options) {
                     var event = options.event || CONSTANTS.Events.mousemove,
                         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
-
                     $(canvasId).off(event);
                 },
                 Events: {

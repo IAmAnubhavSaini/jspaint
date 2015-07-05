@@ -66,6 +66,9 @@
                 context.beginPath();
                 context.arc(x, y, radius, 0, 2 * Math.PI, false);
                 context.fill();
+            },
+            fillSquare: function (x, y, side) {
+                context.fillRect(x, y, side, side);
             }
         };
         var Color = {
@@ -189,16 +192,17 @@
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mouseclick,
                                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                                mouseOptions = null;
+                                mouseOptions = null,
+                                X = null,
+                                Y = null,
+                                side = null;
 
                     $(canvasId).on(event, function (e) {
                         mouseOptions = { event: e, relativeTo: $(this) };
-                        context.fillRect(
-                            Actions.Mouse.getX(mouseOptions),
-                            Actions.Mouse.getY(mouseOptions),
-                            Tools.Square.VARIABLES.side,
-                            Tools.Square.VARIABLES.side
-                        );
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        side = Tools.Square.VARIABLES.side;
+                        CANVASAPI.fillSquare(X, Y, side);
                     });
                 },
                 stop: function (options) {

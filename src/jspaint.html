@@ -1,41 +1,48 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>js paint</title>
-  <link href="./bootstrap.css" type="text/css" rel="stylesheet" />
-  <link href="./jspaint.css" type="text/css" rel="stylesheet" />
-  <link href="./TopTaker.widget.css" type="text/css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>js paint</title>
+    <link href="./bootstrap.css" type="text/css" rel="stylesheet" />
+    <link href="./jspaint.css" type="text/css" rel="stylesheet" />
+    <link href="./TopTaker.widget.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-  <header class="contextual-menu-bar">
-      <div class="menu-item">
-        <a href="./index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
-      </div>
-      <div class="menu-item">
-        <div class="contextual-tool-bar">
-          <div class="menu-item">
-            <div class="BasicColorPalette"></div>
-          </div>
-          <div class="menu-item">
-            <div id="HTML5ColorPicker">
-              <input type="color" id="allColorsPicker" />
-            </div>
-          </div>
-          <div class="menu-item">
-            <div id="SaveImageButton">
-              <a id="save-as-image" class="string-menu-item">imagify</a>
-            </div>
-          </div>
-          <div class="menu-item">
-            <div id="ResetCanvas">
-              <a id="reset-canvas"><i class="glyphicon glyphicon-refresh"></i></a>
-            </div>
-          </div>
+    <header class="contextual-menu-bar">
+        <div class="menu-item">
+            <a href="./index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
         </div>
-      </div>
+        <div class="menu-item">
+            <div class="contextual-tool-bar">
+                <div class="menu-item">
+                    <div class="BasicColorPalette"></div>
+                </div>
+                <div class="menu-item">
+                    <div id="HTML5ColorPicker">
+                        <input type="color" id="allColorsPicker" />
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div id="PickColorTool">
+                        <a id="pick-color" title="Click to pick color from drawing area.">
+                            <i class="glyphicon glyphicon-screenshot"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div id="SaveImageButton">
+                        <a id="save-as-image" class="string-menu-item">imagify</a>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div id="ResetCanvas">
+                        <a id="reset-canvas"><i class="glyphicon glyphicon-refresh"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </header>
     <div id="jspaint-tools">
         <div id="SpeedTools" class="main-tool-menu dropdown">
@@ -49,25 +56,24 @@
                 </li>
             </ul>
         </div>
-      <div id="PencilTool" class="main-tool">Pencil</div>
-      <div id="ShapeTool" class="main-tool-menu dropdown">
-          <button class="btn btn-default dropdown-toggle" type="button" id="ShapeToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Shapes
-              <span class="caret"></span>
-          </button>
-        <ul class="dropdown-menu" aria-labelledby="ShapeToolsMenu">
-          <li>
-            <div id="DiscTool" class="main-tool">Disc</div>
-            <div id="SquareTool" class="main-tool">Square</div>
-          </li>
-        </ul>
-      </div>
-
+        <div id="PencilTool" class="main-tool">Pencil</div>
+        <div id="ShapeTool" class="main-tool-menu dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="ShapeToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Shapes
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="ShapeToolsMenu">
+                <li>
+                    <div id="DiscTool" class="main-tool">Disc</div>
+                    <div id="SquareTool" class="main-tool">Square</div>
+                </li>
+            </ul>
+        </div>
     </div>
     <div id="jspaint-paint-area"></div>
     <div>
-      <div class="top-taker"></div>
-      <div id="mocha"></div>
+        <div class="top-taker"></div>
+        <div id="mocha"></div>
     </div>
     <script src="./jquery.js" type="text/javascript"></script>
     <script src="./jquery-ui.js" type="text/javascript"></script>

@@ -41,7 +41,7 @@ html,body{
   .main-tool:hover{
     border-bottom: thick solid rgba(0,0,0, 1);
   }
-
+  
 .main-tool-menu {
   border-top: thick solid rgba(0,0,0, .5);
   display: inline-block;
@@ -127,12 +127,6 @@ a.string-menu-item{
 #HTML5ColorPicker #allColorsPicker:hover{
   border: thin solid black;
   outline: thin solid white;
-}
-
-a#reset-canvas{
-  font-size: 31px;
-  width: 50px;
-  padding-top: 4px;
 }
 
 i.glyphicon:active{

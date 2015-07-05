@@ -485,6 +485,55 @@
                         );
                     }
                 }
+            },
+            PickColor: {
+                CONSTANTS: {
+                    id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool'
+                },
+                start: function (options) {
+                    var event = options.event || CONSTANTS.Events.mouseclick,
+                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                        mouseOptions = null,
+                        X = null,
+                        Y = null,
+                        data = null,
+                        r = 0,
+                        g = 0,
+                        b = 0,
+                        a = 0;
+                    $(canvasId).on(event, function (e) {
+                        mouseOptions = { event: e, relativeTo: $(this) };
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        data = context.getImageData(X - 0.5, Y - 0.5, X + 0.5, Y + 0.5).data;
+                        r = data[0];
+                        g = data[1];
+                        b = data[2];
+                        a = data[3];
+                        selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+                    });
+                },
+                stop: function (options) {
+                    var event = options.event || CONSTANTS.Events.mouseclick,
+                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                    $(canvasId).off(event);
+                },
+                Events: {
+                    register: function (options) {
+                        var toolId = options.toolId || Tool.PickColor.CONSTANTS.selectionId,
+                            tool = $(toolId);
+                        options.tool = tool;
+                        tool.funcToggle('click',
+                            function () {
+                                activateTool(options);
+                                activeTool = $(this);
+                            },
+                            function () {
+                                activeTool = null;
+                                deactivateTool(options);
+                            });
+                    }
+                }
             }
         };
 
@@ -513,7 +562,7 @@
           return '#' + element.attr('id').split('#')[1];
       },
 
-      activateTool = function (options, start) {
+      activateTool = function (options) {
           if (activeTool !== null) {
               activeTool.trigger('click');
           }
@@ -521,7 +570,7 @@
           options.start(options);
       },
 
-      deactivateTool = function (options, stop) {
+      deactivateTool = function (options) {
           $(options.tool).toggleClass('active-tool');
           options.stop(options);
       },
@@ -593,6 +642,14 @@
               canvasId: CONSTANTS.canvasId,
               start: Tools.Square.start,
               stop: Tools.Square.stop
+          });
+          Tools.PickColor.Events.register({
+              toolId: Tools.PickColor.CONSTANTS.selectionId,
+              containerId: Tools.PickColor.CONSTANTS.containerId,
+              event: CONSTANTS.Events.mouseclick,
+              canvasId: CONSTANTS.canvasId,
+              start: Tools.PickColor.start,
+              stop: Tools.PickColor.stop
           });
           registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
           registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });

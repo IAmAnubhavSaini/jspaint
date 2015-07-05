@@ -206,6 +206,41 @@
                                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
                     $(canvasId).off(event);
                 },
+                ContextMenu: {
+                    activate: function (options) {
+                        function initialSlider() {
+                            return $('<input id="sideSquare" type="range" min="1" max="200" step="1" title="side length for square tool" />');
+                        }
+                        function addSliderForSide(options) {
+                            var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                            var slider = initialSlider()
+                                .attr('value', Tools.Square.VARIABLES.side)
+                                .on('mouseover', function () {
+                                    $(this).attr('title', $(this).val());
+                                })
+                                .on('input', function () {
+                                    Tools.Square.VARIABLES.side = $(this).val();
+                                });
+
+                            slider.appendTo(div);
+                            div.appendTo($(options.containerSelectionCriterion));
+                        }
+                        addSliderForSide(options);
+                    },
+                    deactivate: function (options) {
+                        function removeSliderForSide(options) {
+                            $('#' + options.id).remove();
+                        }
+                        removeSliderForSide(options);
+                    },
+                    getOptions: function () {
+                        return {
+                            tool: this,
+                            id: 'SquareToolContextMenu',
+                            containerSelectionCriterion: '.contextual-tool-bar'
+                        };
+                    }
+                },
                 Events: {
                     register: function (options) {
                         var toolId = options.toolId || CONSTANTS.Tools.Square.selectionId,
@@ -213,14 +248,18 @@
 
                         options.tool = tool;
 
-                        tool.funcToggle('click', function () {
-                            activateTool(options);
-                            activeTool = tool;
-                        },
-                      function () {
-                          activeTool = null;
-                          deactivateTool(options);
-                      });
+                        tool.funcToggle('click',
+                            function () {
+                                activateTool(options);
+                                Tools.Square.ContextMenu.activate(Tools.Square.ContextMenu.getOptions());
+                                activeTool = tool;
+                            },
+                            function () {
+                                activeTool = null;
+                                Tools.Square.ContextMenu.deactivate(Tools.Square.ContextMenu.getOptions());
+                                deactivateTool(options);
+                            }
+                        );
                     }
                 }
             },

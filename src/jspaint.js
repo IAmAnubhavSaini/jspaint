@@ -122,6 +122,41 @@
                         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
                     $(canvasId).off(event);
                 },
+                ContextMenu: {
+                    activate: function (options) {
+                        function initialSlider() {
+                            return $('<input id="radiusSpeedDot" type="range" min="1" max="50" step="1" title="radius for speed dot tool" />');
+                        }
+                        function addSliderForRadius(options) {
+                            var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                            var slider = initialSlider()
+                                .attr('value', Tools.SpeedDot.VARIABLES.radius)
+                                .on('mouseover', function () {
+                                    $(this).attr('title', $(this).val());
+                                })
+                                .on('input', function () {
+                                    Tools.SpeedDot.VARIABLES.radius = $(this).val();
+                                });
+
+                            slider.appendTo(div);
+                            div.appendTo($(options.containerSelectionCriterion));
+                        }
+                        addSliderForRadius(options);
+                    },
+                    deactivate: function (options) {
+                        function removeSliderForRadius(options) {
+                            $('#' + options.id).remove();
+                        }
+                        removeSliderForRadius(options);
+                    },
+                    getOptions: function () {
+                        return {
+                            tool: this,
+                            id: 'SpeedDotContextMenu',
+                            containerSelectionCriterion: '.contextual-tool-bar'
+                        };
+                    }
+                },
                 Events: {
                     register: function (options) {
                         var toolId = options.toolId || CONSTANTS.Tools.SpeedDot.selectionId,
@@ -132,11 +167,13 @@
                         tool.funcToggle('click',
                           function () {
                               activateTool(options);
+                              Tools.SpeedDot.ContextMenu.activate(Tools.SpeedDot.ContextMenu.getOptions());
                               activeTool = tool;
                           },
                           function () {
                               activeTool = null;
                               deactivateTool(options);
+                              Tools.SpeedDot.ContextMenu.deactivate(Tools.SpeedDot.ContextMenu.getOptions());
                           }
                         );
                     }
@@ -319,7 +356,7 @@
                                 if (last.X != -1) {
                                     drawLineSegmentFromLastPoint(context, last, { X: X, Y: Y }, w);
                                 }
-                                CANVASAPI.fillCirc(X, Y, w/2);
+                                CANVASAPI.fillCirc(X, Y, w / 2);
                                 setLastPoint(X, Y);
                             } else {
                                 Tools.Pencil.VARIABLES.LastPoint.X = -1;

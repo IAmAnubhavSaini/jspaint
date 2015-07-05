@@ -286,44 +286,35 @@
                 },
                 ContextMenu: {
                     activate: function (options) {
-                        var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                        var increase = $('<div></div>').attr('id', options.increaseDiscSize.id).addClass('menu-item');
-                        var increaseIcon = $('<i></i>').addClass(options.increaseDiscSize.icon);
-                        var anchorIncrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            Tools.Disc.VARIABLES.radius += 2;
-                            $(this).attr('title', Tools.Disc.VARIABLES.radius);
-                        });
-                        increaseIcon.appendTo(anchorIncrease);
-                        anchorIncrease.appendTo(increase);
-                        var decrease = $('<div></div>').attr('id', options.decreaseDiscSize.id).addClass('menu-item');
-                        var decreaseIcon = $('<i></i>').addClass(options.decreaseDiscSize.icon);
-                        var anchorDecrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            Tools.Disc.VARIABLES.radius = Tools.Disc.VARIABLES.radius - 2 === 0 ? 2 : Tools.Disc.VARIABLES.radius - 2;
-                            $(this).attr('title', Tools.Disc.VARIABLES.radius);
-                        });
-                        decreaseIcon.appendTo(anchorDecrease);
-                        anchorDecrease.appendTo(decrease);
-                        increase.appendTo(div);
-                        decrease.appendTo(div);
-                        div.appendTo($(options.containerSelectionCriterion));
+                        function initialSlider() {
+                            return $('<input id="radiusDisc" type="range" min="1" max="200" step="1" title="radius for disc tool." />');
+                        }
+                        function addSliderForRadius(options) {
+                            var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                            var slider = initialSlider()
+                                .attr('value', Tools.Disc.VARIABLES.radius)
+                                .on('mouseover', function () {
+                                    $(this).attr('title', $(this).val());
+                                })
+                                .on('input', function () {
+                                    Tools.Disc.VARIABLES.radius = $(this).val();
+                                });
+
+                            slider.appendTo(div);
+                            div.appendTo($(options.containerSelectionCriterion));
+                        }
+                        addSliderForRadius(options);
                     },
                     deactivate: function (options) {
-                        $('#' + options.id).remove();
+                        function removeSliderForRadius(options) {
+                            $('#' + options.id).remove();
+                        }
+                        removeSliderForRadius(options);
                     },
                     getOptions: function () {
                         return {
                             tool: this,
                             id: 'DiscContextMenu',
-                            increaseDiscSize: {
-                                id: 'increaseDiscSize',
-                                icon: 'glyphicon glyphicon-circle-arrow-up',
-                                containerId: 'DiscContextMenu'
-                            },
-                            decreaseDiscSize: {
-                                id: 'decreaseDiscSize',
-                                icon: 'glyphicon glyphicon-circle-arrow-down',
-                                containerId: 'DiscContextMenu'
-                            },
                             containerSelectionCriterion: '.contextual-tool-bar'
                         };
                     }
@@ -413,46 +404,35 @@
                 },
                 ContextMenu: {
                     activate: function (options) {
-                        var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                        var increase = $('<div></div>').attr('id', options.increaseDotSize.id).addClass('menu-item');
-                        var increaseIcon = $('<i></i>').addClass(options.increaseDotSize.icon);
-                        var anchorIncrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            Tools.Pencil.VARIABLES.width += 2;
-                            Tools.Pencil.VARIABLES.height = Tools.Pencil.VARIABLES.width;
-                            $(this).attr('title', Tools.Pencil.VARIABLES.width);
-                        });
-                        increaseIcon.appendTo(anchorIncrease);
-                        anchorIncrease.appendTo(increase);
-                        var decrease = $('<div></div>').attr('id', options.decreaseDotSize.id).addClass('menu-item');
-                        var decreaseIcon = $('<i></i>').addClass(options.decreaseDotSize.icon);
-                        var anchorDecrease = $('<a></a>').css('font-size', '20px').on('click', function () {
-                            Tools.Pencil.VARIABLES.width = Tools.Pencil.VARIABLES.width - 2 === 0 ? 2 : Tools.Pencil.VARIABLES.width - 2;
-                            Tools.Pencil.VARIABLES.height = Tools.Pencil.VARIABLES.width;
-                            $(this).attr('title', Tools.Pencil.VARIABLES.width);
-                        });
-                        decreaseIcon.appendTo(anchorDecrease);
-                        anchorDecrease.appendTo(decrease);
-                        increase.appendTo(div);
-                        decrease.appendTo(div);
-                        div.appendTo($(options.containerSelectionCriterion));
+                        function initialSlider() {
+                            return $('<input id="radiusDisc" type="range" min="1" max="100" step="1" title="width for pencil tool." />');
+                        }
+                        function addSliderForLineWidth(options) {
+                            var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                            var slider = initialSlider()
+                                .attr('value', Tools.Pencil.VARIABLES.width)
+                                .on('mouseover', function () {
+                                    $(this).attr('title', $(this).val());
+                                })
+                                .on('input', function () {
+                                    Tools.Pencil.VARIABLES.width = $(this).val();
+                                });
+
+                            slider.appendTo(div);
+                            div.appendTo($(options.containerSelectionCriterion));
+                        }
+                        addSliderForLineWidth(options);
                     },
                     deactivate: function (options) {
-                        $('#' + options.id).remove();
+                        function removeSliderForLineWidth(options) {
+                            $('#' + options.id).remove();
+                        }
+                        removeSliderForLineWidth(options);
                     },
                     getOptions: function () {
                         return {
                             tool: this,
                             id: 'PencilContextMenu',
-                            increaseDotSize: {
-                                id: 'increaseDotSize',
-                                icon: 'glyphicon glyphicon-circle-arrow-up',
-                                containerId: 'PencilContextMenu'
-                            },
-                            decreaseDotSize: {
-                                id: 'decreaseDotSize',
-                                icon: 'glyphicon glyphicon-circle-arrow-down',
-                                containerId: 'PencilContextMenu'
-                            },
                             containerSelectionCriterion: '.contextual-tool-bar'
                         };
                     }

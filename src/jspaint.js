@@ -591,11 +591,7 @@
         Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
         registerEvents();
         $('#PencilTool').trigger('click');
-    },
-
-    mustRunInSequence = function () {
-        init();
     };
-        mustRunInSequence();
+      init();
     });
 })(jQuery);

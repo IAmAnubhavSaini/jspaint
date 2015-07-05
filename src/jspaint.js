@@ -127,18 +127,19 @@
                 },
                 ContextMenu: {
                     activate: function (options) {
+                        var VARS = Tools.SpeedDot.VARIABLES;
                         function initialSlider() {
                             return $('<input id="radiusSpeedDot" type="range" min="1" max="50" step="1" title="radius for speed dot tool" />');
                         }
                         function addSliderForRadius(options) {
                             var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
                             var slider = initialSlider()
-                                .attr('value', Tools.SpeedDot.VARIABLES.radius)
+                                .attr('value', VARS.radius)
                                 .on('mouseover', function () {
                                     $(this).attr('title', $(this).val());
                                 })
                                 .on('input', function () {
-                                    Tools.SpeedDot.VARIABLES.radius = $(this).val();
+                                    VARS.radius = $(this).val();
                                 });
 
                             slider.appendTo(div);
@@ -163,20 +164,21 @@
                 Events: {
                     register: function (options) {
                         var toolId = options.toolId || CONSTANTS.Tools.SpeedDot.selectionId,
-                            tool = $(toolId);
+                            tool = $(toolId),
+                            contextMenu = Tools.SpeedDot.ContextMenu;
 
                         options.tool = tool;
 
                         tool.funcToggle('click',
                           function () {
                               activateTool(options);
-                              Tools.SpeedDot.ContextMenu.activate(Tools.SpeedDot.ContextMenu.getOptions());
+                              contextMenu.activate(contextMenu.getOptions());
                               activeTool = tool;
                           },
                           function () {
                               activeTool = null;
                               deactivateTool(options);
-                              Tools.SpeedDot.ContextMenu.deactivate(Tools.SpeedDot.ContextMenu.getOptions());
+                              contextMenu.deactivate(contextMenu.getOptions());
                           }
                         );
                     }
@@ -248,19 +250,20 @@
                 Events: {
                     register: function (options) {
                         var toolId = options.toolId || CONSTANTS.Tools.Square.selectionId,
-                                          tool = $(toolId);
+                            tool = $(toolId),
+                            contextMenu = Tools.Square.ContextMenu;
 
                         options.tool = tool;
 
                         tool.funcToggle('click',
                             function () {
                                 activateTool(options);
-                                Tools.Square.ContextMenu.activate(Tools.Square.ContextMenu.getOptions());
+                                contextMenu.activate(contextMenu.getOptions());
                                 activeTool = tool;
                             },
                             function () {
                                 activeTool = null;
-                                Tools.Square.ContextMenu.deactivate(Tools.Square.ContextMenu.getOptions());
+                                contextMenu.deactivate(contextMenu.getOptions());
                                 deactivateTool(options);
                             }
                         );
@@ -274,17 +277,23 @@
                 VARIABLES: { radius: 10 },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mouseclick,
-                                  canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                                  mouseOptions = null;
+                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                        mouseOptions = null,
+                        X = null,
+                        Y = null,
+                        radius = null;
 
                     $(canvasId).on(event, function (e) {
                         mouseOptions = { event: e, relativeTo: $(this) };
-                        CANVASAPI.fillCirc(Actions.Mouse.getX(mouseOptions), Actions.Mouse.getY(mouseOptions), Tools.Disc.VARIABLES.radius);
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        radius = Tools.Disc.VARIABLES.radius;
+                        CANVASAPI.fillCirc(X, Y, radius);
                     });
                 },
                 stop: function (options) {
                     var event = options.event || CONSTANTS.Events.mouseclick,
-                                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
                     $(canvasId).off(event);
                 },
@@ -359,7 +368,10 @@
                     var event = options.event || CONSTANTS.Events.mousemove,
                     canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
                     mouseOptions = null,
-                    X, Y, w, last;
+                    X = null,
+                    Y = null,
+                    width = null,
+                    last = null;
 
                     function setLastPoint(X, Y) {
                         Tools.Pencil.VARIABLES.LastPoint.X = X;
@@ -371,7 +383,12 @@
                             Y: Tools.Pencil.VARIABLES.LastPoint.Y
                         };
                     }
-                    function drawLineSegmentFromLastPoint(context, last, current, width) {
+                    function drawLineSegmentFromLastPoint(options) {
+                        var context = options.context,
+                            last = options.last,
+                            current = options.current,
+                            width = options.width;
+
                         context.beginPath();
                         context.moveTo(last.X, last.Y);
                         context.lineTo(current.X, current.Y);
@@ -385,12 +402,17 @@
                             if (e.buttons === 1) {
                                 X = Actions.Mouse.getX(mouseOptions);
                                 Y = Actions.Mouse.getY(mouseOptions);
-                                w = Tools.Pencil.VARIABLES.width;
+                                width = Tools.Pencil.VARIABLES.width;
                                 last = getLastPoint();
                                 if (last.X != -1) {
-                                    drawLineSegmentFromLastPoint(context, last, { X: X, Y: Y }, w);
+                                    drawLineSegmentFromLastPoint({
+                                        context: context,
+                                        last: last,
+                                        current: { X: X, Y: Y },
+                                        width: width
+                                    });
                                 }
-                                CANVASAPI.fillCirc(X, Y, w / 2);
+                                CANVASAPI.fillCirc(X, Y, width / 2);
                                 setLastPoint(X, Y);
                             } else {
                                 Tools.Pencil.VARIABLES.LastPoint.X = -1;
@@ -465,137 +487,134 @@
                 }
             }
         };
+
         var
+        initializeCanvas = function (options) {
+            var canvas = $('<canvas/>', { id: options.canvasId })
+                .prop({ 'width': options.width, 'height': options.height })
+                .appendTo('#' + options.canvasContainerId);
+            return canvas[0];
+        },
 
-      initializeCanvas = function (options) {
-          var canvas = $('<canvas/>', { id: options.canvasId })
-              .prop({ 'width': options.width, 'height': options.height })
-              .appendTo('#' + options.canvasContainerId);
-          return canvas[0];
+        initializeContext = function (options) {
+            var sizeX = options.sizeX || 600,
+                sizeY = options.sizeY || 400,
+                width = sizeX - 2,
+                height = sizeY - 2,
+                canvas = null;
+
+            options.width = width;
+            options.height = height;
+            canvas = initializeCanvas(options);
+            return canvas.getContext('2d');
+        },
+
+      generateHexColorStringFromThisElementsId = function (element) {
+          return '#' + element.attr('id').split('#')[1];
       },
 
-      initializeContext = function (options) {
-          var sizeX = options.sizeX || 600,
-              sizeY = options.sizeY || 400,
-              width = sizeX - 2,
-              height = sizeY - 2,
-              canvasId = options.canvasId || CONSTANTS.canvasId,
-              canvasContainerId = options.canvasContainerId || CONSTANTS.containerId,
-              canvas = initializeCanvas({ canvasId: canvasId, width: width, height: height, canvasContainerId: canvasContainerId });
-
-          return canvas.getContext('2d');
+      activateTool = function (options, start) {
+          if (activeTool !== null) {
+              activeTool.trigger('click');
+          }
+          $(options.tool).toggleClass('active-tool');
+          options.start(options);
       },
 
-    generateHexColorStringFromThisElementsId = function (element) {
-        return '#' + element.attr('id').split('#')[1];
-    },
+      deactivateTool = function (options, stop) {
+          $(options.tool).toggleClass('active-tool');
+          options.stop(options);
+      },
 
-    activateTool = function (options, start) {
-        if (activeTool !== null) {
-            activeTool.trigger('click');
-        }
-        $(options.tool).toggleClass('active-tool');
-        options.start(options);
-    },
+      activeTool = null,
 
-    deactivateTool = function (options, stop) {
-        $(options.tool).toggleClass('active-tool');
-        options.stop(options);
-    },
+      registerColorEvents = function () {
+          $('.color')
+          .on('click', function () {
+              selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
+          })
+          .on('contextmenu', function () {
+              selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
+          });
+      },
 
-    activeTool = null,
+      registerAllColorsPickerEvents = function (options) {
+          $('#' + options.containerId + ' #' + options.toolId).on('input', function () {
+              selectedPrimaryColor = context.fillStyle = $(this).val();
+          });
+      },
 
-    registerColorEvents = function () {
-        $('.color')
-        .on('click', function () {
-            selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
-        })
-        .on('contextmenu', function () {
-            selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
-        });
-    },
+      registerSaveImageEvents = function (options) {
+          $('#' + options.toolId).on('click', function () {
+              window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
+          });
+      },
+      registerResetCanvasEvents = function (options) {
+          $('#' + options.toolId).on('click', function () {
+              var canvas = $('#' + CONSTANTS.canvasId)[0];
+              var canvasHeight = canvas.height;
+              var canvasWidth = canvas.width;
+              var context = canvas.getContext('2d');
+              context.save();
+              context.transform(1, 0, 0, 1, 0, 0);
+              context.fillStyle = resetCanvasColor;
+              context.fillRect(0, 0, canvasWidth, canvasHeight);
+              context.restore();
+          });
+      },
 
-    registerAllColorsPickerEvents = function (options) {
-        $('#' + options.containerId + ' #' + options.toolId).on('input', function () {
-            selectedPrimaryColor = context.fillStyle = $(this).val();
-        });
-    },
+      registerEvents = function () {
+          registerColorEvents();
+          Tools.Pencil.Events.register({
+              toolId: Tools.Pencil.CONSTANTS.selectionId,
+              event: CONSTANTS.Events.mousemove,
+              canvasId: CONSTANTS.canvasId,
+              start: Tools.Pencil.start,
+              stop: Tools.Pencil.stop
+          });
+          Tools.Disc.Events.register({
+              toolId: Tools.Disc.CONSTANTS.selectionId,
+              event: CONSTANTS.Events.mouseclick,
+              canvasId: CONSTANTS.canvasId,
+              start: Tools.Disc.start,
+              stop: Tools.Disc.stop
+          });
+          Tools.SpeedDot.Events.register({
+              toolId: Tools.SpeedDot.CONSTANTS.selectionId,
+              event: CONSTANTS.Events.mousemove,
+              canvasId: CONSTANTS.canvasId,
+              start: Tools.SpeedDot.start,
+              stop: Tools.SpeedDot.stop
+          });
+          Tools.Square.Events.register({
+              toolId: Tools.Square.CONSTANTS.selectionId,
+              containerId: 'jspaint-tools',
+              event: CONSTANTS.Events.mouseclick,
+              canvasId: CONSTANTS.canvasId,
+              start: Tools.Square.start,
+              stop: Tools.Square.stop
+          });
+          registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
+          registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });
+          registerResetCanvasEvents({ toolId: 'reset-canvas', containerId: 'ResetCanvas' });
+      },
 
-    registerSaveImageEvents = function (options) {
-        $('#' + options.toolId).on('click', function () {
-            window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
-        });
-    },
-    registerResetCanvasEvents = function (options) {
-        $('#' + options.toolId).on('click', function () {
-            var canvas = $('#' + CONSTANTS.canvasId)[0];
-            var canvasHeight = canvas.height;
-            var canvasWidth = canvas.width;
-            var context = canvas.getContext('2d');
-            context.save();
-            context.transform(1, 0, 0, 1, 0, 0);
-            context.fillStyle = resetCanvasColor;
+      mustAssignDimensionsToCanvasContainer = function () {
+          $('#jspaint-paint-area').css({ width: sizeX, height: sizeY });
+      },
 
-            context.fillRect(0, 0, canvasWidth, canvasHeight);
-            context.restore();
-        });
-    },
+      initializeTopTakerWidget = function () {
+          $('.top-taker').TopTaker({ 'theme': 'dark' });
+      },
 
-    registerEvents = function () {
-        registerColorEvents();
-        Tools.Pencil.Events.register({
-            toolId: Tools.Pencil.CONSTANTS.selectionId,
-            event: CONSTANTS.Events.mousemove,
-            canvasId: CONSTANTS.canvasId,
-            start: Tools.Pencil.start,
-            stop: Tools.Pencil.stop
-        });
-        Tools.Disc.Events.register({
-            toolId: Tools.Disc.CONSTANTS.selectionId,
-            event: CONSTANTS.Events.mouseclick,
-            canvasId: CONSTANTS.canvasId,
-            start: Tools.Disc.start,
-            stop: Tools.Disc.stop
-        });
-        Tools.SpeedDot.Events.register({
-            toolId: Tools.SpeedDot.CONSTANTS.selectionId,
-            event: CONSTANTS.Events.mousemove,
-            canvasId: CONSTANTS.canvasId,
-            start: Tools.SpeedDot.start,
-            stop: Tools.SpeedDot.stop
-        });
-        Tools.Square.Events.register({
-            toolId: Tools.Square.CONSTANTS.selectionId,
-            containerId: 'jspaint-tools',
-            event: CONSTANTS.Events.mouseclick,
-            canvasId: CONSTANTS.canvasId,
-            start: Tools.Square.start,
-            stop: Tools.Square.stop
-        });
-        registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
-        registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });
-        registerResetCanvasEvents({ toolId: 'reset-canvas', containerId: 'ResetCanvas' });
-
-    },
-
-    mustAssignDimensionsToCanvasContainer = function () {
-        $('#jspaint-paint-area').css({
-            width: sizeX, height: sizeY
-        });
-    },
-
-    initializeTopTakerWidget = function () {
-        $('.top-taker').TopTaker({ 'theme': 'dark' });
-    },
-
-    init = function () {
-        mustAssignDimensionsToCanvasContainer();
-        context = initializeContext({ sizeX: sizeX, sizeY: sizeY, canvasId: CONSTANTS.canvasId, canvasContainerId: CONSTANTS.canvasContainerId });
-        initializeTopTakerWidget();
-        Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
-        registerEvents();
-        $('#PencilTool').trigger('click');
-    };
-      init();
+      init = function () {
+          mustAssignDimensionsToCanvasContainer();
+          context = initializeContext({ sizeX: sizeX, sizeY: sizeY, canvasId: CONSTANTS.canvasId, canvasContainerId: CONSTANTS.canvasContainerId });
+          initializeTopTakerWidget();
+          Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
+          registerEvents();
+          $('#PencilTool').trigger('click');
+      };
+        init();
     });
 })(jQuery);

@@ -31,6 +31,12 @@
         }
     };
 
+    function setupToolTips(tool, title) {
+        tool.attr('title', title)
+            .attr('data-toggle', 'tooltip')
+            .attr('data-placement', 'bottom');
+    }
+
     var
     size = window.location.toString().split('?')[1].split('=')[1],
     sizeX = size.split('x')[0],
@@ -99,7 +105,8 @@
         var Tools = {
             SpeedDot: {
                 CONSTANTS: {
-                    id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool'
+                    id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool',
+                    title: 'Click to draw circles of fixed radius on draw area using mouse movement. Click again to disable.'
                 },
                 VARIABLES: {
                     radius: 4
@@ -167,6 +174,7 @@
                             tool = $(toolId),
                             contextMenu = Tools.SpeedDot.ContextMenu;
 
+                        setupToolTips(tool, Tools.SpeedDot.CONSTANTS.title);
                         options.tool = tool;
 
                         tool.funcToggle('click',
@@ -179,14 +187,14 @@
                               activeTool = null;
                               deactivateTool(options);
                               contextMenu.deactivate(contextMenu.getOptions());
-                          }
-                        );
+                          });
                     }
                 }
             },
             Square: {
                 CONSTANTS: {
-                    id: 'SquareTool', selectionId: '#SquareTool', class: 'main-tool'
+                    id: 'SquareTool', selectionId: '#SquareTool', class: 'main-tool',
+                    title: 'Click to draw squares of fixed side on draw area using click. Click again to disable.'
                 },
                 VARIABLES: {
                     side: 10
@@ -253,6 +261,7 @@
                             tool = $(toolId),
                             contextMenu = Tools.Square.ContextMenu;
 
+                        setupToolTips(tool, Tools.Square.CONSTANTS.title);
                         options.tool = tool;
 
                         tool.funcToggle('click',
@@ -265,14 +274,14 @@
                                 activeTool = null;
                                 contextMenu.deactivate(contextMenu.getOptions());
                                 deactivateTool(options);
-                            }
-                        );
+                            });
                     }
                 }
             },
             Disc: {
                 CONSTANTS: {
-                    id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool'
+                    id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool',
+                    title: 'Click to draw disc of fixed radius on draw area using click. Click again to disable.'
                 },
                 VARIABLES: { radius: 10 },
                 start: function (options) {
@@ -338,6 +347,7 @@
                                      tool = $(toolId),
                                      contextMenu = Tools.Disc.ContextMenu;
 
+                        setupToolTips(tool, Tools.Disc.CONSTANTS.title);
                         options.tool = tool;
 
                         tool.funcToggle('click',
@@ -350,14 +360,14 @@
                               activeTool = null;
                               deactivateTool(options);
                               contextMenu.deactivate(contextMenu.getOptions());
-                          }
-                        );
+                          });
                     }
                 }
             },
             Pencil: {
                 CONSTANTS: {
-                    id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool'
+                    id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool',
+                    title: 'Click to draw free hand lines of fixed width on draw area using click+drag. Click again to disable.'
                 },
                 VARIABLES: {
                     width: 2,
@@ -469,6 +479,7 @@
                             tool = $(toolId),
                             contextMenu = Tools.Pencil.ContextMenu;
 
+                        setupToolTips(tool, Tools.Pencil.CONSTANTS.title);
                         options.tool = tool;
 
                         tool.funcToggle('click',
@@ -488,7 +499,8 @@
             },
             PickColor: {
                 CONSTANTS: {
-                    id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool'
+                    id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool',
+                    title: 'Click to pick color under mouse pointer tip from draw area using click; picks until some other tool is selected. Click again to disable.'
                 },
                 start: function (options) {
                     var event = options.event || CONSTANTS.Events.mouseclick,
@@ -522,6 +534,7 @@
                     register: function (options) {
                         var toolId = options.toolId || Tool.PickColor.CONSTANTS.selectionId,
                             tool = $(toolId);
+                        setupToolTips(tool, Tools.PickColor.CONSTANTS.title);
                         options.tool = tool;
                         tool.funcToggle('click',
                             function () {
@@ -609,6 +622,7 @@
               context.fillStyle = resetCanvasColor;
               context.fillRect(0, 0, canvasWidth, canvasHeight);
               context.restore();
+              
           });
       },
 
@@ -671,6 +685,7 @@
           Color.generateBasicColorPalette({ appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors });
           registerEvents();
           $('#PencilTool').trigger('click');
+          $('[data-toggle="tooltip"]').tooltip();
       };
         init();
     });

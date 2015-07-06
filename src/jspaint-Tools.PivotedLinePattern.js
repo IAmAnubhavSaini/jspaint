@@ -4,37 +4,40 @@
     var PivotedLinePattern = {
         CONSTANTS: {
             id: "PivotedLinePatternTool", selectionId: '#PivotedLinePatternTool', class: 'main-tool',
-            title: 'Click to draw free hand lines of fixed width on draw area using click+drag. Click again to disable.'
+            title: 'Click to draw amazing pattern. Click again to disable.'
         },
         VARIABLES: {
             width: 2,
-            height: 2,
             LastPoint: { X: -1, Y: -1 }
         },
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mousemove,
+            var
+            event = options.event || CONSTANTS.Events.mousemove,
             canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
             mouseOptions = null,
             X = null,
             Y = null,
             width = null,
-            last = null;
+            last = null,
+            LastPoint = {
+                get: function () {
+                    return {
+                        X: PivotedLinePattern.VARIABLES.LastPoint.X,
+                        Y: PivotedLinePattern.VARIABLES.LastPoint.Y
+                    };
+                },
+                set: function (x, y) {
+                    PivotedLinePattern.VARIABLES.LastPoint.X = x;
+                    PivotedLinePattern.VARIABLES.LastPoint.Y = y;
+                }
+            };
 
-            function setLastPoint(X, Y) {
-                PivotedLinePattern.VARIABLES.LastPoint.X = X;
-                PivotedLinePattern.VARIABLES.LastPoint.Y = Y;
-            }
-            function getLastPoint() {
-                return {
-                    X: PivotedLinePattern.VARIABLES.LastPoint.X,
-                    Y: PivotedLinePattern.VARIABLES.LastPoint.Y
-                };
-            }
             function drawLineSegmentFromLastPoint(options) {
-                var context = options.context,
-                    last = options.last,
-                    current = options.current,
-                    width = options.width;
+                var
+                context = options.context,
+                last = options.last,
+                current = options.current,
+                width = options.width;
 
                 context.beginPath();
                 context.moveTo(last.X, last.Y);
@@ -44,6 +47,7 @@
                 context.stroke();
                 context.endPath();
             }
+
             $(canvasId).on(event, function (e) {
                 mouseOptions = { event: e, relativeTo: $(this) };
                 if (e.buttons !== undefined) {
@@ -51,7 +55,7 @@
                         X = Actions.Mouse.getX(mouseOptions);
                         Y = Actions.Mouse.getY(mouseOptions);
                         width = PivotedLinePattern.VARIABLES.width;
-                        last = getLastPoint();
+                        last = LastPoint.get();
                         if (last.X != -1) {
                             drawLineSegmentFromLastPoint({
                                 context: context,
@@ -61,7 +65,7 @@
                             });
                         }
                         CANVASAPI.fillCirc(X, Y, width / 2);
-                        setLastPoint(X, Y);
+                        LastPoint.set(X, Y);
                     } else {
                         PivotedLinePattern.VARIABLES.LastPoint.X = -1;
                         PivotedLinePattern.VARIABLES.LastPoint.Y = -1;
@@ -70,29 +74,30 @@
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mousemove,
+            var
+            event = options.event || CONSTANTS.Events.mousemove,
             canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
-            PivotedLinePattern.VARIABLES.LastPoint.X = -1;
-            PivotedLinePattern.VARIABLES.LastPoint.Y = -1;
+
             $(canvasId).off(event);
         },
         ContextMenu: {
             activate: function (options) {
                 function initialSlider() {
-                    return $('<input id="widthPivotedLinePattern" type="range" min="1" max="100" step="1" title="width for pivoted line pattern tool." />');
+                    return $('<input id="widthPivotedLinePattern" type="range" min="1" max="200" step="1" title="width for pivoted line pattern tool." />');
                 }
                 function addSliderForLineWidth(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                    var slider = initialSlider()
+                    var
+                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    slider = initialSlider()
                         .attr('value', PivotedLinePattern.VARIABLES.width)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
                         })
                         .on('input', function () {
                             PivotedLinePattern.VARIABLES.width = $(this).val();
-                        });
+                        })
+                        .appendTo(div);
 
-                    slider.appendTo(div);
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForLineWidth(options);
@@ -113,9 +118,10 @@
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId || PivotedLinePattern.CONSTANTS.selectionId,
-                    tool = $(toolId),
-                    contextMenu = PivotedLinePattern.ContextMenu;
+                var
+                toolId = options.toolId || PivotedLinePattern.CONSTANTS.selectionId,
+                tool = $(toolId),
+                contextMenu = PivotedLinePattern.ContextMenu;
 
                 setupToolTips(tool, PivotedLinePattern.CONSTANTS.title);
                 options.tool = tool;

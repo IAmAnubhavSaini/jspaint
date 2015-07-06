@@ -4,16 +4,17 @@ $(function () {
     var Disc = {
         CONSTANTS: {
             id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool',
-            title: 'Click to draw disc of fixed radius on draw area using click. Click again to disable.'
+            title: 'Click to draw disc. Click again to disable.'
         },
         VARIABLES: { radius: 10 },
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                mouseOptions = null,
-                X = null,
-                Y = null,
-                radius = null;
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            mouseOptions = null,
+            X = null,
+            Y = null,
+            radius = null;
 
             $(canvasId).on(event, function (e) {
                 mouseOptions = { event: e, relativeTo: $(this) };
@@ -24,8 +25,9 @@ $(function () {
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
         },
@@ -35,17 +37,18 @@ $(function () {
                     return $('<input id="radiusDisc" type="range" min="1" max="200" step="1" title="radius for disc tool." />');
                 }
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                    var slider = initialSlider()
+                    var
+                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    slider = initialSlider()
                         .attr('value', Disc.VARIABLES.radius)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
                         })
                         .on('input', function () {
                             Disc.VARIABLES.radius = $(this).val();
-                        });
+                        })
+                        .appendTo(div);
 
-                    slider.appendTo(div);
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForRadius(options);
@@ -66,9 +69,10 @@ $(function () {
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId || Disc.CONSTANTS.selectionId,
-                             tool = $(toolId),
-                             contextMenu = Disc.ContextMenu;
+                var
+                toolId = options.toolId || Disc.CONSTANTS.selectionId,
+                tool = $(toolId),
+                contextMenu = Disc.ContextMenu;
 
                 setupToolTips(tool, Disc.CONSTANTS.title);
                 options.tool = tool;

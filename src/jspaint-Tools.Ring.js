@@ -8,14 +8,15 @@ $(function () {
         },
         VARIABLES: { innerRadius: 10, outerRadius: 20 },
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                mouseOptions = null,
-                X = null,
-                Y = null,
-                radius = null,
-                innerRadius = null,
-                outerRadius = null;
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            mouseOptions = null,
+            X = null,
+            Y = null,
+            radius = null,
+            innerRadius = null,
+            outerRadius = null;
 
             $(canvasId).on(event, function (e) {
                 mouseOptions = { event: e, relativeTo: $(this) };
@@ -23,12 +24,20 @@ $(function () {
                 Y = Actions.Mouse.getY(mouseOptions);
                 innerRadius = Ring.VARIABLES.innerRadius;
                 outerRadius = Ring.VARIABLES.outerRadius;
-                CANVASAPI.fillRing({ X: X, Y: Y, innerRadius: innerRadius, outerRadius: outerRadius, strokeColor: selectedPrimaryColor, fillColor: selectedAlternativeColor });
+                CANVASAPI.fillRing({
+                    X: X,
+                    Y: Y,
+                    innerRadius: innerRadius,
+                    outerRadius: outerRadius,
+                    strokeColor: selectedPrimaryColor,
+                    fillColor: selectedAlternativeColor
+                });
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
         },
@@ -38,25 +47,29 @@ $(function () {
                     return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
                 }
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                    var innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
+                    var
+                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+
+                    innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
                                     .attr('value', Ring.VARIABLES.innerRadius)
                                     .on('mouseover', function () {
                                         $(this).attr('title', $(this).val());
                                     })
                                     .on('input', function () {
                                         Ring.VARIABLES.innerRadius = $(this).val();
-                                    });
-                    var outerSlider = initialSlider("outerRadiusRing", "outer radius for ring tool.")
+                                    })
+                                    .appendTo(div),
+
+                    outerSlider = initialSlider("outerRadiusRing", "outer radius for ring tool.")
                                     .attr('value', Ring.VARIABLES.outerRadius)
                                     .on('mouseover', function () {
                                         $(this).attr('title', $(this).val());
                                     })
                                     .on('input', function () {
                                         Ring.VARIABLES.outerRadius = $(this).val();
-                                    });
-                    outerSlider.appendTo(div);
-                    innerSlider.appendTo(div);
+                                    })
+                                    .appendTo(div);
+
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForRadius(options);
@@ -77,9 +90,10 @@ $(function () {
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId || Ring.CONSTANTS.selectionId,
-                             tool = $(toolId),
-                             contextMenu = Ring.ContextMenu;
+                var
+                toolId = options.toolId || Ring.CONSTANTS.selectionId,
+                tool = $(toolId),
+                contextMenu = Ring.ContextMenu;
 
                 setupToolTips(tool, Ring.CONSTANTS.title);
                 options.tool = tool;

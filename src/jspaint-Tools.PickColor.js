@@ -4,19 +4,20 @@ $(function () {
     var PickColor = {
         CONSTANTS: {
             id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool',
-            title: 'Click to pick color under mouse pointer tip from draw area using click; picks until some other tool is selected. Click again to disable.'
+            title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
         },
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                mouseOptions = null,
-                X = null,
-                Y = null,
-                data = null,
-                r = 0,
-                g = 0,
-                b = 0,
-                a = 0;
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            mouseOptions = null,
+            X = null,
+            Y = null,
+            data = null,
+            r = 0,
+            g = 0,
+            b = 0,
+            a = 0;
             $(canvasId).on(event, function (e) {
                 mouseOptions = { event: e, relativeTo: $(this) };
                 X = Actions.Mouse.getX(mouseOptions);
@@ -30,14 +31,18 @@ $(function () {
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+
             $(canvasId).off(event);
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId || PickColor.CONSTANTS.selectionId,
-                    tool = $(toolId);
+                var
+                toolId = options.toolId || PickColor.CONSTANTS.selectionId,
+                tool = $(toolId);
+
                 setupToolTips(tool, PickColor.CONSTANTS.title);
                 options.tool = tool;
                 tool.funcToggle('click',

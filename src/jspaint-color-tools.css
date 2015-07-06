@@ -1,0 +1,35 @@
+﻿
+#SelectedPrimaryColor, #SelectedAlternativeColor {
+    width: 50px;
+    height: 20px;
+    margin: 2px;
+}
+
+#HTML5ColorPicker #allColorsPicker {
+    height: 45px;
+    width: 45px;
+    border: thin solid white;
+    outline: thin solid black;
+}
+
+    #HTML5ColorPicker #allColorsPicker:hover {
+        border: thin solid black;
+        outline: thin solid white;
+    }
+
+.BasicColorPalette .color {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    display: inline-block;
+    margin: 0 1px;
+    cursor: pointer;
+    border: thin solid white;
+    outline: thin solid black;
+}
+
+    .BasicColorPalette .color:hover {
+        border: thin solid black;
+        outline: thin solid white;
+    }

@@ -3,25 +3,25 @@ $(function () {
     size = window.location.toString().split('?')[1].split('=')[1];
     sizeX = size.split('x')[0];
     sizeY = size.split('x')[1];
-    jspaint = null;
     selectedAlternativeColor = 'red';
     selectedPrimaryColor = 'black';
-    resetCanvasColor = 'white';
     context = null;
 
     Actions = {
         Mouse: {
             getX: function (options) {
-                var event = options.event,
-                    relativeTo = options.relativeTo,
-                    X = event.pageX - relativeTo.offset().left;
+                var
+                event = options.event,
+                relativeTo = options.relativeTo,
+                X = event.pageX - relativeTo.offset().left;
 
                 return X;
             },
             getY: function (options) {
-                var event = options.event,
-                    relativeTo = options.relativeTo,
-                    Y = event.pageY - relativeTo.offset().top;
+                var
+                event = options.event,
+                relativeTo = options.relativeTo,
+                Y = event.pageY - relativeTo.offset().top;
 
                 return Y;
             }
@@ -54,26 +54,28 @@ $(function () {
             context.restore();
         }
     };
+
     Color = {
         generateBasicColorPalette: function (options) {
-            var IContainBasicColors = options.appendHere || '.BasicColorPalette',
-                div1 = $('<div></div>'),
-                div2 = $('<div></div>'),
-                row = div1,
-                hex = null,
-                color = null,
-                colors = options.basicColors || CONSTANTS.basicColors,
-                len = colors.length,
-                i = 0;
+            var
+            IContainBasicColors = options.appendHere || '.BasicColorPalette',
+            div1 = $('<div></div>'),
+            div2 = $('<div></div>'),
+            row = div1,
+            hex = null,
+            color = null,
+            colors = options.basicColors || CONSTANTS.basicColors,
+            len = colors.length,
+            i = 0;
 
             for (i = 0; i < len; i++) {
                 row = i < len / 2 ? div1 : div2;
                 hex = '#' + colors[i].hex;
                 color = $('<div></div>')
-                            .addClass('color')
-                            .attr('id', 'Color-Hex-' + hex)
-                            .css('background-color', hex);
-                color.appendTo(row);
+                        .addClass('color')
+                        .attr('id', 'Color-Hex-' + hex)
+                        .css('background-color', hex)
+                        .appendTo(row);
             }
             div1.appendTo(IContainBasicColors);
             div2.appendTo(IContainBasicColors);
@@ -82,8 +84,8 @@ $(function () {
 
     setupToolTips = function (tool, title) {
         tool.attr('title', title)
-            .attr('data-toggle', 'tooltip')
-            .attr('data-placement', 'bottom');
+        .attr('data-toggle', 'tooltip')
+        .attr('data-placement', 'bottom');
     };
 
     activateTool = function (options) {

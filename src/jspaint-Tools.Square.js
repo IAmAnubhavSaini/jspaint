@@ -3,31 +3,36 @@ $(function () {
 
     var Square = {
         CONSTANTS: {
-            id: 'SquareTool', selectionId: '#SquareTool', class: 'main-tool',
-            title: 'Click to draw squares of fixed side on draw area using click. Click again to disable.'
+            id: 'SquareTool',
+            selectionId: '#SquareTool',
+            class: 'main-tool',
+            title: 'Click to draw squares. Click again to disable.'
         },
         VARIABLES: {
             side: 10
         },
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                        mouseOptions = null,
-                        X = null,
-                        Y = null,
-                        side = null;
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            mouseOptions = null,
+            X = null,
+            Y = null,
+            side = null;
 
             $(canvasId).on(event, function (e) {
                 mouseOptions = { event: e, relativeTo: $(this) };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 side = Square.VARIABLES.side;
-                CANVASAPI.fillSquare(X-side/2, Y-side/2, side);
+                CANVASAPI.fillSquare(X - side / 2, Y - side / 2, side);
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
-                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+            var
+            event = options.event || CONSTANTS.Events.mouseclick,
+            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+
             $(canvasId).off(event);
         },
         ContextMenu: {
@@ -36,17 +41,18 @@ $(function () {
                     return $('<input id="sideSquare" type="range" min="1" max="200" step="1" title="side length for square tool" />');
                 }
                 function addSliderForSide(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                    var slider = initialSlider()
+                    var
+                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    slider = initialSlider()
                         .attr('value', Square.VARIABLES.side)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
                         })
                         .on('input', function () {
                             Square.VARIABLES.side = $(this).val();
-                        });
+                        })
+                        .appendTo(div);
 
-                    slider.appendTo(div);
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForSide(options);
@@ -67,9 +73,10 @@ $(function () {
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId || Square.CONSTANTS.selectionId,
-                    tool = $(toolId),
-                    contextMenu = Square.ContextMenu;
+                var
+                toolId = options.toolId || Square.CONSTANTS.selectionId,
+                tool = $(toolId),
+                contextMenu = Square.ContextMenu;
 
                 setupToolTips(tool, Square.CONSTANTS.title);
                 options.tool = tool;
@@ -91,7 +98,6 @@ $(function () {
 
     Square.Events.register({
         toolId: Square.CONSTANTS.selectionId,
-        containerId: 'jspaint-tools',
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: Square.start,

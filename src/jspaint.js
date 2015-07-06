@@ -35,10 +35,12 @@
               .attr('data-placement', 'bottom')
           .on('click', function () {
               selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
+              $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
           })
           .on('contextmenu', function (e) {
               e.preventDefault();
               selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
+              $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
           });
       },
 
@@ -101,6 +103,8 @@
           registerEvents();
           $('#PencilTool').trigger('click');
           $('[data-toggle="tooltip"]').tooltip();
+          $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
+          $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
       };
         init();
     });

@@ -782,6 +782,16 @@
       },
 
       mustAssignDimensionsToCanvasContainer = function () {
+          if (sizeX > 2500){
+              sizeX = 2500;
+          } else if (sizeX < 320) {
+              sizeX = 320;
+          }
+          if (sizeY > 2500) {
+              sizeY = 2500;
+          } else if (sizeY < 320) {
+              sizeY = 320;
+          }
           $('#jspaint-paint-area').css({ width: sizeX, height: sizeY });
       },
 

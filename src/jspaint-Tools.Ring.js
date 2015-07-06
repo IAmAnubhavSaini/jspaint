@@ -23,7 +23,7 @@ $(function () {
                 Y = Actions.Mouse.getY(mouseOptions);
                 innerRadius = Ring.VARIABLES.innerRadius;
                 outerRadius = Ring.VARIABLES.outerRadius;
-                CANVASAPI.fillRing({ X: X, Y: Y, innerRadius: innerRadius, outerRadius: outerRadius });
+                CANVASAPI.fillRing({ X: X, Y: Y, innerRadius: innerRadius, outerRadius: outerRadius, strokeColor: selectedPrimaryColor, fillColor: selectedAlternativeColor });
             });
         },
         stop: function (options) {

@@ -30,10 +30,14 @@
       
       registerColorEvents = function () {
           $('.color')
+              .attr('title', 'Left click for primary color, Right click for alternative color.')
+              .attr('data-toggle', 'tooltip')
+              .attr('data-placement', 'bottom')
           .on('click', function () {
               selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
           })
-          .on('contextmenu', function () {
+          .on('contextmenu', function (e) {
+              e.preventDefault();
               selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
           });
       },

@@ -4,8 +4,8 @@ $(function () {
     sizeX = size.split('x')[0];
     sizeY = size.split('x')[1];
     jspaint = null;
-    selectedAlternativeColor = '';
-    selectedPrimaryColor = '';
+    selectedAlternativeColor = 'red';
+    selectedPrimaryColor = 'black';
     resetCanvasColor = 'white';
     context = null;
 
@@ -49,7 +49,7 @@ $(function () {
         fillRing: function (options) {
             CANVASAPI.fillCirc(options.X, options.Y, options.outerRadius);
             context.save();
-            context.fillStyle = resetCanvasColor;
+            context.fillStyle = options.fillColor;
             CANVASAPI.fillCirc(options.X, options.Y, options.innerRadius);
             context.restore();
         }

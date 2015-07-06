@@ -10,92 +10,7 @@
          var Tools = {
             
             
-            Disc: {
-                CONSTANTS: {
-                    id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool',
-                    title: 'Click to draw disc of fixed radius on draw area using click. Click again to disable.'
-                },
-                VARIABLES: { radius: 10 },
-                start: function (options) {
-                    var event = options.event || CONSTANTS.Events.mouseclick,
-                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                        mouseOptions = null,
-                        X = null,
-                        Y = null,
-                        radius = null;
-
-                    $(canvasId).on(event, function (e) {
-                        mouseOptions = { event: e, relativeTo: $(this) };
-                        X = Actions.Mouse.getX(mouseOptions);
-                        Y = Actions.Mouse.getY(mouseOptions);
-                        radius = Tools.Disc.VARIABLES.radius;
-                        CANVASAPI.fillCirc(X, Y, radius);
-                    });
-                },
-                stop: function (options) {
-                    var event = options.event || CONSTANTS.Events.mouseclick,
-                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
-
-                    $(canvasId).off(event);
-                },
-                ContextMenu: {
-                    activate: function (options) {
-                        function initialSlider() {
-                            return $('<input id="radiusDisc" type="range" min="1" max="200" step="1" title="radius for disc tool." />');
-                        }
-                        function addSliderForRadius(options) {
-                            var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
-                            var slider = initialSlider()
-                                .attr('value', Tools.Disc.VARIABLES.radius)
-                                .on('mouseover', function () {
-                                    $(this).attr('title', $(this).val());
-                                })
-                                .on('input', function () {
-                                    Tools.Disc.VARIABLES.radius = $(this).val();
-                                });
-
-                            slider.appendTo(div);
-                            div.appendTo($(options.containerSelectionCriterion));
-                        }
-                        addSliderForRadius(options);
-                    },
-                    deactivate: function (options) {
-                        function removeSliderForRadius(options) {
-                            $('#' + options.id).remove();
-                        }
-                        removeSliderForRadius(options);
-                    },
-                    getOptions: function () {
-                        return {
-                            tool: this,
-                            id: 'DiscContextMenu',
-                            containerSelectionCriterion: '.contextual-tool-bar'
-                        };
-                    }
-                },
-                Events: {
-                    register: function (options) {
-                        var toolId = options.toolId || CONSTANTS.Tools.Disc.selectionId,
-                                     tool = $(toolId),
-                                     contextMenu = Tools.Disc.ContextMenu;
-
-                        setupToolTips(tool, Tools.Disc.CONSTANTS.title);
-                        options.tool = tool;
-
-                        tool.funcToggle('click',
-                          function () {
-                              activateTool(options);
-                              contextMenu.activate(contextMenu.getOptions());
-                              activeTool = tool;
-                          },
-                          function () {
-                              activeTool = null;
-                              deactivateTool(options);
-                              contextMenu.deactivate(contextMenu.getOptions());
-                          });
-                    }
-                }
-            },
+            
             Pencil: {
                 CONSTANTS: {
                     id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool',
@@ -400,13 +315,7 @@
               start: Tools.Pencil.start,
               stop: Tools.Pencil.stop
           });
-          Tools.Disc.Events.register({
-              toolId: Tools.Disc.CONSTANTS.selectionId,
-              event: CONSTANTS.Events.mouseclick,
-              canvasId: CONSTANTS.canvasId,
-              start: Tools.Disc.start,
-              stop: Tools.Disc.stop
-          });
+          
           
           
           

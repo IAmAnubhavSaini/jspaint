@@ -1,6 +1,7 @@
 $(function () {
-    
-    PickColor = {
+    "use strict";
+
+    var PickColor = {
         CONSTANTS: {
             id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool',
             title: 'Click to pick color under mouse pointer tip from draw area using click; picks until some other tool is selected. Click again to disable.'

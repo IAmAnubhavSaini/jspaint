@@ -1,5 +1,7 @@
 $(function () {
-    Square = {
+    "use strict";
+
+    var Square = {
         CONSTANTS: {
             id: 'SquareTool', selectionId: '#SquareTool', class: 'main-tool',
             title: 'Click to draw squares of fixed side on draw area using click. Click again to disable.'

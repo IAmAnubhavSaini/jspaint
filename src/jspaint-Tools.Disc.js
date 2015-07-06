@@ -1,5 +1,7 @@
 $(function () {
-    Disc = {
+    "use strict";
+
+    var Disc = {
         CONSTANTS: {
             id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool',
             title: 'Click to draw disc of fixed radius on draw area using click. Click again to disable.'

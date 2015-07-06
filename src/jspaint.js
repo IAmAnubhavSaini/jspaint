@@ -2,7 +2,6 @@
     "use strict";
 
     $(function () {
-        
         var
         initializeCanvas = function (options) {
             var canvas = $('<canvas/>', { id: options.canvasId })
@@ -67,8 +66,6 @@
 
       registerEvents = function () {
           registerColorEvents();
-
-          
           registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
           registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });
           registerResetCanvasEvents({ toolId: 'reset-canvas', containerId: 'ResetCanvas' });

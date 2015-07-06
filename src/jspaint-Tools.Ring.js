@@ -1,5 +1,7 @@
 $(function () {
-    Ring = {
+    "use strict";
+
+    var Ring = {
         CONSTANTS: {
             id: 'RingTool', selectionId: '#RingTool', class: 'main-tool',
             title: 'Click to draw ring. Click again to disable.'

@@ -1,5 +1,7 @@
 $(function () {
-    Pencil = {
+    "use strict";
+
+    var Pencil = {
         CONSTANTS: {
             id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool',
             title: 'Click to draw free hand lines of fixed width on draw area using click+drag. Click again to disable.'

@@ -1,5 +1,7 @@
 $(function () {
-    SpeedDot = {
+    "use strict";
+
+    var SpeedDot = {
         CONSTANTS: {
             id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool',
             title: 'Click to draw circles of fixed radius on draw area using mouse movement. Click again to disable.'

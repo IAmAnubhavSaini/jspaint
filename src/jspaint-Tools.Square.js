@@ -22,7 +22,7 @@ $(function () {
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 side = Square.VARIABLES.side;
-                CANVASAPI.fillSquare(X, Y, side);
+                CANVASAPI.fillSquare(X-side/2, Y-side/2, side);
             });
         },
         stop: function (options) {

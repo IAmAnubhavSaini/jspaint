@@ -34,6 +34,15 @@ $(function () {
             context.arc(x, y, radius, 0, 2 * Math.PI, false);
             context.fill();
         },
+        drawCircle: function (options) {
+            context.save();
+            context.beginPath();
+            context.arc(options.X, options.Y, options.innerRadius, 0, 2 * Math.PI, false);
+            context.lineWidth = options.outerRadius - options.innerRadius;
+            context.strokeStyle = options.strokeColor;
+            context.stroke();
+            context.restore();
+        },
         fillSquare: function (x, y, side) {
             context.fillRect(x, y, side, side);
         },

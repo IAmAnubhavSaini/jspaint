@@ -1,115 +1,13 @@
 (function ($) {
     "use strict";
+    
+    
 
-    var CONSTANTS = {
-        canvasId: "jspaint-canvas",
-        canvasContainerId: "jspaint-paint-area",
-        activeToolCursorClass: "working-with-tools",
-        maintoolsClass: "main-tool",
-        basicColors:
-          [
-            { hex: '00FFFF', name: "Aqua" },
-            { hex: '000000', name: "Black" },
-            { hex: '0000FF', name: "Blue" },
-            { hex: 'FF00FF', name: "Fuchsia" },
-            { hex: '808080', name: "Gray" },
-            { hex: '008000', name: "Green" },
-            { hex: '00FF00', name: "Lime" },
-            { hex: '800000', name: "Maroon" },
-            { hex: '000080', name: "Navy" },
-            { hex: '808000', name: "Olive" },
-            { hex: '800080', name: "Purple" },
-            { hex: 'FF0000', name: "Red" },
-            { hex: 'C0C0C0', name: "Silver" },
-            { hex: '008080', name: "Teal" },
-            { hex: 'FFFFFF', name: "White" },
-            { hex: 'FFFF00', name: "Yellow" },
-          ],
-        Events: {
-            mousemove: 'mousemove',
-            mouseclick: 'click'
-        }
-    };
-
-    function setupToolTips(tool, title) {
-        tool.attr('title', title)
-            .attr('data-toggle', 'tooltip')
-            .attr('data-placement', 'bottom');
-    }
-
-    var
-    size = window.location.toString().split('?')[1].split('=')[1],
-    sizeX = size.split('x')[0],
-    sizeY = size.split('x')[1],
-    jspaint = null,
-    selectedAlternativeColor = '',
-    selectedPrimaryColor = '',
-    resetCanvasColor = 'white',
-    context = null;
-
-    var Actions = {
-        Mouse: {
-            getX: function (options) {
-                var event = options.event,
-                    relativeTo = options.relativeTo,
-                    X = event.pageX - relativeTo.offset().left;
-
-                return X;
-            },
-            getY: function (options) {
-                var event = options.event,
-                    relativeTo = options.relativeTo,
-                    Y = event.pageY - relativeTo.offset().top;
-
-                return Y;
-            }
-        }
-    };
+    
 
     $(function () {
-        var CANVASAPI = {
-            fillCirc: function (x, y, radius) {
-                context.beginPath();
-                context.arc(x, y, radius, 0, 2 * Math.PI, false);
-                context.fill();
-            },
-            fillSquare: function (x, y, side) {
-                context.fillRect(x, y, side, side);
-            },
-            fillRing: function (options) {
-                CANVASAPI.fillCirc(options.X, options.Y, options.outerRadius);
-                context.save();
-                context.fillStyle = resetCanvasColor;
-                CANVASAPI.fillCirc(options.X, options.Y, options.innerRadius);
-                context.restore();
-            }
-        };
-        var Color = {
-            generateBasicColorPalette: function (options) {
-                var IContainBasicColors = options.appendHere || '.BasicColorPalette',
-                    div1 = $('<div></div>'),
-                    div2 = $('<div></div>'),
-                    row = div1,
-                    hex = null,
-                    color = null,
-                    colors = options.basicColors || CONSTANTS.basicColors,
-                    len = colors.length,
-                    i = 0;
-
-                for (i = 0; i < len; i++) {
-                    row = i < len / 2 ? div1 : div2;
-                    hex = '#' + colors[i].hex;
-                    color = $('<div></div>')
-                                .addClass('color')
-                                .attr('id', 'Color-Hex-' + hex)
-                                .css('background-color', hex);
-                    color.appendTo(row);
-                }
-                div1.appendTo(IContainBasicColors);
-                div2.appendTo(IContainBasicColors);
-            }
-        };
-        var Tools = {
+        
+         var Tools = {
             SpeedDot: {
                 CONSTANTS: {
                     id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool',
@@ -504,57 +402,7 @@
                     }
                 }
             },
-            PickColor: {
-                CONSTANTS: {
-                    id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool',
-                    title: 'Click to pick color under mouse pointer tip from draw area using click; picks until some other tool is selected. Click again to disable.'
-                },
-                start: function (options) {
-                    var event = options.event || CONSTANTS.Events.mouseclick,
-                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                        mouseOptions = null,
-                        X = null,
-                        Y = null,
-                        data = null,
-                        r = 0,
-                        g = 0,
-                        b = 0,
-                        a = 0;
-                    $(canvasId).on(event, function (e) {
-                        mouseOptions = { event: e, relativeTo: $(this) };
-                        X = Actions.Mouse.getX(mouseOptions);
-                        Y = Actions.Mouse.getY(mouseOptions);
-                        data = context.getImageData(X - 0.5, Y - 0.5, X + 0.5, Y + 0.5).data;
-                        r = data[0];
-                        g = data[1];
-                        b = data[2];
-                        a = data[3];
-                        selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-                    });
-                },
-                stop: function (options) {
-                    var event = options.event || CONSTANTS.Events.mouseclick,
-                        canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
-                    $(canvasId).off(event);
-                },
-                Events: {
-                    register: function (options) {
-                        var toolId = options.toolId || Tool.PickColor.CONSTANTS.selectionId,
-                            tool = $(toolId);
-                        setupToolTips(tool, Tools.PickColor.CONSTANTS.title);
-                        options.tool = tool;
-                        tool.funcToggle('click',
-                            function () {
-                                activateTool(options);
-                                activeTool = $(this);
-                            },
-                            function () {
-                                activeTool = null;
-                                deactivateTool(options);
-                            });
-                    }
-                }
-            },
+            
             Ring: {
                 CONSTANTS: {
                     id: 'RingTool', selectionId: '#RingTool', class: 'main-tool',
@@ -679,21 +527,7 @@
           return '#' + element.attr('id').split('#')[1];
       },
 
-      activateTool = function (options) {
-          if (activeTool !== null) {
-              activeTool.trigger('click');
-          }
-          $(options.tool).toggleClass('active-tool');
-          options.start(options);
-      },
-
-      deactivateTool = function (options) {
-          $(options.tool).toggleClass('active-tool');
-          options.stop(options);
-      },
-
-      activeTool = null,
-
+      
       registerColorEvents = function () {
           $('.color')
           .on('click', function () {
@@ -761,14 +595,7 @@
               start: Tools.Square.start,
               stop: Tools.Square.stop
           });
-          Tools.PickColor.Events.register({
-              toolId: Tools.PickColor.CONSTANTS.selectionId,
-              containerId: Tools.PickColor.CONSTANTS.containerId,
-              event: CONSTANTS.Events.mouseclick,
-              canvasId: CONSTANTS.canvasId,
-              start: Tools.PickColor.start,
-              stop: Tools.PickColor.stop
-          });
+          
           Tools.Ring.Events.register({
               toolId: Tools.Ring.CONSTANTS.selectionId,
               event: CONSTANTS.Events.mouseclick,

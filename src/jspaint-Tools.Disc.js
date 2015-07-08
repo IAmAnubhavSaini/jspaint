@@ -4,7 +4,8 @@ $(function () {
     var Disc = {
         CONSTANTS: {
             id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool',
-            title: 'Click to draw disc. Click again to disable.'
+            title: 'Click to draw disc. Click again to disable.',
+            previewId: 'previewDisc'
         },
         VARIABLES: { radius: 10 },
         start: function (options) {
@@ -14,14 +15,61 @@ $(function () {
             mouseOptions = null,
             X = null,
             Y = null,
-            radius = null;
+            radius = null,
+            previewer = null,
+            canvasOffsetLeft = $(canvasId).offset().left,
+            canvasOffsetTop = $(canvasId).offset().top,
+            canvasHeight = $(canvasId).height(),
+            canvasWidth = $(canvasId).width(),
+            previewOffsetLeft = null,
+            previewOffsetTop = null;
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
-                X = Actions.Mouse.getX(mouseOptions);
-                Y = Actions.Mouse.getY(mouseOptions);
-                radius = Disc.VARIABLES.radius;
-                CANVASAPI.fillCirc(X, Y, radius);
+            function generatePreview(options) {
+                var
+                div = $('<div></div>')
+                        .attr('id', Disc.CONSTANTS.previewId)
+                        .css({
+                            'position': 'fixed',
+                            'z-index': '100',
+                            'border-radius': '50%'
+                        })
+                        .appendTo('.utilities')
+                        .on('click', function (eClick) {
+                            mouseOptions = { event: eClick, relativeTo: $(canvasId) };
+                            X = Actions.Mouse.getX(mouseOptions);
+                            Y = Actions.Mouse.getY(mouseOptions);
+                            radius = Disc.VARIABLES.radius;
+                            CANVASAPI.fillCirc(X, Y, radius);
+                        })
+                        .on('mousemove', function (ev) {
+                            $(this).css('top', ev.pageY - Disc.VARIABLES.radius  - scrollY)
+                                    .css('left', ev.pageX - Disc.VARIABLES.radius  - scrollX)
+                                    .css('background-color', selectedPrimaryColor)
+                                    .css('border', 'thin dashed ' + selectedAlternativeColor)
+                                    .css('height', Disc.VARIABLES.radius*2)
+                                    .css('width', Disc.VARIABLES.radius*2);
+
+                            previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Disc.VARIABLES.radius) ;
+                            previewOffsetTop = parseInt($(this).offset().top) + parseInt(Disc.VARIABLES.radius) ;
+                            canvasOffsetLeft = $(canvasId).offset().left,
+                            canvasOffsetTop = $(canvasId).offset().top;
+                            
+                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
+                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                                $(this).hide();
+                            }
+                        });
+            }
+            generatePreview();
+
+            $(canvasId).on('mousemove', function (e) {
+                previewer = previewer || $('#' + Disc.CONSTANTS.previewId);
+                previewer.css('top', e.pageY - Disc.VARIABLES.radius  - scrollY)
+                        .css('left', e.pageX - Disc.VARIABLES.radius  - scrollX)
+                        .css('background-color', selectedPrimaryColor)
+                        .css('height', Disc.VARIABLES.radius*2)
+                        .css('width', Disc.VARIABLES.radius*2)
+                        .show();
             });
         },
         stop: function (options) {

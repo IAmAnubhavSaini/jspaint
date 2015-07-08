@@ -80,11 +80,11 @@ $(function () {
                                 'height': Ring.VARIABLES.outerRadius * 2,
                                 'width': Ring.VARIABLES.outerRadius * 2,
                                 'background-color': selectedPrimaryColor,
-                            })
+                            });
 
                             previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius);
                             previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius);
-                            canvasOffsetLeft = $(canvasId).offset().left,
+                            canvasOffsetLeft = $(canvasId).offset().left;
                             canvasOffsetTop = $(canvasId).offset().top;
                             
                             if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||

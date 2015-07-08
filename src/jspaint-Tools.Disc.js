@@ -51,7 +51,7 @@ $(function () {
 
                             previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Disc.VARIABLES.radius) ;
                             previewOffsetTop = parseInt($(this).offset().top) + parseInt(Disc.VARIABLES.radius) ;
-                            canvasOffsetLeft = $(canvasId).offset().left,
+                            canvasOffsetLeft = $(canvasId).offset().left;
                             canvasOffsetTop = $(canvasId).offset().top;
                             
                             if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||

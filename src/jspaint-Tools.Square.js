@@ -54,7 +54,7 @@ $(function () {
 
                             previewOffsetLeft = $(this).offset().left + Square.VARIABLES.side / 2;
                             previewOffsetTop = $(this).offset().top + Square.VARIABLES.side / 2;
-                            canvasOffsetLeft = $(canvasId).offset().left,
+                            canvasOffsetLeft = $(canvasId).offset().left;
                             canvasOffsetTop = $(canvasId).offset().top;
                             
                             if (canvasOffsetLeft > previewOffsetLeft || canvasOffsetLeft + canvasWidth < previewOffsetLeft ||

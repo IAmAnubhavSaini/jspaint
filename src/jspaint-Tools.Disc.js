@@ -78,6 +78,8 @@ $(function () {
             canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
+            $('#' + Disc.CONSTANTS.previewId).off('mousemove');
+            $('#' + Disc.CONSTANTS.previewId).remove();
         },
         ContextMenu: {
             activate: function (options) {

@@ -124,6 +124,9 @@ $(function () {
             canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
+            $('#' + Ring.CONSTANTS.previewId).off('mousemove');
+            $('#' + Ring.CONSTANTS.previewId).remove();
+            $('#' + Ring.CONSTANTS.previewOuterId).remove();
         },
         ContextMenu: {
             activate: function (options) {

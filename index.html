@@ -1,71 +1,76 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Welcome to js paint home page</title>
-  <link href="./bootstrap.min.css" type="text/css" rel="stylesheet" />
-  <link href="./TopTaker.widget.min.css" type="text/css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to js paint home page</title>
+    <link href="./bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="./TopTaker.widget.min.css" type="text/css" rel="stylesheet" />
+    <style type="text/css">
+        body{
+            margin:0 0 50px 0;
+            padding: 0 0 20px 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="page-header">
+    <div class="page-header">
+        <div class="container">
+            <h1>Paint <small>without delay, online, from any device, at any time</small></h1>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Say Hello to jspaint!</h1>
+            <p>Online - Offline - Quick - Social Friendly</p>
+        </div>
+    </div>
     <div class="container">
-      <h1>Paint <small>without delay, online, from any device, at any time</small></h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            Options
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th class="text-nowrap" scope="row">Dimensions of Paint Area</th>
+                        <td class="dimension-options">
+                            <button type="button" id="480x320" class="btn btn-lg" title="Width: 480px, Height: 320px">480 X 320</button>
+                            <button type="button" id="600x400" class="btn btn-lg" title="Width: 600px, Height: 400px">600 X 400</button>
+                            <button type="button" id="800x600" class="btn btn-lg" title="Width: 800px, Height: 600px">800 X 600</button>
+                            <button type="button" id="Max" class="btn btn-lg" title="Whatever your screen supports.">Maximum</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap" scope="row">Orientation</th>
+                        <td class="orientation-options">
+                            <button type="button" id="landscape" class="btn btn-lg" title="Lying down. Width is greater than height.">Landscape</button>
+                            <button type="button" id="portrait" class="btn btn-lg" title="Standing up. Height is greater than width.">Portrait</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-nowrap" scope="row">All set!</th>
+                        <td>
+                            <a id="jspaint-action" class="btn btn-primary btn-lg" href="./jspaint.html" role="button">Let's paint</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
-  <div class="jumbotron">
-    <div class="container">
-      <h1>Say Hello to jspaint!</h1>
-      <p>Online - Offline - Quick - Social Friendly</p>
+    <div>
+        <div class="top-taker"></div>
     </div>
-  </div>
-  <div class="container">
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped">
-        <thead>
-          <tr>
-            <th></th>
-            <th>
-              Options
-            </th>
-         </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th class="text-nowrap" scope="row">Dimensions of Paint Area</th>
-            <td class="dimension-options">
-              <button type="button" id="480x320" class="btn btn-lg" title="Width: 480px, Height: 320px">480 X 320</button>
-              <button type="button" id="600x400" class="btn btn-lg" title="Width: 600px, Height: 400px">600 X 400</button>
-              <button type="button" id="800x600" class="btn btn-lg" title="Width: 800px, Height: 600px">800 X 600</button>
-              <button type="button" id="Max" class="btn btn-lg" title="Whatever your screen supports.">Maximum</button>
-            </td>
-          </tr>
-          <tr>
-            <th class="text-nowrap" scope="row">Orientation</th>
-            <td class="orientation-options">
-              <button type="button" id="landscape" class="btn btn-lg" title="Lying down. Width is greater than height.">Landscape</button>
-              <button type="button" id="portrait" class="btn btn-lg" title="Standing up. Height is greater than width.">Portrait</button>
-            </td>
-          </tr>
-          <tr>
-            <th class="text-nowrap" scope="row">All set!</th>
-            <td>
-              <a id="jspaint-action" class="btn btn-primary btn-lg" href="./jspaint.html" role="button">Let's paint</a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div>
-    <div class="top-taker"></div>
-    <div id="mocha"></div>
-  </div>
-  <script src="./jquery.min.js" type="text/javascript"></script>
-  <script src="./jquery-ui.min.js" type="text/javascript"></script>
-  <script src="./TopTaker.widget.min.js" type="text/javascript"></script>
-  <script src="./iframe-buster.min.js" type="text/javascript"></script>
-  <script src="./index.min.js" type="text/javascript"></script>
+    <script src="./jquery.min.js" type="text/javascript"></script>
+    <script src="./jquery-ui.min.js" type="text/javascript"></script>
+    <script src="./TopTaker.widget.min.js" type="text/javascript"></script>
+    <script src="./iframe-buster.min.js" type="text/javascript"></script>
+    <script src="./index.min.js" type="text/javascript"></script>
 </body>
 </html>

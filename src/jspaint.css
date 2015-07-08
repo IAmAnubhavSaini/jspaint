@@ -10,6 +10,11 @@ html, body {
     -ms-user-select: none;
 }
 
+body{
+    margin-bottom: 50px;
+    padding-bottom: 20px;
+}
+
 #jspaint-tools {
     background-color: #ddDDdd;
     display: block;

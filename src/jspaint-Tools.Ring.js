@@ -86,7 +86,7 @@ $(function () {
                             previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius);
                             canvasOffsetLeft = $(canvasId).offset().left,
                             canvasOffsetTop = $(canvasId).offset().top;
-                            console.log(previewOffsetLeft + ', ' + previewOffsetTop + '; ' + canvasOffsetLeft + ', ' + canvasOffsetTop);
+                            
                             if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
                                 canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
                                 $(this).hide();
@@ -124,6 +124,9 @@ $(function () {
             canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
+            $('#' + Ring.CONSTANTS.previewId).off('mousemove');
+            $('#' + Ring.CONSTANTS.previewId).remove();
+            $('#' + Ring.CONSTANTS.previewOuterId).remove();
         },
         ContextMenu: {
             activate: function (options) {

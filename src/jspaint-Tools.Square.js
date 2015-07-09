@@ -45,8 +45,8 @@ $(function () {
                             CANVASAPI.fillSquare(X - side / 2, Y - side / 2, side);
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Square.VARIABLES.side / 2 - scrollY)
-                                    .css('left', ev.pageX - Square.VARIABLES.side / 2 - scrollX)
+                            $(this).css('top', ev.pageY - Square.VARIABLES.side / 2 - window.scrollY)
+                                    .css('left', ev.pageX - Square.VARIABLES.side / 2 - window.scrollX)
                                     .css('background-color', selectedPrimaryColor)
                                     .css('border', 'thin dashed '+selectedAlternativeColor)
                                     .css('height', Square.VARIABLES.side)
@@ -67,8 +67,8 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Square.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - Square.VARIABLES.side / 2 - scrollY)
-                        .css('left', e.pageX - Square.VARIABLES.side / 2 - scrollX)
+                previewer.css('top', e.pageY - Square.VARIABLES.side / 2 - window.scrollY)
+                        .css('left', e.pageX - Square.VARIABLES.side / 2 - window.scrollX)
                         .css('background-color', selectedPrimaryColor)
                         .css('height', Square.VARIABLES.side)
                         .css('width', Square.VARIABLES.side)

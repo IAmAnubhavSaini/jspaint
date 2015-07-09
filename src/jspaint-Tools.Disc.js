@@ -42,8 +42,8 @@ $(function () {
                             CANVASAPI.fillCirc(X, Y, radius);
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Disc.VARIABLES.radius  - scrollY)
-                                    .css('left', ev.pageX - Disc.VARIABLES.radius  - scrollX)
+                            $(this).css('top', ev.pageY - Disc.VARIABLES.radius  - window.scrollY)
+                                    .css('left', ev.pageX - Disc.VARIABLES.radius  - window.scrollX)
                                     .css('background-color', selectedPrimaryColor)
                                     .css('border', 'thin dashed ' + selectedAlternativeColor)
                                     .css('height', Disc.VARIABLES.radius*2)
@@ -64,8 +64,8 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Disc.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - Disc.VARIABLES.radius  - scrollY)
-                        .css('left', e.pageX - Disc.VARIABLES.radius  - scrollX)
+                previewer.css('top', e.pageY - Disc.VARIABLES.radius  - window.scrollY)
+                        .css('left', e.pageX - Disc.VARIABLES.radius  - window.scrollX)
                         .css('background-color', selectedPrimaryColor)
                         .css('height', Disc.VARIABLES.radius*2)
                         .css('width', Disc.VARIABLES.radius*2)

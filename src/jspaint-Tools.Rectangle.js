@@ -49,8 +49,8 @@ $(function () {
                             context.fillRect(X - length / 2, Y - breadth / 2, length, breadth);
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Rectangle.VARIABLES.breadth / 2 - scrollY)
-                                    .css('left', ev.pageX - Rectangle.VARIABLES.length / 2 - scrollX)
+                            $(this).css('top', ev.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
+                                    .css('left', ev.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
                                     .css('background-color', selectedPrimaryColor)
                                     .css('border', 'thin dashed ' + selectedAlternativeColor)
                                     .css('height', Rectangle.VARIABLES.breadth)
@@ -71,8 +71,8 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Rectangle.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - Rectangle.VARIABLES.breadth / 2 - scrollY)
-                        .css('left', e.pageX - Rectangle.VARIABLES.length / 2 - scrollX)
+                previewer.css('top', e.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
+                        .css('left', e.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
                         .css('background-color', selectedPrimaryColor)
                         .css('height', Rectangle.VARIABLES.breadth)
                         .css('width', Rectangle.VARIABLES.length)

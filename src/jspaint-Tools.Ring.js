@@ -64,8 +64,8 @@ $(function () {
                             });
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(scrollY))
-                                    .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(scrollX))
+                            $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
+                                    .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
                                     .css('background-color', selectedAlternativeColor)
                                     .css('border', 'thin dashed ' + selectedPrimaryColor)
                                     .css('height', Ring.VARIABLES.innerRadius*2)
@@ -73,8 +73,8 @@ $(function () {
 
                             outer.css({
                                 'position': 'fixed',
-                                'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(scrollY),
-                                'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(scrollX),
+                                'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
+                                'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
                                 'z-index': '100',
                                 'border-radius': '50%',
                                 'height': Ring.VARIABLES.outerRadius * 2,
@@ -99,8 +99,8 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Ring.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(scrollY))
-                        .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(scrollX))
+                previewer.css('top', e.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
+                        .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
                         .css('background-color', selectedAlternativeColor)
                         .css('height', Ring.VARIABLES.innerRadius*2)
                         .css('width', Ring.VARIABLES.innerRadius*2)
@@ -108,8 +108,8 @@ $(function () {
                 outer = outer || $('#' + Ring.CONSTANTS.previewOuterId);
                 outer.css({
                     'position': 'fixed',
-                    'top': e.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(scrollY),
-                    'left': e.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(scrollX),
+                    'top': e.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
+                    'left': e.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
                     'z-index': '100',
                     'border-radius': '50%',
                     'height': Ring.VARIABLES.outerRadius * 2,

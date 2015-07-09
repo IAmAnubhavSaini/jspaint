@@ -44,8 +44,8 @@
                             CANVASAPI.drawCircle({ X: X, Y: Y, innerRadius: innerRadius, outerRadius: outerRadius, strokeColor: selectedPrimaryColor });
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Circle.VARIABLES.innerRadius - scrollY)
-                                    .css('left', ev.pageX - Circle.VARIABLES.innerRadius - scrollX)
+                            $(this).css('top', ev.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
+                                    .css('left', ev.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
                                     .css('border', 'thin solid ' + selectedPrimaryColor)
                                     .css('height', Circle.VARIABLES.innerRadius * 2)
                                     .css('width', Circle.VARIABLES.innerRadius * 2);
@@ -65,8 +65,8 @@
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Circle.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - Circle.VARIABLES.innerRadius - scrollY)
-                        .css('left', e.pageX - Circle.VARIABLES.innerRadius - scrollX)
+                previewer.css('top', e.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
+                        .css('left', e.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
                         .css('border', 'thin solid ' + selectedPrimaryColor)
                         .css('height', Circle.VARIABLES.innerRadius * 2)
                         .css('width', Circle.VARIABLES.innerRadius * 2)

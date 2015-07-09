@@ -10,7 +10,7 @@ $(function () {
             previewId: 'previewSquare'
         },
         VARIABLES: {
-            side: 10
+            side: 10, xyPlaneRotationAngle: 360
         },
         start: function (options) {
             var
@@ -20,6 +20,7 @@ $(function () {
             X = null,
             Y = null,
             side = null,
+            xyPlaneRotationAngle = null,
             previewer = null,
             canvasOffsetLeft = $(canvasId).offset().left,
             canvasOffsetTop = $(canvasId).offset().top,
@@ -38,27 +39,30 @@ $(function () {
                         })
                         .appendTo('.utilities')
                         .on('click', function (eClick) {
-                            var mouseOptions = { event: eClick, relativeTo: $(canvasId) },
-                                X = Actions.Mouse.getX(mouseOptions),
-                                Y = Actions.Mouse.getY(mouseOptions),
-                                side = Square.VARIABLES.side;
-                            CANVASAPI.fillSquare(X - side / 2, Y - side / 2, side);
+                            var
+                            mouseOptions = { event: eClick, relativeTo: $(canvasId) },
+                            X = Actions.Mouse.getX(mouseOptions),
+                            Y = Actions.Mouse.getY(mouseOptions),
+                            side = Square.VARIABLES.side,
+                            xyPlaneRotationAngle = (Square.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
+                            
+                            CANVASAPI.fillRoatedSquare(X - side / 2, Y - side / 2, side, xyPlaneRotationAngle);
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Square.VARIABLES.side / 2 - window.scrollY)
-                                    .css('left', ev.pageX - Square.VARIABLES.side / 2 - window.scrollX)
+                            $(this).css('top', parseInt(ev.pageY) - parseInt(Square.VARIABLES.side / 2) - parseInt(window.scrollY))
+                                    .css('left', parseInt(ev.pageX) - parseInt(parseInt(Square.VARIABLES.side / 2)) - parseInt(window.scrollX))
                                     .css('background-color', selectedPrimaryColor)
-                                    .css('border', 'thin dashed '+selectedAlternativeColor)
+                                    .css('border', 'thin dashed ' + selectedAlternativeColor)
                                     .css('height', Square.VARIABLES.side)
                                     .css('width', Square.VARIABLES.side);
 
-                            previewOffsetLeft = $(this).offset().left + Square.VARIABLES.side / 2;
-                            previewOffsetTop = $(this).offset().top + Square.VARIABLES.side / 2;
+                            previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Square.VARIABLES.side / 2);
+                            previewOffsetTop = parseInt($(this).offset().top) + parseInt(Square.VARIABLES.side / 2);
                             canvasOffsetLeft = $(canvasId).offset().left;
                             canvasOffsetTop = $(canvasId).offset().top;
-                            
-                            if (canvasOffsetLeft > previewOffsetLeft || canvasOffsetLeft + canvasWidth < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || canvasOffsetTop + canvasHeight < previewOffsetTop) {
+
+                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft + canvasWidth) < previewOffsetLeft ||
+                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop + canvasHeight) < previewOffsetTop) {
                                 $(this).hide();
                             }
                         });
@@ -67,11 +71,12 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Square.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - Square.VARIABLES.side / 2 - window.scrollY)
-                        .css('left', e.pageX - Square.VARIABLES.side / 2 - window.scrollX)
+                previewer.css('top', e.pageY - parseInt(Square.VARIABLES.side / 2) - window.scrollY)
+                        .css('left', e.pageX - parseInt(Square.VARIABLES.side / 2) - window.scrollX)
                         .css('background-color', selectedPrimaryColor)
                         .css('height', Square.VARIABLES.side)
                         .css('width', Square.VARIABLES.side)
+                        .css('transform', 'rotate('+parseInt((Square.VARIABLES.xyPlaneRotationAngle*Math.PI))/180+'rad)')
                         .show();
             });
         },
@@ -84,25 +89,40 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                function initialSlider() {
-                    return $('<input id="sideSquare" type="range" min="1" max="200" step="1" title="side length for square tool" />');
+                function initialSlider(id, title, max) {
+                    return $('<input id="' + id + '" type="range" min="1" max="' + max + '" step="1" title="' + title + '" />');
                 }
-                function addSliderForSide(options) {
-                    var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
-                        .attr('value', Square.VARIABLES.side)
-                        .on('mouseover', function () {
-                            $(this).attr('title', $(this).val());
-                        })
-                        .on('input', function () {
-                            Square.VARIABLES.side = $(this).val();
-                        })
-                        .appendTo(div);
-
-                    div.appendTo($(options.containerSelectionCriterion));
+                function getContextMenuContainer(options) {
+                    var container = $('#' + options.id);
+                    if (container.length === 0)
+                        return $('<div></div>').attr('id', options.id).addClass('menu-item');
+                    else
+                        return container;
                 }
-                addSliderForSide(options);
+                function getSliderForSide(options) {
+                    return initialSlider('sideSquare', 'side length for square tool', 200)
+                            .attr('value', Square.VARIABLES.side)
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('input', function () {
+                                Square.VARIABLES.side = $(this).val();
+                            });
+                }
+                function getSliderForXYPlaneRotationAngle(options) {
+                    return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360)
+                            .attr('value', Square.VARIABLES.xyPlaneRotationAngle)
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val()+' deg');
+                            })
+                            .on('input', function () {
+                                Square.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                            });
+                }
+                var contextMenuContainer = getContextMenuContainer(options);
+                getSliderForSide(options).appendTo(contextMenuContainer);
+                getSliderForXYPlaneRotationAngle(options).appendTo(contextMenuContainer);
+                contextMenuContainer.appendTo($(options.containerSelectionCriterion));
             },
             deactivate: function (options) {
                 function removeSliderForSide(options) {

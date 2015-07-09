@@ -46,6 +46,14 @@ $(function () {
         fillSquare: function (x, y, side) {
             context.fillRect(x, y, side, side);
         },
+        fillRoatedSquare: function (x, y, side, xyPlaneRotationAngle) {
+            context.save();
+            context.translate(x+side/2, y+side/2);
+            context.rotate(xyPlaneRotationAngle);
+            context.translate(-1 * (x+side/2), -1 * (y+side/2));
+            CANVASAPI.fillSquare(x, y, side);
+            context.restore();
+        },
         fillRing: function (options) {
             CANVASAPI.fillCirc(options.X, options.Y, options.outerRadius);
             context.save();

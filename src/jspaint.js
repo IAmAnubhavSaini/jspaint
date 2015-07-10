@@ -65,16 +65,13 @@
             $('#' + options.toolId)
                 .on('click', function () {
                     var
-                    canvas = $('#' + CONSTANTS.canvasId)[0],
+                    canvasId = '#'+(options.canvasId || CONSTANTS.canvasId),
+                    canvas = $(canvasId)[0],
                     canvasHeight = canvas.height,
                     canvasWidth = canvas.width,
                     context = canvas.getContext('2d');
 
-                    context.save();
-                    context.transform(1, 0, 0, 1, 0, 0);
-                    context.fillStyle = selectedAlternativeColor;
-                    context.fillRect(0, 0, canvasWidth, canvasHeight);
-                    context.restore();
+                    context.clearRect(0, 0, canvasWidth, canvasHeight);
                 });
         },
 

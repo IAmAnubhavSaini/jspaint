@@ -117,8 +117,6 @@ a.string-menu-item {
     margin: 0 5px;
 }
 
-
-
 i.glyphicon:active {
     color: red;
 }
@@ -132,7 +130,7 @@ i.glyphicon:active {
     position: fixed;
     top: 14px;
     left: 14px;
-    z-index: 2;
+    z-index: 3;
     background-color: black;
     color: white;
     min-width: 30px;
@@ -146,6 +144,7 @@ i.glyphicon:active {
 
     #MenuButton:hover {
         cursor: pointer;
+        box-shadow: 0 10px 0 #dd3 inset, 3px 3px 4px #000;
     }
 
     #MenuButton.active-menu{

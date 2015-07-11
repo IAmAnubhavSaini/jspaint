@@ -35,7 +35,7 @@ $(function () {
                         .attr('id', Square.CONSTANTS.previewId)
                         .css({
                             'position': 'fixed',
-                            'z-index': '100',
+                            'z-index': '2',
                         })
                         .appendTo('.utilities')
                         .on('click', function (eClick) {

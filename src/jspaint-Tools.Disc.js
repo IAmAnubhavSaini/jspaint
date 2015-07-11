@@ -30,7 +30,7 @@ $(function () {
                         .attr('id', Disc.CONSTANTS.previewId)
                         .css({
                             'position': 'fixed',
-                            'z-index': '100',
+                            'z-index': '2',
                             'border-radius': '50%'
                         })
                         .appendTo('.utilities')

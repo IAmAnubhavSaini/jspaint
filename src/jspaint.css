@@ -10,7 +10,7 @@ html, body {
     -ms-user-select: none;
 }
 
-body{
+body {
     margin-bottom: 50px;
     padding-bottom: 20px;
 }
@@ -75,7 +75,9 @@ body{
 
 .contextual-menu-bar {
     min-height: 80px;
-    padding: 10px 5px;
+    min-width: 600px;
+    width: 100%;
+    padding: 10px 5px 10px 100px;
     background-color: #800080;
 }
 
@@ -120,3 +122,36 @@ a.string-menu-item {
 i.glyphicon:active {
     color: red;
 }
+
+#Menu {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    box-shadow: 10px 10px 3px black;
+}
+
+#MenuButton {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 2;
+    background-color: black;
+    color: white;
+    min-width: 30px;
+    min-height: 30px;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0 10px 0 #d33 inset, 3px 3px 4px #000;
+}
+
+    #MenuButton:hover {
+        cursor: pointer;
+    }
+
+    #MenuButton.active-menu{
+        box-shadow: 0 10px 0 #3d3 inset, 3px 3px 4px #000;
+    }

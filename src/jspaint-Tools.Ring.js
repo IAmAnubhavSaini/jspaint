@@ -32,7 +32,7 @@ $(function () {
                 var outerDiv = $('<div></div>').attr('id', Ring.CONSTANTS.previewOuterId)
                         .css({
                             'position': 'fixed',
-                            'z-index': '100',
+                            'z-index': '2',
                             'border-radius': '50%',
                             'height': Ring.VARIABLES.outerRadius * 2,
                             'width': Ring.VARIABLES.outerRadius * 2,
@@ -44,7 +44,7 @@ $(function () {
                         .attr('id', Ring.CONSTANTS.previewId)
                         .css({
                             'position': 'fixed',
-                            'z-index': '100',
+                            'z-index': '2',
                             'border-radius': '50%'
                         })
                         .appendTo(outerDiv)
@@ -75,7 +75,7 @@ $(function () {
                                 'position': 'fixed',
                                 'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
                                 'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
-                                'z-index': '100',
+                                'z-index': '2',
                                 'border-radius': '50%',
                                 'height': Ring.VARIABLES.outerRadius * 2,
                                 'width': Ring.VARIABLES.outerRadius * 2,
@@ -110,7 +110,7 @@ $(function () {
                     'position': 'fixed',
                     'top': e.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
                     'left': e.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
-                    'z-index': '100',
+                    'z-index': '2',
                     'border-radius': '50%',
                     'height': Ring.VARIABLES.outerRadius * 2,
                     'width': Ring.VARIABLES.outerRadius * 2,

@@ -124,11 +124,7 @@ i.glyphicon:active {
 }
 
 #Menu {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
+    display:none;
     box-shadow: 10px 10px 3px black;
 }
 

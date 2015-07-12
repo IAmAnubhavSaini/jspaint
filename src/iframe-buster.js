@@ -17,9 +17,9 @@
         blocker.style.lineHeight = '600px';
         blocker.style.textAlign = 'center';
         blocker.style.fontSize = '72px';
-        blocker.style.backgroundColor = 'red';
-        blocker.style.color = 'white';
-        blocker.style.textShadow = '2px 2px black';
+        blocker.style.backgroundColor = '#FF0000';
+        blocker.style.color = '#FFFFFF';
+        blocker.style.textShadow = '2px 2px #000000';
         blocker.style.position = 'fixed';
         blocker.style.top = '0';
 

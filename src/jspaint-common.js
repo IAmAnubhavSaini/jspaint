@@ -3,8 +3,8 @@ $(function () {
     size = window.location.toString().split('?')[1].split('=')[1];
     sizeX = size.split('x')[0];
     sizeY = size.split('x')[1];
-    selectedAlternativeColor = 'red';
-    selectedPrimaryColor = 'black';
+    selectedAlternativeColor = '#FF0000';
+    selectedPrimaryColor = '#000000';
     context = null;
 
     Actions = {
@@ -48,9 +48,9 @@ $(function () {
         },
         fillRoatedSquare: function (x, y, side, xyPlaneRotationAngle) {
             context.save();
-            context.translate(x+side/2, y+side/2);
+            context.translate(x + side / 2, y + side / 2);
             context.rotate(xyPlaneRotationAngle);
-            context.translate(-1 * (x+side/2), -1 * (y+side/2));
+            context.translate(-1 * (x + side / 2), -1 * (y + side / 2));
             CANVASAPI.fillSquare(x, y, side);
             context.restore();
         },
@@ -87,6 +87,22 @@ $(function () {
             }
             div1.appendTo(IContainBasicColors);
             div2.appendTo(IContainBasicColors);
+        },
+        hexToRgb: function (hex) {
+            console.log(hex);
+            var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        },
+        rgbToHex: function(r, g, b){
+            function componentToHex(c) {
+                var hex = c.toString(16);
+                return hex.length == 1 ? "0" + hex : hex;
+            }
+            return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
         }
     };
 

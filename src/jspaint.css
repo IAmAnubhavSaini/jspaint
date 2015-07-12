@@ -85,19 +85,19 @@ body {
         height: 45px;
         width: 45px;
         display: inline-block;
-        color: black;
+        color: #000000;
         background-color: #DDddDD;
         text-align: center;
         line-height: 45px;
         text-decoration: none;
         font-weight: bold;
-        border: thin solid white;
-        outline: thin solid black;
+        border: thin solid #FFFFFF;
+        outline: thin solid #000000;
     }
 
         .contextual-menu-bar a:hover {
-            border: thin solid black;
-            outline: thin solid white;
+            border: thin solid #000000;
+            outline: thin solid #FFFFFF;
         }
 
 a.string-menu-item {
@@ -118,12 +118,12 @@ a.string-menu-item {
 }
 
 i.glyphicon:active {
-    color: red;
+    color: #FF0000;
 }
 
 #Menu {
     display:none;
-    box-shadow: 10px 10px 3px black;
+    box-shadow: 10px 10px 3px #000000;
 }
 
 #MenuButton {
@@ -131,8 +131,8 @@ i.glyphicon:active {
     top: 14px;
     left: 14px;
     z-index: 3;
-    background-color: black;
-    color: white;
+    background-color: #000000;
+    color: #FFFFFF;
     min-width: 30px;
     min-height: 30px;
     font-size: 20px;

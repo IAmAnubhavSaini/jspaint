@@ -8,13 +8,13 @@
 #HTML5ColorPicker #allColorsPicker {
     height: 45px;
     width: 45px;
-    border: thin solid white;
-    outline: thin solid black;
+    border: thin solid #FFFFFF;
+    outline: thin solid #000000;
 }
 
     #HTML5ColorPicker #allColorsPicker:hover {
-        border: thin solid black;
-        outline: thin solid white;
+        border: thin solid #000000;
+        outline: thin solid #FFFFFF;
     }
 
 .BasicColorPalette .color {
@@ -25,11 +25,11 @@
     display: inline-block;
     margin: 0 1px;
     cursor: pointer;
-    border: thin solid white;
-    outline: thin solid black;
+    border: thin solid #FFFFFF;
+    outline: thin solid #000000;
 }
 
     .BasicColorPalette .color:hover {
-        border: thin solid black;
-        outline: thin solid white;
+        border: thin solid #000000;
+        outline: thin solid #FFFFFF;
     }

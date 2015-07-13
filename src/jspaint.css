@@ -117,6 +117,10 @@ a.string-menu-item {
     margin: 0 5px;
 }
 
+.menu-item label{
+    margin: 0 5px;
+}
+
 i.glyphicon:active {
     color: #FF0000;
 }

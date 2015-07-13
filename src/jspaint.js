@@ -118,10 +118,6 @@
             $('[data-toggle="tooltip"]').tooltip();
             $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
             $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
-            $('#MenuButton').on('click', function () {
-                $('#Menu').toggle();
-                $(this).toggleClass('active-menu');
-            });
         };
         init();
     });

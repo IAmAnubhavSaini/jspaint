@@ -264,10 +264,8 @@ $(function () {
                       MandelbrotFractal.VARIABLES.height = MandelbrotFractal.CONSTANTS.maxHeight = $(options.canvasId)[0].height;
                       MandelbrotFractal.VARIABLES.width = MandelbrotFractal.CONSTANTS.maxWidth = $(options.canvasId)[0].width;
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = $(this);
                   },
                   function () {
-                      activeTool = null;
                       contextMenu.deactivate(contextMenu.getOptions());
                       deactivateTool(options);
                   });
@@ -283,5 +281,6 @@ $(function () {
         canvasId: '#' + CONSTANTS.canvasId,
         start: MandelbrotFractal.start,
         stop: MandelbrotFractal.stop,
+        toolName: 'Mandelbrot fractal'
     });
 });

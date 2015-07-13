@@ -91,7 +91,7 @@ $(function () {
         ContextMenu: {
             activate: function (options) {
                 function initialSlider(id, title) {
-                    return $('<input id="'+id+'" type="range" min="1" max="200" step="1" title="'+title+'" />');
+                    return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
                 }
                 function addSliderForLength(options) {
                     var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
@@ -119,7 +119,7 @@ $(function () {
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForLength(options);
-                
+
             },
             deactivate: function (options) {
                 function removeSliderForSide(options) {
@@ -145,7 +145,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || Rectangle.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = Rectangle.ContextMenu;
 
@@ -156,10 +156,8 @@ $(function () {
                     function () {
                         activateTool(options);
                         contextMenu.activate(contextMenu.getOptions());
-                        activeTool = tool;
                     },
                     function () {
-                        activeTool = null;
                         contextMenu.deactivate(contextMenu.getOptions());
                         deactivateTool(options);
                     });
@@ -172,6 +170,7 @@ $(function () {
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: Rectangle.start,
-        stop: Rectangle.stop
+        stop: Rectangle.stop,
+        toolName: 'Rectangle'
     });
 });

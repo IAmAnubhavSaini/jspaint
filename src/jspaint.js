@@ -32,6 +32,12 @@
 
 
         registerColorEvents = function () {
+            function updatePrimaryColor(selectedPrimaryColor) {
+                $('label#primary-color-name').css('color', selectedPrimaryColor).html(selectedPrimaryColor);
+            }
+            function updataAlternativeColorLabel(selectedAlternativeColor) {
+                $('label#alternative-color-name').css('color', selectedAlternativeColor).html(selectedAlternativeColor);
+            }
             $('.color')
                 .attr('title', 'Left click for primary color, Right click for alternative color.')
                 .attr('data-toggle', 'tooltip')
@@ -39,16 +45,20 @@
                 .on('click', function () {
                     selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
                     $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
+                    updatePrimaryColor(selectedPrimaryColor);
                 })
                 .on('contextmenu', function (e) {
                     e.preventDefault();
                     selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
                     $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
+                    updataAlternativeColorLabel(selectedAlternativeColor);
                 });
+            updatePrimaryColor(selectedPrimaryColor);
+            updataAlternativeColorLabel(selectedAlternativeColor);
         },
 
         registerAllColorsPickerEvents = function (options) {
-            $('#' + options.containerId + ' #' + options.toolId)
+            $('#' + options.toolId)
                 .on('input', function () {
                     selectedPrimaryColor = context.fillStyle = $(this).val();
                 });
@@ -65,7 +75,7 @@
             $('#' + options.toolId)
                 .on('click', function () {
                     var
-                    canvasId = '#'+(options.canvasId || CONSTANTS.canvasId),
+                    canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
                     canvas = $(canvasId)[0],
                     canvasHeight = canvas.height,
                     canvasWidth = canvas.width,

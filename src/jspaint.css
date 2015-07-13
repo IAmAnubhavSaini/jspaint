@@ -18,8 +18,7 @@ body {
 #jspaint-tools {
     background-color: #ddDDdd;
     display: block;
-    padding: 2px;
-    margin: 2px;
+    padding: 10px;    
 }
 
 #jspaint-paint-area {

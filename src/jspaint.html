@@ -11,95 +11,97 @@
     <link href="./TopTaker.widget.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
-    <header class="contextual-menu-bar">
-        <div class="menu-item">
-            <a href="./index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
+    <header class="Menu">
+        <div id="jspaint-tools">
+            <div id="SpeedTools" class="main-tool-menu dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="SpeedToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Speed
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="SpeedToolsMenu">
+                    <li>
+                        <div id="SpeedDotTool" class="main-tool">Dot</div>
+                    </li>
+                </ul>
+            </div>
+            <div id="PencilTool" class="main-tool">Pencil</div>
+            <div id="ShapeTool" class="main-tool-menu dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="ShapeToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Shapes
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="ShapeToolsMenu">
+                    <li>
+                        <div id="DiscTool" class="main-tool">Disc</div>
+                        <div id="SquareTool" class="main-tool">Square</div>
+                        <div id="RingTool" class="main-tool">Ring</div>
+                        <div id="CircleTool" class="main-tool">Circle</div>
+                        <div id="RectangleTool" class="main-tool">Rectangle</div>
+                    </li>
+                </ul>
+            </div>
+            <div id="SerendipityTool" class="main-tool-menu dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="SerendipityToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Serendipity
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="SerendipityToolsMenu">
+                    <li>
+                        <div id="PivotedLinePatternTool" class="main-tool">Pivoted line pattern</div>
+                    </li>
+                </ul>
+            </div>
+            <div id="FractalTool" class="main-tool-menu dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="FractalToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    Fractals
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="FractalToolsMenu">
+                    <li>
+                        <div id="MandelbrotFractalTool" class="main-tool">Mandelbrot</div>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="menu-item">
-            <div class="contextual-tool-bar">
-                <div class="menu-item">
-                    <div id="SelectedPrimaryColor" title="Primary/Draw color." data-toggle="tooltip" data-placement="bottom"></div>
-                    <div id="SelectedAlternativeColor" title="Alternative/Background color." data-toggle="tooltip" data-placement="bottom"></div>
-                </div>
-                <div class="menu-item">
-                    <div class="BasicColorPalette"></div>
-                </div>
-                <div class="menu-item">
-                    <div id="HTML5ColorPicker">
-                        <input type="color" id="allColorsPicker" />
+        <div class="contextual-menu-bar">
+            <div class="menu-item">
+                <a href="./index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
+            </div>
+            <div class="menu-item">
+                <div class="contextual-tool-bar">
+                    <div class="menu-item">
+                        <div id="SelectedPrimaryColor" title="Primary/Draw color." data-toggle="tooltip" data-placement="bottom"></div>
+                        <div id="SelectedAlternativeColor" title="Alternative/Background color." data-toggle="tooltip" data-placement="bottom"></div>
                     </div>
-                </div>
-                <div class="menu-item">
-                    <div id="PickColorTool">
-                        <a id="pick-color">
-                            <i class="glyphicon glyphicon-screenshot"></i>
-                        </a>
+                    <div class="menu-item">
+                        <div class="BasicColorPalette"></div>
                     </div>
-                </div>
-                <div class="menu-item">
-                    <div id="SaveImageButton" title="Save the image as seen on data area." data-toggle="tooltip" data-placement="bottom">
-                        <a id="save-as-image" class="string-menu-item">imagify</a>
+                    <div class="menu-item">
+                        <div id="HTML5ColorPicker">
+                            <input type="color" id="allColorsPicker" />
+                        </div>
                     </div>
-                </div>
-                <div class="menu-item">
-                    <div id="ResetCanvas">
-                        <a id="reset-canvas" title="Click to clear the draw area." data-toggle="tooltip" data-placement="bottom"><i class="glyphicon glyphicon-refresh"></i></a>
+                    <div class="menu-item">
+                        <div id="PickColorTool">
+                            <a id="pick-color">
+                                <i class="glyphicon glyphicon-screenshot"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div id="SaveImageButton" title="Save the image as seen on data area." data-toggle="tooltip" data-placement="bottom">
+                            <a id="save-as-image" class="string-menu-item">imagify</a>
+                        </div>
+                    </div>
+                    <div class="menu-item">
+                        <div id="ResetCanvas">
+                            <a id="reset-canvas" title="Click to clear the draw area." data-toggle="tooltip" data-placement="bottom"><i class="glyphicon glyphicon-refresh"></i></a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-    <div id="jspaint-tools">
-        <div id="SpeedTools" class="main-tool-menu dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="SpeedToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Speed
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="SpeedToolsMenu">
-                <li>
-                    <div id="SpeedDotTool" class="main-tool">Dot</div>
-                </li>
-            </ul>
-        </div>
-        <div id="PencilTool" class="main-tool">Pencil</div>
-        <div id="ShapeTool" class="main-tool-menu dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="ShapeToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Shapes
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="ShapeToolsMenu">
-                <li>
-                    <div id="DiscTool" class="main-tool">Disc</div>
-                    <div id="SquareTool" class="main-tool">Square</div>
-                    <div id="RingTool" class="main-tool">Ring</div>
-                    <div id="CircleTool" class="main-tool">Circle</div>
-                    <div id="RectangleTool" class="main-tool">Rectangle</div>
-                </li>
-            </ul>
-        </div>
-        <div id="SerendipityTool" class="main-tool-menu dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="SerendipityToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Serendipity
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="SerendipityToolsMenu">
-                <li>
-                    <div id="PivotedLinePatternTool" class="main-tool">Pivoted line pattern</div>
-                </li>
-            </ul>
-        </div>
-        <div id="FractalTool" class="main-tool-menu dropdown">
-            <button class="btn btn-default dropdown-toggle" type="button" id="FractalToolsMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                Fractals
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="FractalToolsMenu">
-                <li>
-                    <div id="MandelbrotFractalTool" class="main-tool">Mandelbrot</div>
-                </li>
-            </ul>
-        </div>
-    </div>
     <div id="jspaint-paint-area"></div>
     <div class="utilities">
         <div class="top-taker"></div>

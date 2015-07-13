@@ -119,7 +119,7 @@
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || PivotedLinePattern.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = PivotedLinePattern.ContextMenu;
 
@@ -130,12 +130,10 @@
                   function () {
                       activateTool(options);
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = $(this);
                   },
                   function () {
-                      activeTool = null;
-                      deactivateTool(options);
                       contextMenu.deactivate(contextMenu.getOptions());
+                      deactivateTool(options);
                   }
                 );
             }
@@ -147,6 +145,7 @@
         event: CONSTANTS.Events.mousemove,
         canvasId: CONSTANTS.canvasId,
         start: PivotedLinePattern.start,
-        stop: PivotedLinePattern.stop
+        stop: PivotedLinePattern.stop,
+        toolName: 'Pivoted Line Pattern'
     });
 });

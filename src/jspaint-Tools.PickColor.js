@@ -40,7 +40,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || PickColor.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId);
 
                 setupToolTips(tool, PickColor.CONSTANTS.title);
@@ -48,10 +48,8 @@ $(function () {
                 tool.funcToggle('click',
                     function () {
                         activateTool(options);
-                        activeTool = $(this);
                     },
                     function () {
-                        activeTool = null;
                         deactivateTool(options);
                     });
             }
@@ -64,6 +62,7 @@ $(function () {
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: PickColor.start,
-        stop: PickColor.stop
+        stop: PickColor.stop,
+        toolName: 'Color picker'
     });
 });

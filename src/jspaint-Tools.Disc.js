@@ -120,7 +120,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || Disc.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = Disc.ContextMenu;
 
@@ -131,12 +131,10 @@ $(function () {
                   function () {
                       activateTool(options);
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = tool;
                   },
                   function () {
-                      activeTool = null;
-                      deactivateTool(options);
                       contextMenu.deactivate(contextMenu.getOptions());
+                      deactivateTool(options);
                   });
             }
         }
@@ -147,6 +145,7 @@ $(function () {
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: Disc.start,
-        stop: Disc.stop
+        stop: Disc.stop,
+        toolName: 'Disc'
     });
 });

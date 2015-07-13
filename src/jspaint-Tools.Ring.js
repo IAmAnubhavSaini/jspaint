@@ -178,7 +178,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || Ring.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = Ring.ContextMenu;
 
@@ -189,12 +189,10 @@ $(function () {
                   function () {
                       activateTool(options);
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = tool;
                   },
                   function () {
-                      activeTool = null;
-                      deactivateTool(options);
                       contextMenu.deactivate(contextMenu.getOptions());
+                      deactivateTool(options);
                   });
             }
         }
@@ -204,6 +202,7 @@ $(function () {
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: Ring.start,
-        stop: Ring.stop
+        stop: Ring.stop,
+        toolName: 'Ring'
     });
 });

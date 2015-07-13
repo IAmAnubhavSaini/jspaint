@@ -143,7 +143,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || Square.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = Square.ContextMenu;
 
@@ -154,10 +154,8 @@ $(function () {
                     function () {
                         activateTool(options);
                         contextMenu.activate(contextMenu.getOptions());
-                        activeTool = tool;
                     },
                     function () {
-                        activeTool = null;
                         contextMenu.deactivate(contextMenu.getOptions());
                         deactivateTool(options);
                     });
@@ -170,6 +168,7 @@ $(function () {
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: Square.start,
-        stop: Square.stop
+        stop: Square.stop,
+        toolName: 'Square'
     });
 });

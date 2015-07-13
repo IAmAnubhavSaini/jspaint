@@ -117,9 +117,10 @@
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId || Circle.CONSTANTS.selectionId,
-                             tool = $(toolId),
-                             contextMenu = Circle.ContextMenu;
+                var
+                toolId = options.toolId,
+                tool = $(toolId),
+                contextMenu = Circle.ContextMenu;
 
                 setupToolTips(tool, Circle.CONSTANTS.title);
                 options.tool = tool;
@@ -128,12 +129,10 @@
                   function () {
                       activateTool(options);
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = tool;
                   },
                   function () {
-                      activeTool = null;
-                      deactivateTool(options);
                       contextMenu.deactivate(contextMenu.getOptions());
+                      deactivateTool(options);
                   });
             }
         }
@@ -143,6 +142,7 @@
         event: CONSTANTS.Events.mouseclick,
         canvasId: CONSTANTS.canvasId,
         start: Circle.start,
-        stop: Circle.stop
+        stop: Circle.stop,
+        toolName: 'Circle'
     });
 });

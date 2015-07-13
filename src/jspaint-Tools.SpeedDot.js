@@ -72,7 +72,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || SpeedDot.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = SpeedDot.ContextMenu;
 
@@ -83,12 +83,10 @@ $(function () {
                   function () {
                       activateTool(options);
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = tool;
                   },
                   function () {
-                      activeTool = null;
-                      deactivateTool(options);
                       contextMenu.deactivate(contextMenu.getOptions());
+                      deactivateTool(options);
                   });
             }
         }
@@ -99,6 +97,7 @@ $(function () {
         event: CONSTANTS.Events.mousemove,
         canvasId: CONSTANTS.canvasId,
         start: SpeedDot.start,
-        stop: SpeedDot.stop
+        stop: SpeedDot.stop,
+        toolName: 'Speed dot'
     });
 });

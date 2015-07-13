@@ -115,12 +115,16 @@ $(function () {
         if (activeTool !== null) {
             activeTool.trigger('click');
         }
+        activeTool = options.tool;
         $(options.tool).toggleClass('active-tool');
+        $('label#activated-tool-name').html(options.toolName);
         options.start(options);
     };
 
     deactivateTool = function (options) {
+        activeTool = null;
         $(options.tool).toggleClass('active-tool');
+        $('label#activated-tool-name').html('no active tool');
         options.stop(options);
     };
 

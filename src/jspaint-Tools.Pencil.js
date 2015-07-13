@@ -116,7 +116,7 @@ $(function () {
         Events: {
             register: function (options) {
                 var
-                toolId = options.toolId || Pencil.CONSTANTS.selectionId,
+                toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = Pencil.ContextMenu;
 
@@ -127,12 +127,10 @@ $(function () {
                   function () {
                       activateTool(options);
                       contextMenu.activate(contextMenu.getOptions());
-                      activeTool = $(this);
                   },
                   function () {
-                      activeTool = null;
-                      deactivateTool(options);
                       contextMenu.deactivate(contextMenu.getOptions());
+                      deactivateTool(options);                     
                   });
             }
         }
@@ -143,6 +141,7 @@ $(function () {
         event: CONSTANTS.Events.mousemove,
         canvasId: CONSTANTS.canvasId,
         start: Pencil.start,
-        stop: Pencil.stop
+        stop: Pencil.stop,
+        toolName: 'Pencil'
     });
 });

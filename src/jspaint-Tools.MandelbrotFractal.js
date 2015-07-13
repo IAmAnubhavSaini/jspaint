@@ -5,10 +5,10 @@ $(function () {
         CONSTANTS: {
             id: "MandelbrotFractalTool", selectionId: '#MandelbrotFractalTool', class: 'main-tool',
             title: 'Click to draw Mandelbrot Fractal. Click again to disable.',
-            maxHeight: 0,
-            maxWidth: 0
+            maxHeight: -1,
+            maxWidth: -1
         },
-        VARIABLES: { iterations: 1000, xMax: 1, yMax: 1, xMin: -2, yMin: -1, height: 400, width: 400 },
+        VARIABLES: { iterations: 1000, xMax: 1, yMax: 1, xMin: -2, yMin: -1, height: -1, width: -1 },
         start: function (options) {
             var
             event = options.event,
@@ -104,7 +104,7 @@ $(function () {
                 if (startY + Math.floor(MandelbrotFractal.VARIABLES.height) > MandelbrotFractal.CONSTANTS.maxHeight) {
                     startY -= startY + Math.floor(MandelbrotFractal.VARIABLES.height) - MandelbrotFractal.CONSTANTS.maxHeight;
                 }
-                drawMandelbrotFractal({ context: context, XMin: XMin, XMax: XMax, YMin: YMin, YMax: YMax, iterations: MandelbrotFractal.VARIABLES.iterations, startX: startX, startY: startY });
+                drawMandelbrotFractal({ context: context, XMin: XMin, XMax: MandelbrotFractal.VARIABLES.xMax, YMin: YMin, YMax: YMax, iterations: MandelbrotFractal.VARIABLES.iterations, startX: startX, startY: startY });
             });
         },
         stop: function (options) {
@@ -115,14 +115,14 @@ $(function () {
             activate: function (options) {
                 var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
-                function initialNumberInput(id, min, max, title) {
+                function getInputElement(id, min, max, title) {
                     return $('<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="1" title="' + title + '" />');
                 }
 
                 function addIterationController(options) {
                     function createIterationSlider(options) {
                         var
-                        slider = initialNumberInput('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
+                        slider = getInputElement('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
                             .attr('value', MandelbrotFractal.VARIABLES.iterations)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
@@ -145,7 +145,7 @@ $(function () {
                 function addHeightController(options) {
                     function createHeightSlider(options) {
                         var
-                        slider = initialNumberInput('mandelbrotHeight', '100', MandelbrotFractal.CONSTANTS.maxHeight, 'Height for mandelbrot fractal generation.')
+                        slider = getInputElement('mandelbrotHeight', '100', MandelbrotFractal.CONSTANTS.maxHeight, 'Height for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxHeight)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
@@ -166,7 +166,7 @@ $(function () {
                 function addWidthController(options) {
                     function createWidthSlider(options) {
                         var
-                        slider = initialNumberInput('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
+                        slider = getInputElement('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxWidth)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
@@ -184,9 +184,45 @@ $(function () {
                             .append(options.widthLabel)
                             .append(createWidthSlider(options));
                 }
+                function addXMaxController(options) {
+                    function createXMaxSlider(options) {
+                        var
+                        slider = getInputElement('mandelbrotXMax', '0', '3', 'XMax for mandelbrot fractal generation.')
+                            .attr('value', '1')
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('change', function () {
+                                MandelbrotFractal.VARIABLES.xMax = $(this).val();
+                            });
+                        return slider;
+                    }
+                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                            .append(options.xMaxLabel)
+                            .append(createXMaxSlider(options));
+                }
+                function addYMaxController(options) {
+                    function createYMaxSlider(options) {
+                        var
+                        slider = getInputElement('mandelbrotYMax', '0', '3', 'YMax for mandelbrot fractal generation.')
+                            .attr('value', '1')
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('change', function () {
+                                MandelbrotFractal.VARIABLES.yMax = $(this).val();
+                            });
+                        return slider;
+                    }
+                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                            .append(options.yMaxLabel)
+                            .append(createYMaxSlider(options));
+                }
                 container.append(addIterationController(options));
                 container.append(addHeightController(options));
                 container.append(addWidthController(options));
+                container.append(addXMaxController(options));
+                //container.append(addYMaxController(options));
                 container.appendTo($(options.containerSelectionCriterion));
             },
             deactivate: function (options) {
@@ -207,6 +243,8 @@ $(function () {
                     heightLabel: 'Height: ',
                     maxWidthAllowed: MandelbrotFractal.VARIABLES.maxWidth,
                     widthLabel: 'Width: ',
+                    xMaxLabel: 'XMax: ',
+                    yMaxLabel: 'YMax: ',
                 };
             }
         },
@@ -216,7 +254,6 @@ $(function () {
                 toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = MandelbrotFractal.ContextMenu;
-
 
                 setupToolTips(tool, MandelbrotFractal.CONSTANTS.title);
                 options.tool = tool;

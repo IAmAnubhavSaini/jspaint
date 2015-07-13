@@ -71,13 +71,11 @@ body {
         margin-top: 5px;
     }
 
-
-
 .contextual-menu-bar {
     min-height: 80px;
     min-width: 600px;
     width: 100%;
-    padding: 10px 5px 10px 100px;
+    padding: 10px;
     background-color: #800080;
 }
 
@@ -124,33 +122,3 @@ a.string-menu-item {
 i.glyphicon:active {
     color: #FF0000;
 }
-
-#Menu {
-    display:none;
-    box-shadow: 10px 10px 3px #000000;
-}
-
-#MenuButton {
-    position: fixed;
-    top: 14px;
-    left: 14px;
-    z-index: 3;
-    background-color: #000000;
-    color: #FFFFFF;
-    min-width: 30px;
-    min-height: 30px;
-    font-size: 20px;
-    line-height: 30px;
-    text-align: center;
-    padding: 10px;
-    box-shadow: 0 10px 0 #d33 inset, 3px 3px 4px #000;
-}
-
-    #MenuButton:hover {
-        cursor: pointer;
-        box-shadow: 0 10px 0 #dd3 inset, 3px 3px 4px #000;
-    }
-
-    #MenuButton.active-menu{
-        box-shadow: 0 10px 0 #3d3 inset, 3px 3px 4px #000;
-    }

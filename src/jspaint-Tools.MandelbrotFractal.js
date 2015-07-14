@@ -12,11 +12,7 @@ $(function () {
         start: function (options) {
             var
             event = options.event,
-            canvasId = options.canvasId,
-            XMin = MandelbrotFractal.VARIABLES.xMin,
-            XMax = MandelbrotFractal.VARIABLES.xMax,
-            YMin = MandelbrotFractal.VARIABLES.yMin,
-            YMax = MandelbrotFractal.VARIABLES.yMax;
+            canvasId = options.canvasId;
 
             function drawMandelbrotFractal(options) {
                 function mandelIter(cx, cy, maxIter) {
@@ -104,7 +100,16 @@ $(function () {
                 if (startY + Math.floor(MandelbrotFractal.VARIABLES.height) > MandelbrotFractal.CONSTANTS.maxHeight) {
                     startY -= startY + Math.floor(MandelbrotFractal.VARIABLES.height) - MandelbrotFractal.CONSTANTS.maxHeight;
                 }
-                drawMandelbrotFractal({ context: context, XMin: XMin, XMax: MandelbrotFractal.VARIABLES.xMax, YMin: YMin, YMax: YMax, iterations: MandelbrotFractal.VARIABLES.iterations, startX: startX, startY: startY });
+                drawMandelbrotFractal({
+                    context: context,
+                    XMin: MandelbrotFractal.VARIABLES.xMin,
+                    XMax: MandelbrotFractal.VARIABLES.xMax,
+                    YMin: MandelbrotFractal.VARIABLES.yMin,
+                    YMax: MandelbrotFractal.VARIABLES.yMax,
+                    iterations: MandelbrotFractal.VARIABLES.iterations,
+                    startX: startX,
+                    startY: startY
+                });
             });
         },
         stop: function (options) {
@@ -189,6 +194,7 @@ $(function () {
                         var
                         slider = getInputElement('mandelbrotXMax', '0', '3', 'XMax for mandelbrot fractal generation.')
                             .attr('value', '1')
+                            .attr('disabled', 'disabled')
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
@@ -206,6 +212,7 @@ $(function () {
                         var
                         slider = getInputElement('mandelbrotYMax', '0', '3', 'YMax for mandelbrot fractal generation.')
                             .attr('value', '1')
+                            .attr('disabled', 'disabled')
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
@@ -218,11 +225,49 @@ $(function () {
                             .append(options.yMaxLabel)
                             .append(createYMaxSlider(options));
                 }
+                function addXMinController(options) {
+                    function createXMinSlider(options) {
+                        var
+                        slider = getInputElement('mandelbrotXMin', '-3', '1', 'XMin for mandelbrot fractal generation.')
+                            .attr('value', '-2')
+                            .attr('disabled', 'disabled')
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('change', function () {
+                                MandelbrotFractal.VARIABLES.xMin = $(this).val();
+                            });
+                        return slider;
+                    }
+                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                            .append(options.xMinLabel)
+                            .append(createXMinSlider(options));
+                }
+                function addYMinController(options) {
+                    function createYMinSlider(options) {
+                        var
+                        slider = getInputElement('mandelbrotYMin', '-2', '1', 'YMin for mandelbrot fractal generation.')
+                            .attr('value', '-1')
+                            .attr('disabled', 'disabled')
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('change', function () {
+                                MandelbrotFractal.VARIABLES.yMin = $(this).val();
+                            });
+                        return slider;
+                    }
+                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                            .append(options.yMinLabel)
+                            .append(createYMinSlider(options));
+                }
                 container.append(addIterationController(options));
                 container.append(addHeightController(options));
                 container.append(addWidthController(options));
                 container.append(addXMaxController(options));
-                //container.append(addYMaxController(options));
+                container.append(addYMaxController(options));
+                container.append(addXMinController(options));
+                container.append(addYMinController(options));
                 container.appendTo($(options.containerSelectionCriterion));
             },
             deactivate: function (options) {
@@ -245,6 +290,8 @@ $(function () {
                     widthLabel: 'Width: ',
                     xMaxLabel: 'XMax: ',
                     yMaxLabel: 'YMax: ',
+                    xMinLabel: 'XMin: ',
+                    yMinLabel: 'YMin: ',
                 };
             }
         },

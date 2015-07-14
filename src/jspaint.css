@@ -124,5 +124,5 @@ i.glyphicon:active {
 }
 
 .contextual-tool-bar input[disabled="disabled"]{
-    cursor: none;
+    cursor: not-allowed;
 }

@@ -4,77 +4,32 @@ $(function () {
     var SpeedDot = {
         CONSTANTS: {
             id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool',
-            title: 'Click to draw circles. Click again to disable.'
+            title: 'Click to draw dots. Click again to disable.'
         },
-        VARIABLES: {
-            radius: 4
-        },
+        VARIABLES: {},
         start: function (options) {
             var
-            event = options.event || CONSTANTS.Events.mousemove,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            event = options.event,
+            canvasId = '#' + options.canvasId,
             mouseOptions = null,
             X = null,
-            Y = null,
-            R = null;
+            Y = null;
 
             $(canvasId).on(event, function (e) {
                 mouseOptions = { event: e, relativeTo: $(this) };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
-                R = SpeedDot.VARIABLES.radius;
-                CANVASAPI.fillCirc(X, Y, R);
+                CANVASAPI.fillCirc(X, Y, 1);
             });
         },
         stop: function (options) {
-            var
-            event = options.event || CONSTANTS.Events.mousemove,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
-
-            $(canvasId).off(event);
-        },
-        ContextMenu: {
-            activate: function (options) {
-                var VARS = SpeedDot.VARIABLES;
-                function initialSlider() {
-                    return $('<input id="radiusSpeedDot" type="range" min="1" max="200" step="1" title="radius for speed dot tool" />');
-                }
-                function addSliderForRadius(options) {
-                    var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
-                        .attr('value', VARS.radius)
-                        .on('mouseover', function () {
-                            $(this).attr('title', $(this).val());
-                        })
-                        .on('input', function () {
-                            VARS.radius = $(this).val();
-                        }).appendTo(div);
-
-                    div.appendTo($(options.containerSelectionCriterion));
-                }
-                addSliderForRadius(options);
-            },
-            deactivate: function (options) {
-                function removeSliderForRadius(options) {
-                    $('#' + options.id).remove();
-                }
-                removeSliderForRadius(options);
-            },
-            getOptions: function () {
-                return {
-                    tool: this,
-                    id: 'SpeedDotContextMenu',
-                    containerSelectionCriterion: '.contextual-tool-bar'
-                };
-            }
+            $('#' + options.canvasId).off(options.event);
         },
         Events: {
             register: function (options) {
                 var
                 toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedDot.ContextMenu;
+                tool = $(toolId);
 
                 setupToolTips(tool, SpeedDot.CONSTANTS.title);
                 options.tool = tool;
@@ -82,10 +37,8 @@ $(function () {
                 tool.funcToggle('click',
                   function () {
                       activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
                   },
                   function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
                       deactivateTool(options);
                   });
             }

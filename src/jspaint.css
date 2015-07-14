@@ -70,15 +70,16 @@ body {
         margin-top: 5px;
     }
 
-.contextual-menu-bar {
+.common-menu-bar {
     min-height: 80px;
     min-width: 600px;
     width: 100%;
     padding: 10px;
     background-color: #800080;
+    overflow: auto;
 }
 
-    .contextual-menu-bar a {
+    .common-menu-bar a {
         height: 45px;
         width: 45px;
         display: inline-block;
@@ -92,7 +93,7 @@ body {
         outline: thin solid #000000;
     }
 
-        .contextual-menu-bar a:hover {
+        .common-menu-bar a:hover {
             border: thin solid #000000;
             outline: thin solid #FFFFFF;
         }
@@ -101,13 +102,9 @@ a.string-menu-item {
     width: 100px;
 }
 
-.contextual-menu-bar .menu-item {
+.common-menu-bar .menu-item {
     float: left;
     margin: 5px;
-}
-
-.contextual-menu-bar:last-child(.menu-item) {
-    clear: both;
 }
 
 .menu-item .menu-item {

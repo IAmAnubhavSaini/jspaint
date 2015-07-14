@@ -122,3 +122,7 @@ i.glyphicon:active {
 #status-bar{
     padding: 0 10px;
 }
+
+.contextual-tool-bar input[disabled="disabled"]{
+    cursor: none;
+}

@@ -6,6 +6,7 @@ $(function () {
     selectedAlternativeColor = '#FF0000';
     selectedPrimaryColor = '#000000';
     context = null;
+    CanvasState = [];
 
     Actions = {
         Mouse: {

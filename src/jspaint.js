@@ -82,7 +82,21 @@
                     context = canvas.getContext('2d');
 
                     context.clearRect(0, 0, canvasWidth, canvasHeight);
+                    CanvasState = [];
                 });
+        },
+
+        registerUndoEvents = function (options) {
+            $(options.toolSelection)
+            .on('click', function () {
+                var state = CanvasState.pop();
+                if (state !== undefined) {
+                    context.putImageData(state, 0, 0);
+                }
+            });
+            $(options.canvasId).on('mousedown', function () {
+                CanvasState.push(context.getImageData(0, 0, $(this).width(), $(this).height()));
+            });
         },
 
         registerEvents = function () {
@@ -90,6 +104,7 @@
             registerAllColorsPickerEvents({ toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker' });
             registerSaveImageEvents({ toolId: 'save-as-image', containerId: 'SaveImageButton' });
             registerResetCanvasEvents({ toolId: 'reset-canvas', containerId: 'ResetCanvas' });
+            registerUndoEvents({ toolSelection: '#undo-button', canvasId: '#' + CONSTANTS.canvasId });
         },
 
         mustAssignDimensionsToCanvasContainer = function () {

@@ -10,12 +10,12 @@ $(function () {
             previewId: 'previewRectangle'
         },
         VARIABLES: {
-            length: 20, breadth: 10
+            length: 20, breadth: 10, xyPlaneRotationAngle: 360
         },
         start: function (options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            event = options.event,
+            canvasId = '#' + options.canvasId,
             mouseOptions = null,
             X = null,
             Y = null,
@@ -27,7 +27,8 @@ $(function () {
             canvasHeight = $(canvasId).height(),
             canvasWidth = $(canvasId).width(),
             previewOffsetLeft = null,
-            previewOffsetTop = null;
+            previewOffsetTop = null,
+            xyPlaneRotationAngle = null;
 
             function generatePreview(options) {
                 var
@@ -45,8 +46,8 @@ $(function () {
                             Y = Actions.Mouse.getY(mouseOptions),
                             length = Rectangle.VARIABLES.length,
                             breadth = Rectangle.VARIABLES.breadth;
-
-                            context.fillRect(X - length / 2, Y - breadth / 2, length, breadth);
+                            xyPlaneRotationAngle = (Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
+                            CANVASAPI.fillRotatedRectangle(X - length / 2, Y - breadth / 2, length, breadth, xyPlaneRotationAngle);
                         })
                         .on('mousemove', function (ev) {
                             $(this).css('top', ev.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
@@ -76,6 +77,7 @@ $(function () {
                         .css('background-color', selectedPrimaryColor)
                         .css('height', Rectangle.VARIABLES.breadth)
                         .css('width', Rectangle.VARIABLES.length)
+                        .css('transform', 'rotate(' + parseInt((Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
                         .show();
             });
         },
@@ -90,13 +92,25 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                function initialSlider(id, title) {
-                    return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
-                }
-                function addSliderForLength(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
-                    var lengthSlider = initialSlider(options.lengthId, options.lengthTitle)
+                function initialSlider(id, title, max) {
+                    return $('<input id="' + id + '" type="range" min="1" max="' + max + '" step="1" title="' + title + '" />');
+                }
+
+                function getSliderForXYPlaneRotationAngle(options) {
+                    return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360)
+                            .attr('value', Rectangle.VARIABLES.xyPlaneRotationAngle)
+                            .on('mouseover', function () {
+                                $(this).attr('title', $(this).val() + ' deg');
+                            })
+                            .on('input', function () {
+                                Rectangle.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                            });
+                }
+
+                function addSliderForLength(options) {
+                    var lengthSlider = initialSlider(options.lengthId, options.lengthTitle, 400)
                         .attr('value', Rectangle.VARIABLES.length)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
@@ -104,9 +118,9 @@ $(function () {
                         .on('input', function () {
                             Rectangle.VARIABLES.length = $(this).val();
                         })
-                        .appendTo(div);
+                        .appendTo(container);
 
-                    var breadthSlider = initialSlider(options.breadthId, options.breadthTitle)
+                    var breadthSlider = initialSlider(options.breadthId, options.breadthTitle, 400)
                         .attr('value', Rectangle.VARIABLES.breadth)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
@@ -114,17 +128,18 @@ $(function () {
                         .on('input', function () {
                             Rectangle.VARIABLES.breadth = $(this).val();
                         })
-                        .appendTo(div);
-
-                    div.appendTo($(options.containerSelectionCriterion));
+                        .appendTo(container);
                 }
-                addSliderForLength(options);
 
+                addSliderForLength(options);
+                container.append(getSliderForXYPlaneRotationAngle(options));
+                container.appendTo($(options.containerSelectionCriterion));
             },
             deactivate: function (options) {
                 function removeSliderForSide(options) {
                     $('#' + options.lengthId).remove();
                     $('#' + options.breadthId).remove();
+                    $('#xyPlaneRotationAngle').remove();
                 }
                 removeSliderForSide(options);
                 $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');

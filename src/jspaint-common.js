@@ -55,6 +55,14 @@ $(function () {
             CANVASAPI.fillSquare(x, y, side);
             context.restore();
         },
+        fillRotatedRectangle: function(x, y, length, breadth, xyPlaneRotationAngle){
+            context.save();
+            context.translate(x + length / 2, y + breadth / 2);
+            context.rotate(xyPlaneRotationAngle);
+            context.translate(-1 * (x + length / 2), -1 * (y + breadth / 2));
+            context.fillRect(x, y, length, breadth);
+            context.restore();
+        },
         fillRing: function (options) {
             CANVASAPI.fillCirc(options.X, options.Y, options.outerRadius);
             context.save();

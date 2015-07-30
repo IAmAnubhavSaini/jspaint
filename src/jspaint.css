@@ -80,27 +80,21 @@ body {
 }
 
     .common-menu-bar a {
-        height: 45px;
-        width: 45px;
         display: inline-block;
         color: #000000;
         background-color: #DDddDD;
         text-align: center;
-        line-height: 45px;
         text-decoration: none;
         font-weight: bold;
         border: thin solid #FFFFFF;
         outline: thin solid #000000;
+        padding: 0 2px;
     }
 
         .common-menu-bar a:hover {
             border: thin solid #000000;
             outline: thin solid #FFFFFF;
         }
-
-a.string-menu-item {
-    width: 100px;
-}
 
 .common-menu-bar .menu-item {
     float: left;

@@ -15,10 +15,8 @@ body {
     padding-bottom: 20px;
 }
 
-#jspaint-tools {
-    background-color: #ddDDdd;
-    display: block;
-    padding: 10px;    
+#jspaint-tools{
+    margin-bottom: .5em;
 }
 
 #jspaint-paint-area {
@@ -32,34 +30,21 @@ body {
     cursor: crosshair;
 }
 
-.active-tool {
-    background-color: #77aa77;
-}
-
 .main-tool {
-    border-bottom: thick solid rgba(0,0,0, .5);
+    border-bottom: thin solid rgba(0,0,0, .5);
     display: inline-block;
-    padding: 10px;
     margin: 0 5px;
     cursor: pointer;
 }
 
-    .main-tool:hover {
-        border-bottom: thick solid rgba(0,0,0, 1);
-    }
-
 .main-tool-menu {
-    border-top: thick solid rgba(0,0,0, .5);
     display: inline-block;
 }
-
-    .main-tool-menu:hover {
-        border-top: thick solid rgba(0,0,0, 1);
-    }
-
+ 
     .main-tool-menu button {
         background-color: transparent;
         border: none;
+        padding: 0;
     }
 
         .main-tool-menu button:hover, .main-tool-menu.dropdown.open button.btn-default:active {
@@ -71,10 +56,8 @@ body {
     }
 
 .common-menu-bar {
-    min-height: 80px;
     min-width: 600px;
     width: 100%;
-    padding: 10px;
     background-color: #800080;
     overflow: auto;
 }
@@ -114,7 +97,7 @@ i.glyphicon:active {
 }
 
 #status-bar{
-    padding: 0 10px;
+    font-size: .8em;
 }
 
 .contextual-tool-bar input[disabled="disabled"]{

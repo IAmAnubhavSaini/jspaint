@@ -1,3 +1,5 @@
 node_modules/
 build/
 switch_file.txt
+
+perf/

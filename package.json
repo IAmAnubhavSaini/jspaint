@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "0.0.31",
+  "version": "0.0.33",
   "description": "Paint without delay, online, from any device, at any time. Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
   "main": "index.js",
   "directories": {
@@ -36,6 +36,7 @@
     "grunt-bootlint": "^0.9.1",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-cssmin": "^0.12.3",
+    "grunt-contrib-imagemin": "^0.9.4",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-nodeunit": "^0.4.1",
     "grunt-contrib-uglify": "^0.9.1",

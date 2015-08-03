@@ -100,6 +100,16 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    imagemin: {
+      dynamic: {
+      files: [{
+        expand: true,
+        cwd: 'src/',
+        src: ['**/*.{png,jpg,gif}'],
+        dest: 'dist/'
+      }]
+    }
     }
   });
 
@@ -109,8 +119,9 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bootlint');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
 
   grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'cssmin', 'copy:copyFontsToBuild']);
+  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

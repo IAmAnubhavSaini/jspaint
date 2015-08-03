@@ -3,36 +3,71 @@ CONSTANTS = {
     canvasContainerId: "jspaint-paint-area",
     activeToolCursorClass: "working-with-tools",
     maintoolsClass: "main-tool",
-    basicColors:
-      [
-        { hex: '00FFFF', name: "Aqua" },
-        { hex: '000000', name: "Black" },
-        { hex: '0000FF', name: "Blue" },
-        { hex: 'FF00FF', name: "Fuchsia" },
-        { hex: '808080', name: "Gray" },
-        { hex: '008000', name: "Green" },
-        { hex: '00FF00', name: "Lime" },
-        { hex: '800000', name: "Maroon" },
-        { hex: '000080', name: "Navy" },
-        { hex: '808000', name: "Olive" },
-        { hex: '800080', name: "Purple" },
-        { hex: 'FF0000', name: "Red" },
-        { hex: 'C0C0C0', name: "Silver" },
-        { hex: '008080', name: "Teal" },
-        { hex: 'FFFFFF', name: "White" },
-        { hex: 'FFFF00', name: "Yellow" },
-      ],
+    basicColors: [{
+        hex: '00FFFF',
+        name: "Aqua"
+    }, {
+        hex: '000000',
+        name: "Black"
+    }, {
+        hex: '0000FF',
+        name: "Blue"
+    }, {
+        hex: 'FF00FF',
+        name: "Fuchsia"
+    }, {
+        hex: '808080',
+        name: "Gray"
+    }, {
+        hex: '008000',
+        name: "Green"
+    }, {
+        hex: '00FF00',
+        name: "Lime"
+    }, {
+        hex: '800000',
+        name: "Maroon"
+    }, {
+        hex: '000080',
+        name: "Navy"
+    }, {
+        hex: '808000',
+        name: "Olive"
+    }, {
+        hex: '800080',
+        name: "Purple"
+    }, {
+        hex: 'FF0000',
+        name: "Red"
+    }, {
+        hex: 'C0C0C0',
+        name: "Silver"
+    }, {
+        hex: '008080',
+        name: "Teal"
+    }, {
+        hex: 'FFFFFF',
+        name: "White"
+    }, {
+        hex: 'FFFF00',
+        name: "Yellow"
+    }, ],
     Events: {
         mousemove: 'mousemove',
         mouseclick: 'click'
     }
 };
 
-$(function () {
+$(function() {
+    LocalStorageAvailable = localStorage !== undefined && localStorage !== null;
 
-    size = window.location.toString().split('?')[1].split('=')[1];
+    size = LocalStorageAvailable ?
+        localStorage.getItem('dimensionsWxH') :
+        window.location.toString().split('?')[1].split('=')[1];
+
     sizeX = size.split('x')[0];
     sizeY = size.split('x')[1];
+
     selectedAlternativeColor = '#FF0000';
     selectedPrimaryColor = '#000000';
     context = null;
@@ -40,19 +75,19 @@ $(function () {
 
     Actions = {
         Mouse: {
-            getX: function (options) {
+            getX: function(options) {
                 var
-                event = options.event,
-                relativeTo = options.relativeTo,
-                X = event.pageX - relativeTo.offset().left;
+                    event = options.event,
+                    relativeTo = options.relativeTo,
+                    X = event.pageX - relativeTo.offset().left;
 
                 return X;
             },
-            getY: function (options) {
+            getY: function(options) {
                 var
-                event = options.event,
-                relativeTo = options.relativeTo,
-                Y = event.pageY - relativeTo.offset().top;
+                    event = options.event,
+                    relativeTo = options.relativeTo,
+                    Y = event.pageY - relativeTo.offset().top;
 
                 return Y;
             }
@@ -60,12 +95,12 @@ $(function () {
     };
 
     CANVASAPI = {
-        fillCirc: function (x, y, radius) {
+        fillCirc: function(x, y, radius) {
             context.beginPath();
             context.arc(x, y, radius, 0, 2 * Math.PI, false);
             context.fill();
         },
-        drawCircle: function (options) {
+        drawCircle: function(options) {
             context.save();
             context.beginPath();
             context.arc(options.X, options.Y, options.innerRadius, 0, 2 * Math.PI, false);
@@ -74,10 +109,10 @@ $(function () {
             context.stroke();
             context.restore();
         },
-        fillSquare: function (x, y, side) {
+        fillSquare: function(x, y, side) {
             context.fillRect(x, y, side, side);
         },
-        fillRoatedSquare: function (x, y, side, xyPlaneRotationAngle) {
+        fillRoatedSquare: function(x, y, side, xyPlaneRotationAngle) {
             context.save();
             context.translate(x + side / 2, y + side / 2);
             context.rotate(xyPlaneRotationAngle);
@@ -85,7 +120,7 @@ $(function () {
             CANVASAPI.fillSquare(x, y, side);
             context.restore();
         },
-        fillRotatedRectangle: function(x, y, length, breadth, xyPlaneRotationAngle){
+        fillRotatedRectangle: function(x, y, length, breadth, xyPlaneRotationAngle) {
             context.save();
             context.translate(x + length / 2, y + breadth / 2);
             context.rotate(xyPlaneRotationAngle);
@@ -93,7 +128,7 @@ $(function () {
             context.fillRect(x, y, length, breadth);
             context.restore();
         },
-        fillRing: function (options) {
+        fillRing: function(options) {
             CANVASAPI.fillCirc(options.X, options.Y, options.outerRadius);
             context.save();
             context.fillStyle = options.fillColor;
@@ -103,31 +138,31 @@ $(function () {
     };
 
     Color = {
-        generateBasicColorPalette: function (options) {
+        generateBasicColorPalette: function(options) {
             var
-            IContainBasicColors = options.appendHere || '.BasicColorPalette',
-            div1 = $('<div></div>'),
-            div2 = $('<div></div>'),
-            row = div1,
-            hex = null,
-            color = null,
-            colors = options.basicColors || CONSTANTS.basicColors,
-            len = colors.length,
-            i = 0;
+                IContainBasicColors = options.appendHere || '.BasicColorPalette',
+                div1 = $('<div></div>'),
+                div2 = $('<div></div>'),
+                row = div1,
+                hex = null,
+                color = null,
+                colors = options.basicColors || CONSTANTS.basicColors,
+                len = colors.length,
+                i = 0;
 
             for (i = 0; i < len; i++) {
                 row = i < len / 2 ? div1 : div2;
                 hex = '#' + colors[i].hex;
                 color = $('<div></div>')
-                        .addClass('color')
-                        .attr('id', 'Color-Hex-' + hex)
-                        .css('background-color', hex)
-                        .appendTo(row);
+                    .addClass('color')
+                    .attr('id', 'Color-Hex-' + hex)
+                    .css('background-color', hex)
+                    .appendTo(row);
             }
             div1.appendTo(IContainBasicColors);
             div2.appendTo(IContainBasicColors);
         },
-        hexToRgb: function (hex) {
+        hexToRgb: function(hex) {
             var result = null;
             var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function(m, r, g, b) {
@@ -141,7 +176,7 @@ $(function () {
                 b: parseInt(result[3], 16)
             } : null;
         },
-        rgbToHex: function(r, g, b){
+        rgbToHex: function(r, g, b) {
             function componentToHex(c) {
                 var hex = c.toString(16);
                 return hex.length == 1 ? "0" + hex : hex;
@@ -150,13 +185,13 @@ $(function () {
         }
     };
 
-    setupToolTips = function (tool, title) {
+    setupToolTips = function(tool, title) {
         tool.attr('title', title)
-        .attr('data-toggle', 'tooltip')
-        .attr('data-placement', 'bottom');
+            .attr('data-toggle', 'tooltip')
+            .attr('data-placement', 'bottom');
     };
 
-    activateTool = function (options) {
+    activateTool = function(options) {
         if (activeTool !== null) {
             activeTool.trigger('click');
         }
@@ -165,7 +200,7 @@ $(function () {
         options.start(options);
     };
 
-    deactivateTool = function (options) {
+    deactivateTool = function(options) {
         activeTool = null;
         $('label#activated-tool-name').html('no active tool');
         options.stop(options);

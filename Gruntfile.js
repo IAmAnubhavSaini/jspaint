@@ -103,13 +103,24 @@ module.exports = function(grunt) {
     },
     imagemin: {
       dynamic: {
-      files: [{
-        expand: true,
-        cwd: 'src/',
-        src: ['**/*.{png,jpg,gif}'],
-        dest: 'dist/'
-      }]
-    }
+        files: [
+          {
+            expand: true,
+            cwd: 'src/',
+            src: ['**/*.{png,jpg,gif}'],
+            dest: 'build/'
+          }
+        ]
+      }
+    },
+    autoprefixer: {
+      options: {
+        browsers: ['last 5 versions', 'ie 8', 'ie 9']
+      },
+      single_file: {
+        src: 'src/jspaint.css',
+        dest: 'src/jspaint.css'
+      }
     }
   });
 
@@ -120,8 +131,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bootlint');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-autoprefixer');
+
 
   grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

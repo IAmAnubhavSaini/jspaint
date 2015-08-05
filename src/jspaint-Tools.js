@@ -95,22 +95,33 @@ $(function() {
                 mandelbrot(options);
             }
 
-            var getStartingXCoordinate = function(mouseOptions) {
-                var X = Actions.Mouse.getX(mouseOptions);
-                return Math.max(X - Math.floor(MandelbrotFractal.VARIABLES.width / 2), 0);
-            };
-
-            var getStartingYCoordinate = function(mouseOptions) {
-                var Y = Actions.Mouse.getY(mouseOptions);
-                return Math.max(Y - Math.floor(MandelbrotFractal.VARIABLES.height / 2), 0);
-            };
-
             var getOverflowInXAxis = function(startX) {
                 return startX + Math.floor(MandelbrotFractal.VARIABLES.width) - MandelbrotFractal.CONSTANTS.maxWidth;
             };
 
+            var getStartingXCoordinate = function(mouseOptions) {
+                var X = Actions.Mouse.getX(mouseOptions);
+                var startX = Math.max(X - Math.floor(MandelbrotFractal.VARIABLES.width / 2), 0);
+                var overflowX = getOverflowInXAxis(startX)
+                if (overflowX > 0) {
+                    startX -= overflowX;
+                }
+                return startX;
+            };
+
             var getOverflowInYAxis = function(startY) {
                 return startY + Math.floor(MandelbrotFractal.VARIABLES.height) - MandelbrotFractal.CONSTANTS.maxHeight;
+            };
+
+            var getStartingYCoordinate = function(mouseOptions) {
+                var Y = Actions.Mouse.getY(mouseOptions),
+                    startY = Math.max(Y - Math.floor(MandelbrotFractal.VARIABLES.height / 2), 0),
+                    overflowY = getOverflowInYAxis(startY);
+
+                if (overflowY > 0) {
+                    startY -= overflowY;
+                }
+                return startY;
             };
 
             $(canvasId).on(event, function(e) {
@@ -120,17 +131,8 @@ $(function() {
                         relativeTo: $(canvasId)
                     },
                     startX = getStartingXCoordinate(mouseOptions),
-                    startY = getStartingYCoordinate(mouseOptions),
-                    overflowX = getOverflowInXAxis(startX),
-                    overflowY = getOverflowInYAxis(startY);
+                    startY = getStartingYCoordinate(mouseOptions);
 
-
-                if (overflowX > 0) {
-                    startX -= overflowX;
-                }
-                if (overflowY > 0) {
-                    startY -= overflowY;
-                }
                 drawMandelbrotFractal({
                     context: context,
                     XMin: MandelbrotFractal.VARIABLES.xMin,
@@ -143,11 +145,12 @@ $(function() {
                 });
             });
         },
+
         stop: function(options) {
             $(options.canvasId).off(options.event);
         },
-        ContextMenu: {
 
+        ContextMenu: {
             activate: function(options) {
                 var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
@@ -166,7 +169,7 @@ $(function() {
                             .on('change', function() {
                                 var val = $(this).val();
                                 if (val > options.maxIterationsAllowed) {
-                                    if (confirm('Beware! It might crash your browser. Go back?', 'back', 'No, I want these many iterations')) {
+                                    if (confirm('Beware! It might crash your browser. Go back?', 'back', 'No, I want these many iterations. I know what I am doing!')) {
                                         val = options.maxIterationsAllowed;
                                     }
                                 }
@@ -174,9 +177,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.iterationLabel)
                         .append(createIterationSlider(options));
+
+                    return sliderTool;
                 }
 
                 function addHeightController(options) {
@@ -196,9 +201,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.heightLabel)
                         .append(createHeightSlider(options));
+
+                    return sliderTool;
                 }
 
                 function addWidthController(options) {
@@ -218,9 +225,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.widthLabel)
                         .append(createWidthSlider(options));
+
+                    return sliderTool;
                 }
 
                 function addXMaxController(options) {
@@ -237,9 +246,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.xMaxLabel)
                         .append(createXMaxSlider(options));
+
+                    return sliderTool;
                 }
 
                 function addYMaxController(options) {
@@ -256,9 +267,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.yMaxLabel)
                         .append(createYMaxSlider(options));
+
+                    return sliderTool;
                 }
 
                 function addXMinController(options) {
@@ -275,9 +288,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.xMinLabel)
                         .append(createXMinSlider(options));
+
+                    return sliderTool;
                 }
 
                 function addYMinController(options) {
@@ -294,9 +309,11 @@ $(function() {
                             });
                         return slider;
                     }
-                    return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                    var sliderTool = $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
                         .append(options.yMinLabel)
                         .append(createYMinSlider(options));
+
+                    return sliderTool;
                 }
                 container.append(addIterationController(options));
                 container.append(addHeightController(options));
@@ -356,8 +373,6 @@ $(function() {
             }
         }
     };
-
-
 
     MandelbrotFractal.Events.register({
         toolId: MandelbrotFractal.CONSTANTS.selectionId,

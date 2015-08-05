@@ -102,7 +102,7 @@ $(function() {
             var getStartingXCoordinate = function(mouseOptions) {
                 var X = Actions.Mouse.getX(mouseOptions);
                 var startX = Math.max(X - Math.floor(MandelbrotFractal.VARIABLES.width / 2), 0);
-                var overflowX = getOverflowInXAxis(startX)
+                var overflowX = getOverflowInXAxis(startX);
                 if (overflowX > 0) {
                     startX -= overflowX;
                 }
@@ -392,7 +392,7 @@ $(function() {
             id: "PencilTool",
             selectionId: '#PencilTool',
             class: 'main-tool',
-            title: 'Click to draw free hand lines. Click again to disable.'
+            title: 'Click to draw free-hand lines. Click again to disable.'
         },
         VARIABLES: {
             width: 2,
@@ -402,8 +402,8 @@ $(function() {
             }
         },
         start: function(options) {
-            var event = options.event || CONSTANTS.Events.mousemove,
-                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+            var event = options.event,
+                canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
                 Y = null,
@@ -422,44 +422,34 @@ $(function() {
                     }
                 };
 
-            function drawLineSegmentFromLastPoint(options) {
-                var
-                    context = options.context,
-                    last = options.last,
-                    current = options.current,
-                    width = options.width;
-
-                context.beginPath();
-                context.moveTo(last.X, last.Y);
-                context.lineTo(current.X, current.Y);
-                context.lineWidth = width;
-                context.strokeStyle = selectedPrimaryColor;
-                context.stroke();
-            }
             $(canvasId).on(event, function(e) {
                 mouseOptions = {
                     event: e,
                     relativeTo: $(this)
                 };
+
+                var drawLines = function() {
+                    X = Actions.Mouse.getX(mouseOptions);
+                    Y = Actions.Mouse.getY(mouseOptions);
+                    width = Pencil.VARIABLES.width;
+                    last = LastPoint.get();
+                    if (last.X != -1) {
+                        CANVASAPI.drawLineSegmentFromLastPoint({
+                            context: context,
+                            last: last,
+                            current: {
+                                X: X,
+                                Y: Y
+                            },
+                            width: width
+                        });
+                    }
+                    LastPoint.set(X, Y);
+                };
+
                 if (e.buttons !== undefined) {
                     if (e.buttons === 1) {
-                        X = Actions.Mouse.getX(mouseOptions);
-                        Y = Actions.Mouse.getY(mouseOptions);
-                        width = Pencil.VARIABLES.width;
-                        last = LastPoint.get();
-                        if (last.X != -1) {
-                            drawLineSegmentFromLastPoint({
-                                context: context,
-                                last: last,
-                                current: {
-                                    X: X,
-                                    Y: Y
-                                },
-                                width: width
-                            });
-                        }
-                        CANVASAPI.fillCirc(X, Y, width / 2);
-                        LastPoint.set(X, Y);
+                        drawLines();
                     } else {
                         Pencil.VARIABLES.LastPoint.X = -1;
                         Pencil.VARIABLES.LastPoint.Y = -1;

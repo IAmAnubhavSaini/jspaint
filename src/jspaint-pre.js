@@ -137,6 +137,22 @@ $(function() {
             context.fillStyle = options.fillColor;
             CANVASAPI.fillCirc(options.X, options.Y, options.innerRadius);
             context.restore();
+        },
+        drawLineSegmentFromLastPoint: function(options) {
+            var
+                context = options.context,
+                last = options.last,
+                current = options.current,
+                width = options.width;
+
+            context.beginPath();
+            context.moveTo(last.X, last.Y);
+            context.lineTo(current.X, current.Y);
+            context.lineWidth = width;
+            context.strokeStyle = selectedPrimaryColor;
+            context.stroke();
+
+            CANVASAPI.fillCirc(current.X, current.Y, width / 2);
         }
     };
 

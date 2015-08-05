@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "description": "Paint without delay, online, from any device, at any time. Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
   "main": "index.js",
   "directories": {

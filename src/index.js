@@ -4,7 +4,9 @@
     $(function() {
         var DimensionOptionsButtons = $('.dimension-options button'),
             OrientationOptionsButtons = $('.orientation-options button'),
-            LocalStorageAvailable = localStorage !== undefined && localStorage !== null,
+            LocalStorageAvailable = function() {
+                return localStorage !== undefined && localStorage !== null;
+            },
 
             dimensionEvents = function() {
                 DimensionOptionsButtons
@@ -71,11 +73,11 @@
                 return uri;
             },
 
-            takeMeToPaint = function(uri) {
+            goToPaint = function(uri) {
                 window.location = uri;
             },
 
-            deferLinkAction = function(e) {
+            deferAction = function(e) {
                 e.preventDefault();
             },
 
@@ -83,8 +85,8 @@
                 setupEvents();
                 $('#jspaint-action')
                     .on('click', function(e) {
-                        deferLinkAction(e);
-                        takeMeToPaint(newUri($(this)));
+                        deferAction(e);
+                        goToPaint(newUri($(this)));
                     });
             },
 
@@ -111,6 +113,7 @@
                 setup();
                 init();
             };
+            
         mustRunInSequence();
     });
 })(jQuery);

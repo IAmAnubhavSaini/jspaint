@@ -1,8 +1,6 @@
 CONSTANTS = {
     canvasId: "jspaint-canvas",
     canvasContainerId: "jspaint-paint-area",
-    activeToolCursorClass: "working-with-tools",
-    maintoolsClass: "main-tool",
     basicColors: [{
         hex: '00FFFF',
         name: "Aqua"
@@ -59,14 +57,19 @@ CONSTANTS = {
 };
 
 $(function() {
-    LocalStorageAvailable = localStorage !== undefined && localStorage !== null;
+    LocalStorageAvailable = function() {
+        return localStorage !== undefined && localStorage !== null;
+    };
+    var getSizeFromURL = function() {
+        return window.location.toString().split('?')[1].split('=')[1];
+    };
 
-    size = LocalStorageAvailable ?
-        localStorage.getItem('dimensionsWxH') :
-        window.location.toString().split('?')[1].split('=')[1];
+    size = function() {
+        return LocalStorageAvailable() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL();
+    };
 
-    sizeX = size.split('x')[0];
-    sizeY = size.split('x')[1];
+    sizeX = size().split('x')[0];
+    sizeY = size().split('x')[1];
 
     selectedAlternativeColor = '#FF0000';
     selectedPrimaryColor = '#000000';

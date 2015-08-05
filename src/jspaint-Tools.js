@@ -1,28 +1,38 @@
-$(function () {
+$(function() {
     "use strict";
 
     var MandelbrotFractal = {
         CONSTANTS: {
-            id: "MandelbrotFractalTool", selectionId: '#MandelbrotFractalTool', class: 'main-tool',
+            id: "MandelbrotFractalTool",
+            selectionId: '#MandelbrotFractalTool',
+            class: 'main-tool',
             title: 'Click to draw Mandelbrot Fractal. Click again to disable.',
             maxHeight: -1,
             maxWidth: -1
         },
-        VARIABLES: { iterations: 1000, xMax: 1, yMax: 1, xMin: -2, yMin: -1, height: -1, width: -1 },
-        start: function (options) {
+        VARIABLES: {
+            iterations: 1000,
+            xMax: 1,
+            yMax: 1,
+            xMin: -2,
+            yMin: -1,
+            height: -1,
+            width: -1
+        },
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = options.canvasId;
+                event = options.event,
+                canvasId = options.canvasId;
 
             function drawMandelbrotFractal(options) {
                 function mandelIter(cx, cy, maxIter) {
                     var
-                    x = 0.0,
-                    y = 0.0,
-                    xx = 0,
-                    yy = 0,
-                    xy = 0,
-                    i = maxIter;
+                        x = 0.0,
+                        y = 0.0,
+                        xx = 0,
+                        yy = 0,
+                        xy = 0,
+                        i = maxIter;
 
                     while (i-- && xx + yy <= 4) {
                         xy = x * y;
@@ -36,18 +46,18 @@ $(function () {
 
                 function mandelbrot(options) {
                     var
-                    ctx = options.context,
-                    xmin = options.XMin,
-                    ymin = options.YMin,
-                    xmax = options.XMax,
-                    ymax = options.YMax,
-                    iterations = options.iterations,
-                    width = MandelbrotFractal.VARIABLES.width,
-                    height = MandelbrotFractal.VARIABLES.height,
-                    img = ctx.getImageData(0, 0, width, height),
-                    pix = img.data,
-                    innerColor = Color.hexToRgb(selectedPrimaryColor),
-                    ix, iy, x, y, i, c, ppos;
+                        ctx = options.context,
+                        xmin = options.XMin,
+                        ymin = options.YMin,
+                        xmax = options.XMax,
+                        ymax = options.YMax,
+                        iterations = options.iterations,
+                        width = MandelbrotFractal.VARIABLES.width,
+                        height = MandelbrotFractal.VARIABLES.height,
+                        img = ctx.getImageData(0, 0, width, height),
+                        pix = img.data,
+                        innerColor = Color.hexToRgb(selectedPrimaryColor),
+                        ix, iy, x, y, i, c, ppos;
 
                     for (ix = 0; ix < width; ++ix) {
                         for (iy = 0; iy < height; ++iy) {
@@ -67,8 +77,7 @@ $(function () {
                                     pix[ppos] = 255 * c;
                                     pix[ppos + 1] = 0;
                                     pix[ppos + 2] = 0;
-                                }
-                                else if (c < 2) {
+                                } else if (c < 2) {
                                     pix[ppos] = 255;
                                     pix[ppos + 1] = 255 * (c - 1);
                                     pix[ppos + 2] = 0;
@@ -85,20 +94,42 @@ $(function () {
                 }
                 mandelbrot(options);
             }
-            $(canvasId).on(event, function (e) {
+
+            var getStartingXCoordinate = function(mouseOptions) {
+                var X = Actions.Mouse.getX(mouseOptions);
+                return Math.max(X - Math.floor(MandelbrotFractal.VARIABLES.width / 2), 0);
+            };
+
+            var getStartingYCoordinate = function(mouseOptions) {
+                var Y = Actions.Mouse.getY(mouseOptions);
+                return Math.max(Y - Math.floor(MandelbrotFractal.VARIABLES.height / 2), 0);
+            };
+
+            var getOverflowInXAxis = function(startX) {
+                return startX + Math.floor(MandelbrotFractal.VARIABLES.width) - MandelbrotFractal.CONSTANTS.maxWidth;
+            };
+
+            var getOverflowInYAxis = function(startY) {
+                return startY + Math.floor(MandelbrotFractal.VARIABLES.height) - MandelbrotFractal.CONSTANTS.maxHeight;
+            };
+
+            $(canvasId).on(event, function(e) {
                 var
-                mouseOptions = { event: e, relativeTo: $(canvasId) },
-                X = Actions.Mouse.getX(mouseOptions),
-                Y = Actions.Mouse.getY(mouseOptions),
-                startX = X - Math.floor(MandelbrotFractal.VARIABLES.width / 2),
-                startY = Y - Math.floor(MandelbrotFractal.VARIABLES.height / 2);
-                if (startX < 0) { startX = 0; }
-                if (startY < 0) { startY = 0; }
-                if (startX + Math.floor(MandelbrotFractal.VARIABLES.width) > MandelbrotFractal.CONSTANTS.maxWidth) {
-                    startX -= startX + Math.floor(MandelbrotFractal.VARIABLES.width) - MandelbrotFractal.CONSTANTS.maxWidth;
+                    mouseOptions = {
+                        event: e,
+                        relativeTo: $(canvasId)
+                    },
+                    startX = getStartingXCoordinate(mouseOptions),
+                    startY = getStartingYCoordinate(mouseOptions),
+                    overflowX = getOverflowInXAxis(startX),
+                    overflowY = getOverflowInYAxis(startY);
+
+
+                if (overflowX > 0) {
+                    startX -= overflowX;
                 }
-                if (startY + Math.floor(MandelbrotFractal.VARIABLES.height) > MandelbrotFractal.CONSTANTS.maxHeight) {
-                    startY -= startY + Math.floor(MandelbrotFractal.VARIABLES.height) - MandelbrotFractal.CONSTANTS.maxHeight;
+                if (overflowY > 0) {
+                    startY -= overflowY;
                 }
                 drawMandelbrotFractal({
                     context: context,
@@ -112,12 +143,12 @@ $(function () {
                 });
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $(options.canvasId).off(options.event);
         },
         ContextMenu: {
 
-            activate: function (options) {
+            activate: function(options) {
                 var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function getInputElement(id, min, max, title) {
@@ -127,12 +158,12 @@ $(function () {
                 function addIterationController(options) {
                     function createIterationSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
+                            slider = getInputElement('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
                             .attr('value', MandelbrotFractal.VARIABLES.iterations)
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 var val = $(this).val();
                                 if (val > options.maxIterationsAllowed) {
                                     if (confirm('Beware! It might crash your browser. Go back?', 'back', 'No, I want these many iterations')) {
@@ -144,18 +175,19 @@ $(function () {
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.iterationLabel)
-                            .append(createIterationSlider(options));
+                        .append(options.iterationLabel)
+                        .append(createIterationSlider(options));
                 }
+
                 function addHeightController(options) {
                     function createHeightSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotHeight', '100', MandelbrotFractal.CONSTANTS.maxHeight, 'Height for mandelbrot fractal generation.')
+                            slider = getInputElement('mandelbrotHeight', '100', MandelbrotFractal.CONSTANTS.maxHeight, 'Height for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxHeight)
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 var val = $(this).val();
                                 if (val > MandelbrotFractal.CONSTANTS.maxHeight) {
                                     val = MandelbrotFractal.CONSTANTS.maxHeight;
@@ -165,18 +197,19 @@ $(function () {
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.heightLabel)
-                            .append(createHeightSlider(options));
+                        .append(options.heightLabel)
+                        .append(createHeightSlider(options));
                 }
+
                 function addWidthController(options) {
                     function createWidthSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
+                            slider = getInputElement('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxWidth)
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 var val = $(this).val();
                                 if (val > MandelbrotFractal.CONSTANTS.maxWidth) {
                                     val = MandelbrotFractal.CONSTANTS.maxWidth;
@@ -186,80 +219,84 @@ $(function () {
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.widthLabel)
-                            .append(createWidthSlider(options));
+                        .append(options.widthLabel)
+                        .append(createWidthSlider(options));
                 }
+
                 function addXMaxController(options) {
                     function createXMaxSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotXMax', '0', '3', 'XMax for mandelbrot fractal generation.')
+                            slider = getInputElement('mandelbrotXMax', '0', '3', 'XMax for mandelbrot fractal generation.')
                             .attr('value', '1')
                             .attr('disabled', 'disabled')
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 MandelbrotFractal.VARIABLES.xMax = $(this).val();
                             });
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.xMaxLabel)
-                            .append(createXMaxSlider(options));
+                        .append(options.xMaxLabel)
+                        .append(createXMaxSlider(options));
                 }
+
                 function addYMaxController(options) {
                     function createYMaxSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotYMax', '0', '3', 'YMax for mandelbrot fractal generation.')
+                            slider = getInputElement('mandelbrotYMax', '0', '3', 'YMax for mandelbrot fractal generation.')
                             .attr('value', '1')
                             .attr('disabled', 'disabled')
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 MandelbrotFractal.VARIABLES.yMax = $(this).val();
                             });
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.yMaxLabel)
-                            .append(createYMaxSlider(options));
+                        .append(options.yMaxLabel)
+                        .append(createYMaxSlider(options));
                 }
+
                 function addXMinController(options) {
                     function createXMinSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotXMin', '-3', '1', 'XMin for mandelbrot fractal generation.')
+                            slider = getInputElement('mandelbrotXMin', '-3', '1', 'XMin for mandelbrot fractal generation.')
                             .attr('value', '-2')
                             .attr('disabled', 'disabled')
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 MandelbrotFractal.VARIABLES.xMin = $(this).val();
                             });
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.xMinLabel)
-                            .append(createXMinSlider(options));
+                        .append(options.xMinLabel)
+                        .append(createXMinSlider(options));
                 }
+
                 function addYMinController(options) {
                     function createYMinSlider(options) {
                         var
-                        slider = getInputElement('mandelbrotYMin', '-2', '1', 'YMin for mandelbrot fractal generation.')
+                            slider = getInputElement('mandelbrotYMin', '-2', '1', 'YMin for mandelbrot fractal generation.')
                             .attr('value', '-1')
                             .attr('disabled', 'disabled')
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 MandelbrotFractal.VARIABLES.yMin = $(this).val();
                             });
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.yMinLabel)
-                            .append(createYMinSlider(options));
+                        .append(options.yMinLabel)
+                        .append(createYMinSlider(options));
                 }
                 container.append(addIterationController(options));
                 container.append(addHeightController(options));
@@ -270,13 +307,13 @@ $(function () {
                 container.append(addYMinController(options));
                 container.appendTo($(options.containerSelectionCriterion));
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForLineWidth(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForLineWidth(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'MandelbrotFractalContextMenu',
@@ -296,26 +333,26 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = MandelbrotFractal.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = MandelbrotFractal.ContextMenu;
 
                 setupToolTips(tool, MandelbrotFractal.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      MandelbrotFractal.VARIABLES.height = MandelbrotFractal.CONSTANTS.maxHeight = $(options.canvasId)[0].height;
-                      MandelbrotFractal.VARIABLES.width = MandelbrotFractal.CONSTANTS.maxWidth = $(options.canvasId)[0].width;
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        MandelbrotFractal.VARIABLES.height = MandelbrotFractal.CONSTANTS.maxHeight = $(options.canvasId)[0].height;
+                        MandelbrotFractal.VARIABLES.width = MandelbrotFractal.CONSTANTS.maxWidth = $(options.canvasId)[0].width;
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -332,45 +369,50 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var Pencil = {
         CONSTANTS: {
-            id: "PencilTool", selectionId: '#PencilTool', class: 'main-tool',
+            id: "PencilTool",
+            selectionId: '#PencilTool',
+            class: 'main-tool',
             title: 'Click to draw free hand lines. Click again to disable.'
         },
         VARIABLES: {
             width: 2,
-            LastPoint: { X: -1, Y: -1 }
+            LastPoint: {
+                X: -1,
+                Y: -1
+            }
         },
-        start: function (options) {
+        start: function(options) {
             var event = options.event || CONSTANTS.Events.mousemove,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            width = null,
-            last = null,
-            LastPoint = {
-                get: function () {
-                    return {
-                        X: Pencil.VARIABLES.LastPoint.X,
-                        Y: Pencil.VARIABLES.LastPoint.Y
-                    };
-                },
-                set: function (x, y) {
-                    Pencil.VARIABLES.LastPoint.X = x;
-                    Pencil.VARIABLES.LastPoint.Y = y;
-                }
-            };
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                width = null,
+                last = null,
+                LastPoint = {
+                    get: function() {
+                        return {
+                            X: Pencil.VARIABLES.LastPoint.X,
+                            Y: Pencil.VARIABLES.LastPoint.Y
+                        };
+                    },
+                    set: function(x, y) {
+                        Pencil.VARIABLES.LastPoint.X = x;
+                        Pencil.VARIABLES.LastPoint.Y = y;
+                    }
+                };
 
             function drawLineSegmentFromLastPoint(options) {
                 var
-                context = options.context,
-                last = options.last,
-                current = options.current,
-                width = options.width;
+                    context = options.context,
+                    last = options.last,
+                    current = options.current,
+                    width = options.width;
 
                 context.beginPath();
                 context.moveTo(last.X, last.Y);
@@ -379,8 +421,11 @@ $(function () {
                 context.strokeStyle = selectedPrimaryColor;
                 context.stroke();
             }
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 if (e.buttons !== undefined) {
                     if (e.buttons === 1) {
                         X = Actions.Mouse.getX(mouseOptions);
@@ -391,7 +436,10 @@ $(function () {
                             drawLineSegmentFromLastPoint({
                                 context: context,
                                 last: last,
-                                current: { X: X, Y: Y },
+                                current: {
+                                    X: X,
+                                    Y: Y
+                                },
                                 width: width
                             });
                         }
@@ -404,27 +452,28 @@ $(function () {
                 }
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mousemove,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mousemove,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider() {
                     return $('<input id="widthPencil" type="range" min="1" max="200" step="1" title="width for pencil tool." />');
                 }
+
                 function addSliderForLineWidth(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        slider = initialSlider()
                         .attr('value', Pencil.VARIABLES.width)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             Pencil.VARIABLES.width = $(this).val();
                         })
                         .appendTo(div);
@@ -433,13 +482,13 @@ $(function () {
                 }
                 addSliderForLineWidth(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForLineWidth(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForLineWidth(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'PencilContextMenu',
@@ -448,24 +497,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = Pencil.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = Pencil.ContextMenu;
 
                 setupToolTips(tool, Pencil.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);                     
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -480,28 +529,34 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var PickColor = {
         CONSTANTS: {
-            id: 'pick-color', selectionId: '#pick-color', class: 'string-menu-item', containerId: 'PickColorTool',
+            id: 'pick-color',
+            selectionId: '#pick-color',
+            class: 'string-menu-item',
+            containerId: 'PickColorTool',
             title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            data = null,
-            r = 0,
-            g = 0,
-            b = 0,
-            a = 0;
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                data = null,
+                r = 0,
+                g = 0,
+                b = 0,
+                a = 0;
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 data = context.getImageData(X - 0.5, Y - 0.5, X + 0.5, Y + 0.5).data;
@@ -512,26 +567,26 @@ $(function () {
                 selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId);
+                    toolId = options.toolId,
+                    tool = $(toolId);
 
                 setupToolTips(tool, PickColor.CONSTANTS.title);
                 options.tool = tool;
                 tool.funcToggle('click',
-                    function () {
+                    function() {
                         activateTool(options);
                     },
-                    function () {
+                    function() {
                         deactivateTool(options);
                     });
             }
@@ -549,46 +604,51 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var PivotedLinePattern = {
         CONSTANTS: {
-            id: "PivotedLinePatternTool", selectionId: '#PivotedLinePatternTool', class: 'main-tool',
+            id: "PivotedLinePatternTool",
+            selectionId: '#PivotedLinePatternTool',
+            class: 'main-tool',
             title: 'Click to draw amazing pattern. Click again to disable.'
         },
         VARIABLES: {
             width: 2,
-            LastPoint: { X: -1, Y: -1 }
+            LastPoint: {
+                X: -1,
+                Y: -1
+            }
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mousemove,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            width = null,
-            last = null,
-            LastPoint = {
-                get: function () {
-                    return {
-                        X: PivotedLinePattern.VARIABLES.LastPoint.X,
-                        Y: PivotedLinePattern.VARIABLES.LastPoint.Y
-                    };
-                },
-                set: function (x, y) {
-                    PivotedLinePattern.VARIABLES.LastPoint.X = x;
-                    PivotedLinePattern.VARIABLES.LastPoint.Y = y;
-                }
-            };
+                event = options.event || CONSTANTS.Events.mousemove,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                width = null,
+                last = null,
+                LastPoint = {
+                    get: function() {
+                        return {
+                            X: PivotedLinePattern.VARIABLES.LastPoint.X,
+                            Y: PivotedLinePattern.VARIABLES.LastPoint.Y
+                        };
+                    },
+                    set: function(x, y) {
+                        PivotedLinePattern.VARIABLES.LastPoint.X = x;
+                        PivotedLinePattern.VARIABLES.LastPoint.Y = y;
+                    }
+                };
 
             function drawLineSegmentFromLastPoint(options) {
                 var
-                context = options.context,
-                last = options.last,
-                current = options.current,
-                width = options.width;
+                    context = options.context,
+                    last = options.last,
+                    current = options.current,
+                    width = options.width;
 
                 context.beginPath();
                 context.moveTo(last.X, last.Y);
@@ -599,8 +659,11 @@ $(function () {
                 context.endPath();
             }
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 if (e.buttons !== undefined) {
                     if (e.buttons === 1) {
                         X = Actions.Mouse.getX(mouseOptions);
@@ -611,7 +674,10 @@ $(function () {
                             drawLineSegmentFromLastPoint({
                                 context: context,
                                 last: last,
-                                current: { X: X, Y: Y },
+                                current: {
+                                    X: X,
+                                    Y: Y
+                                },
                                 width: width
                             });
                         }
@@ -624,27 +690,28 @@ $(function () {
                 }
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mousemove,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mousemove,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider() {
                     return $('<input id="widthPivotedLinePattern" type="range" min="1" max="200" step="1" title="width for pivoted line pattern tool." />');
                 }
+
                 function addSliderForLineWidth(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        slider = initialSlider()
                         .attr('value', PivotedLinePattern.VARIABLES.width)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             PivotedLinePattern.VARIABLES.width = $(this).val();
                         })
                         .appendTo(div);
@@ -653,13 +720,13 @@ $(function () {
                 }
                 addSliderForLineWidth(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForLineWidth(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForLineWidth(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'PivotedLinePatternContextMenu',
@@ -668,24 +735,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = PivotedLinePattern.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = PivotedLinePattern.ContextMenu;
 
                 setupToolTips(tool, PivotedLinePattern.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  }
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    }
                 );
             }
         }
@@ -701,26 +768,33 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var PointWalker = {
         CONSTANTS: {
-            id: 'PointWalkerTool', selectionId: '#PointWalkerTool', class: 'main-tool',
+            id: 'PointWalkerTool',
+            selectionId: '#PointWalkerTool',
+            class: 'main-tool',
             title: 'Click to draw random point walker. Click again to disable.'
         },
-        VARIABLES: { steps: 100 },
-        start: function (options) {
+        VARIABLES: {
+            steps: 100
+        },
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            i = 0;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                i = 0;
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(canvasId) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(canvasId)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 for (i = 0; i < PointWalker.VARIABLES.steps; i++) {
@@ -730,11 +804,11 @@ $(function () {
                 }
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function getInputElement(id, min, max, title) {
@@ -744,27 +818,27 @@ $(function () {
                 function addStepController(options) {
                     function createStepSlider(options) {
                         var
-                        slider = getInputElement('pointWalkerSptes', '500', options.maxStepsAllowed, 'Steps for random point walk generation.')
+                            slider = getInputElement('pointWalkerSptes', '500', options.maxStepsAllowed, 'Steps for random point walk generation.')
                             .attr('value', PointWalker.VARIABLES.steps)
-                            .on('mouseover', function () {
+                            .on('mouseover', function() {
                                 $(this).attr('title', $(this).val());
                             })
-                            .on('change', function () {
+                            .on('change', function() {
                                 PointWalker.VARIABLES.steps = $(this).val();
                             });
                         return slider;
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.stepLabel)
-                            .append(createStepSlider(options));
+                        .append(options.stepLabel)
+                        .append(createStepSlider(options));
                 }
                 container.append(addStepController(options));
                 container.appendTo($(options.containerSelectionCriterion));
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 $('#' + options.id).remove();
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'PointWalkerContextMenu',
@@ -775,24 +849,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = PointWalker.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = PointWalker.ContextMenu;
 
                 setupToolTips(tool, PointWalker.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -807,7 +881,7 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var Rectangle = {
@@ -819,88 +893,93 @@ $(function () {
             previewId: 'previewRectangle'
         },
         VARIABLES: {
-            length: 20, breadth: 10, xyPlaneRotationAngle: 360
+            length: 20,
+            breadth: 10,
+            xyPlaneRotationAngle: 360
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            length = null,
-            breadth = null,
-            previewer = null,
-            canvasOffsetLeft = $(canvasId).offset().left,
-            canvasOffsetTop = $(canvasId).offset().top,
-            canvasHeight = $(canvasId).height(),
-            canvasWidth = $(canvasId).width(),
-            previewOffsetLeft = null,
-            previewOffsetTop = null,
-            xyPlaneRotationAngle = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                length = null,
+                breadth = null,
+                previewer = null,
+                canvasOffsetLeft = $(canvasId).offset().left,
+                canvasOffsetTop = $(canvasId).offset().top,
+                canvasHeight = $(canvasId).height(),
+                canvasWidth = $(canvasId).width(),
+                previewOffsetLeft = null,
+                previewOffsetTop = null,
+                xyPlaneRotationAngle = null;
 
             function generatePreview(options) {
                 var
-                div = $('<div></div>')
-                        .attr('id', Rectangle.CONSTANTS.previewId)
-                        .css({
-                            'position': 'fixed',
-                            'z-index': '2',
-                        })
-                        .appendTo('.utilities')
-                        .on('click', function (eClick) {
-                            var
-                            mouseOptions = { event: eClick, relativeTo: $(canvasId) },
+                    div = $('<div></div>')
+                    .attr('id', Rectangle.CONSTANTS.previewId)
+                    .css({
+                        'position': 'fixed',
+                        'z-index': '2',
+                    })
+                    .appendTo('.utilities')
+                    .on('click', function(eClick) {
+                        var
+                            mouseOptions = {
+                                event: eClick,
+                                relativeTo: $(canvasId)
+                            },
                             X = Actions.Mouse.getX(mouseOptions),
                             Y = Actions.Mouse.getY(mouseOptions),
                             length = Rectangle.VARIABLES.length,
                             breadth = Rectangle.VARIABLES.breadth;
-                            xyPlaneRotationAngle = (Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
-                            CANVASAPI.fillRotatedRectangle(X - length / 2, Y - breadth / 2, length, breadth, xyPlaneRotationAngle);
-                        })
-                        .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
-                                    .css('left', ev.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
-                                    .css('background-color', selectedPrimaryColor)
-                                    .css('border', 'thin dashed ' + selectedAlternativeColor)
-                                    .css('height', Rectangle.VARIABLES.breadth)
-                                    .css('width', Rectangle.VARIABLES.length);
+                        xyPlaneRotationAngle = (Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
+                        CANVASAPI.fillRotatedRectangle(X - length / 2, Y - breadth / 2, length, breadth, xyPlaneRotationAngle);
+                    })
+                    .on('mousemove', function(ev) {
+                        $(this).css('top', ev.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
+                            .css('left', ev.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
+                            .css('background-color', selectedPrimaryColor)
+                            .css('border', 'thin dashed ' + selectedAlternativeColor)
+                            .css('height', Rectangle.VARIABLES.breadth)
+                            .css('width', Rectangle.VARIABLES.length);
 
-                            previewOffsetLeft = $(this).offset().left + Rectangle.VARIABLES.length / 2;
-                            previewOffsetTop = $(this).offset().top + Rectangle.VARIABLES.breadth / 2;
-                            canvasOffsetLeft = $(canvasId).offset().left;
-                            canvasOffsetTop = $(canvasId).offset().top;
+                        previewOffsetLeft = $(this).offset().left + Rectangle.VARIABLES.length / 2;
+                        previewOffsetTop = $(this).offset().top + Rectangle.VARIABLES.breadth / 2;
+                        canvasOffsetLeft = $(canvasId).offset().left;
+                        canvasOffsetTop = $(canvasId).offset().top;
 
-                            if (canvasOffsetLeft > previewOffsetLeft || canvasOffsetLeft + canvasWidth < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || canvasOffsetTop + canvasHeight < previewOffsetTop) {
-                                $(this).hide();
-                            }
-                        });
+                        if (canvasOffsetLeft > previewOffsetLeft || canvasOffsetLeft + canvasWidth < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || canvasOffsetTop + canvasHeight < previewOffsetTop) {
+                            $(this).hide();
+                        }
+                    });
             }
             generatePreview();
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 previewer = previewer || $('#' + Rectangle.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
-                        .css('left', e.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
-                        .css('background-color', selectedPrimaryColor)
-                        .css('height', Rectangle.VARIABLES.breadth)
-                        .css('width', Rectangle.VARIABLES.length)
-                        .css('transform', 'rotate(' + parseInt((Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
-                        .show();
+                    .css('left', e.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
+                    .css('background-color', selectedPrimaryColor)
+                    .css('height', Rectangle.VARIABLES.breadth)
+                    .css('width', Rectangle.VARIABLES.length)
+                    .css('transform', 'rotate(' + parseInt((Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
+                    .show();
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
             $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');
             $('#' + Rectangle.CONSTANTS.previewId).remove();
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function initialSlider(id, title, max) {
@@ -909,32 +988,32 @@ $(function () {
 
                 function getSliderForXYPlaneRotationAngle(options) {
                     return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360)
-                            .attr('value', Rectangle.VARIABLES.xyPlaneRotationAngle)
-                            .on('mouseover', function () {
-                                $(this).attr('title', $(this).val() + ' deg');
-                            })
-                            .on('input', function () {
-                                Rectangle.VARIABLES.xyPlaneRotationAngle = $(this).val();
-                            });
+                        .attr('value', Rectangle.VARIABLES.xyPlaneRotationAngle)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val() + ' deg');
+                        })
+                        .on('input', function() {
+                            Rectangle.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                        });
                 }
 
                 function addSliderForLength(options) {
                     var lengthSlider = initialSlider(options.lengthId, options.lengthTitle, 400)
                         .attr('value', Rectangle.VARIABLES.length)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             Rectangle.VARIABLES.length = $(this).val();
                         })
                         .appendTo(container);
 
                     var breadthSlider = initialSlider(options.breadthId, options.breadthTitle, 400)
                         .attr('value', Rectangle.VARIABLES.breadth)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             Rectangle.VARIABLES.breadth = $(this).val();
                         })
                         .appendTo(container);
@@ -944,7 +1023,7 @@ $(function () {
                 container.append(getSliderForXYPlaneRotationAngle(options));
                 container.appendTo($(options.containerSelectionCriterion));
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForSide(options) {
                     $('#' + options.lengthId).remove();
                     $('#' + options.breadthId).remove();
@@ -954,7 +1033,7 @@ $(function () {
                 $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');
                 $('#' + Rectangle.CONSTANTS.previewId).remove();
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'RectangleContextMenu',
@@ -967,21 +1046,21 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = Rectangle.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = Rectangle.ContextMenu;
 
                 setupToolTips(tool, Rectangle.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                    function () {
+                    function() {
                         activateTool(options);
                         contextMenu.activate(contextMenu.getOptions());
                     },
-                    function () {
+                    function() {
                         contextMenu.deactivate(contextMenu.getOptions());
                         deactivateTool(options);
                     });
@@ -999,113 +1078,121 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var Ring = {
         CONSTANTS: {
-            id: 'RingTool', selectionId: '#RingTool', class: 'main-tool',
+            id: 'RingTool',
+            selectionId: '#RingTool',
+            class: 'main-tool',
             title: 'Click to draw ring. Click again to disable.',
             previewId: 'previewRing',
             previewOuterId: 'previewOuterRing'
         },
-        VARIABLES: { innerRadius: 10, outerRadius: 20 },
-        start: function (options) {
+        VARIABLES: {
+            innerRadius: 10,
+            outerRadius: 20
+        },
+        start: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            radius = null,
-            innerRadius = null,
-            outerRadius = null,
-            previewer = null,
-            canvasOffsetLeft = null,
-            canvasOffsetTop = null,
-            canvasHeight = $(canvasId).height(),
-            canvasWidth = $(canvasId).width(),
-            previewOffsetLeft = null,
-            previewOffsetTop = null,
-            outer = null;
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                radius = null,
+                innerRadius = null,
+                outerRadius = null,
+                previewer = null,
+                canvasOffsetLeft = null,
+                canvasOffsetTop = null,
+                canvasHeight = $(canvasId).height(),
+                canvasWidth = $(canvasId).width(),
+                previewOffsetLeft = null,
+                previewOffsetTop = null,
+                outer = null;
 
             function generatePreview(options) {
                 var outerDiv = $('<div></div>').attr('id', Ring.CONSTANTS.previewOuterId)
-                        .css({
+                    .css({
+                        'position': 'fixed',
+                        'z-index': '2',
+                        'border-radius': '50%',
+                        'height': Ring.VARIABLES.outerRadius * 2,
+                        'width': Ring.VARIABLES.outerRadius * 2,
+                        'backgruond-color': selectedPrimaryColor,
+                    })
+                    .appendTo('.utilities');
+                var
+                    div = $('<div></div>')
+                    .attr('id', Ring.CONSTANTS.previewId)
+                    .css({
+                        'position': 'fixed',
+                        'z-index': '2',
+                        'border-radius': '50%'
+                    })
+                    .appendTo(outerDiv)
+                    .on('click', function(eClick) {
+                        mouseOptions = {
+                            event: eClick,
+                            relativeTo: $(canvasId)
+                        };
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        innerRadius = Ring.VARIABLES.innerRadius;
+                        outerRadius = Ring.VARIABLES.outerRadius;
+                        CANVASAPI.fillRing({
+                            X: X,
+                            Y: Y,
+                            innerRadius: innerRadius,
+                            outerRadius: outerRadius,
+                            strokeColor: selectedPrimaryColor,
+                            fillColor: selectedAlternativeColor
+                        });
+                    })
+                    .on('mousemove', function(ev) {
+                        $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
+                            .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
+                            .css('background-color', selectedAlternativeColor)
+                            .css('border', 'thin dashed ' + selectedPrimaryColor)
+                            .css('height', Ring.VARIABLES.innerRadius * 2)
+                            .css('width', Ring.VARIABLES.innerRadius * 2);
+
+                        outer.css({
                             'position': 'fixed',
+                            'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
+                            'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
                             'z-index': '2',
                             'border-radius': '50%',
                             'height': Ring.VARIABLES.outerRadius * 2,
                             'width': Ring.VARIABLES.outerRadius * 2,
-                            'backgruond-color': selectedPrimaryColor,
-                        })
-                        .appendTo('.utilities');
-                var
-                div = $('<div></div>')
-                        .attr('id', Ring.CONSTANTS.previewId)
-                        .css({
-                            'position': 'fixed',
-                            'z-index': '2',
-                            'border-radius': '50%'
-                        })
-                        .appendTo(outerDiv)
-                        .on('click', function (eClick) {
-                            mouseOptions = { event: eClick, relativeTo: $(canvasId) };
-                            X = Actions.Mouse.getX(mouseOptions);
-                            Y = Actions.Mouse.getY(mouseOptions);
-                            innerRadius = Ring.VARIABLES.innerRadius;
-                            outerRadius = Ring.VARIABLES.outerRadius;
-                            CANVASAPI.fillRing({
-                                X: X,
-                                Y: Y,
-                                innerRadius: innerRadius,
-                                outerRadius: outerRadius,
-                                strokeColor: selectedPrimaryColor,
-                                fillColor: selectedAlternativeColor
-                            });
-                        })
-                        .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
-                                    .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
-                                    .css('background-color', selectedAlternativeColor)
-                                    .css('border', 'thin dashed ' + selectedPrimaryColor)
-                                    .css('height', Ring.VARIABLES.innerRadius*2)
-                                    .css('width', Ring.VARIABLES.innerRadius * 2);
-
-                            outer.css({
-                                'position': 'fixed',
-                                'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
-                                'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
-                                'z-index': '2',
-                                'border-radius': '50%',
-                                'height': Ring.VARIABLES.outerRadius * 2,
-                                'width': Ring.VARIABLES.outerRadius * 2,
-                                'background-color': selectedPrimaryColor,
-                            });
-
-                            previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius);
-                            previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius);
-                            canvasOffsetLeft = $(canvasId).offset().left;
-                            canvasOffsetTop = $(canvasId).offset().top;
-                            
-                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
-                                $(this).hide();
-                                outer.hide();
-                            }
+                            'background-color': selectedPrimaryColor,
                         });
-                        
+
+                        previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius);
+                        previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius);
+                        canvasOffsetLeft = $(canvasId).offset().left;
+                        canvasOffsetTop = $(canvasId).offset().top;
+
+                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                            $(this).hide();
+                            outer.hide();
+                        }
+                    });
+
             }
             generatePreview();
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 previewer = previewer || $('#' + Ring.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
-                        .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
-                        .css('background-color', selectedAlternativeColor)
-                        .css('height', Ring.VARIABLES.innerRadius*2)
-                        .css('width', Ring.VARIABLES.innerRadius*2)
-                        .show();
+                    .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
+                    .css('background-color', selectedAlternativeColor)
+                    .css('height', Ring.VARIABLES.innerRadius * 2)
+                    .css('width', Ring.VARIABLES.innerRadius * 2)
+                    .show();
                 outer = outer || $('#' + Ring.CONSTANTS.previewOuterId);
                 outer.css({
                     'position': 'fixed',
@@ -1119,10 +1206,10 @@ $(function () {
                 }).show();
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
             $('#' + Ring.CONSTANTS.previewId).off('mousemove');
@@ -1130,45 +1217,46 @@ $(function () {
             $('#' + Ring.CONSTANTS.previewOuterId).remove();
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider(id, title) {
                     return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
                 }
+
                 function addSliderForRadius(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
 
-                    innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
-                                    .attr('value', Ring.VARIABLES.innerRadius)
-                                    .on('mouseover', function () {
-                                        $(this).attr('title', $(this).val());
-                                    })
-                                    .on('input', function () {
-                                        Ring.VARIABLES.innerRadius = $(this).val();
-                                    })
-                                    .appendTo(div),
+                        innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
+                        .attr('value', Ring.VARIABLES.innerRadius)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val());
+                        })
+                        .on('input', function() {
+                            Ring.VARIABLES.innerRadius = $(this).val();
+                        })
+                        .appendTo(div),
 
-                    outerSlider = initialSlider("outerRadiusRing", "outer radius for ring tool.")
-                                    .attr('value', Ring.VARIABLES.outerRadius)
-                                    .on('mouseover', function () {
-                                        $(this).attr('title', $(this).val());
-                                    })
-                                    .on('input', function () {
-                                        Ring.VARIABLES.outerRadius = $(this).val();
-                                    })
-                                    .appendTo(div);
+                        outerSlider = initialSlider("outerRadiusRing", "outer radius for ring tool.")
+                        .attr('value', Ring.VARIABLES.outerRadius)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val());
+                        })
+                        .on('input', function() {
+                            Ring.VARIABLES.outerRadius = $(this).val();
+                        })
+                        .appendTo(div);
 
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForRadius(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForRadius(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForRadius(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'RingContextMenu',
@@ -1177,24 +1265,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = Ring.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = Ring.ContextMenu;
 
                 setupToolTips(tool, Ring.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -1208,52 +1296,65 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedCircle = {
         CONSTANTS: {
-            id: 'SpeedCircleTool', selectionId: '#SpeedCircleTool', class: 'main-tool',
+            id: 'SpeedCircleTool',
+            selectionId: '#SpeedCircleTool',
+            class: 'main-tool',
             title: 'Click to draw Circles. Click again to disable.'
         },
         VARIABLES: {
             radius: 4
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            R = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                R = null;
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 R = SpeedCircle.VARIABLES.radius;
-                CANVASAPI.drawCircle({ X: X, Y: Y, innerRadius: R, outerRadius: parseInt(R)+1, strokeColor: selectedPrimaryColor });
+                CANVASAPI.drawCircle({
+                    X: X,
+                    Y: Y,
+                    innerRadius: R,
+                    outerRadius: parseInt(R) + 1,
+                    strokeColor: selectedPrimaryColor
+                });
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 var VARS = SpeedCircle.VARIABLES;
+
                 function initialSlider() {
                     return $('<input id="radiusSpeedCircle" type="range" min="1" max="200" step="1" title="radius for speed circle tool" />');
                 }
+
                 function addSliderForRadius(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        slider = initialSlider()
                         .attr('value', VARS.radius)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             VARS.radius = $(this).val();
                         }).appendTo(div);
 
@@ -1261,13 +1362,13 @@ $(function () {
                 }
                 addSliderForRadius(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForRadius(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForRadius(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SpeedCircleContextMenu',
@@ -1276,24 +1377,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedCircle.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = SpeedCircle.ContextMenu;
 
                 setupToolTips(tool, SpeedCircle.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -1308,52 +1409,59 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedDisc = {
         CONSTANTS: {
-            id: 'SpeedDiscTool', selectionId: '#SpeedDiscTool', class: 'main-tool',
+            id: 'SpeedDiscTool',
+            selectionId: '#SpeedDiscTool',
+            class: 'main-tool',
             title: 'Click to draw Discs. Click again to disable.'
         },
         VARIABLES: {
             radius: 4
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            R = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                R = null;
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 R = SpeedDisc.VARIABLES.radius;
                 CANVASAPI.fillCirc(X, Y, R);
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 var VARS = SpeedDisc.VARIABLES;
+
                 function initialSlider() {
                     return $('<input id="radiusSpeedDisc" type="range" min="1" max="200" step="1" title="radius for speed disc tool" />');
                 }
+
                 function addSliderForRadius(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        slider = initialSlider()
                         .attr('value', VARS.radius)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             VARS.radius = $(this).val();
                         }).appendTo(div);
 
@@ -1361,13 +1469,13 @@ $(function () {
                 }
                 addSliderForRadius(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForRadius(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForRadius(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SpeedDiscContextMenu',
@@ -1376,24 +1484,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedDisc.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = SpeedDisc.ContextMenu;
 
                 setupToolTips(tool, SpeedDisc.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -1408,49 +1516,54 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedDot = {
         CONSTANTS: {
-            id: 'SpeedDotTool', selectionId: '#SpeedDotTool', class: 'main-tool',
+            id: 'SpeedDotTool',
+            selectionId: '#SpeedDotTool',
+            class: 'main-tool',
             title: 'Click to draw dots. Click again to disable.'
         },
         VARIABLES: {},
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null;
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 CANVASAPI.fillCirc(X, Y, 1);
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId);
+                    toolId = options.toolId,
+                    tool = $(toolId);
 
                 setupToolTips(tool, SpeedDot.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                  },
-                  function () {
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                    },
+                    function() {
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -1465,45 +1578,51 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedPencil = {
         CONSTANTS: {
-            id: 'SpeedPencilTool', selectionId: '#SpeedPencilTool', class: 'main-tool',
+            id: 'SpeedPencilTool',
+            selectionId: '#SpeedPencilTool',
+            class: 'main-tool',
             title: 'Click to draw draw free hand lines. Click again to disable.'
         },
         VARIABLES: {
             width: 2,
-            LastPoint: { X: -1, Y: -1 }
+            LastPoint: {
+                X: -1,
+                Y: -1
+            }
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            width = null,
-            last = null,
-            LastPoint = {
-                get: function () {
-                    return {
-                        X: SpeedPencil.VARIABLES.LastPoint.X,
-                        Y: SpeedPencil.VARIABLES.LastPoint.Y
-                    };
-                },
-                set: function (x, y) {
-                    SpeedPencil.VARIABLES.LastPoint.X = x;
-                    SpeedPencil.VARIABLES.LastPoint.Y = y;
-                }
-            };
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                width = null,
+                last = null,
+                LastPoint = {
+                    get: function() {
+                        return {
+                            X: SpeedPencil.VARIABLES.LastPoint.X,
+                            Y: SpeedPencil.VARIABLES.LastPoint.Y
+                        };
+                    },
+                    set: function(x, y) {
+                        SpeedPencil.VARIABLES.LastPoint.X = x;
+                        SpeedPencil.VARIABLES.LastPoint.Y = y;
+                    }
+                };
+
             function drawLineSegmentFromLastPoint(options) {
                 var
-                context = options.context,
-                last = options.last,
-                current = options.current,
-                width = options.width;
+                    context = options.context,
+                    last = options.last,
+                    current = options.current,
+                    width = options.width;
 
                 context.beginPath();
                 context.moveTo(last.X, last.Y);
@@ -1512,8 +1631,11 @@ $(function () {
                 context.strokeStyle = selectedPrimaryColor;
                 context.stroke();
             }
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 width = SpeedPencil.VARIABLES.width;
@@ -1522,7 +1644,10 @@ $(function () {
                     drawLineSegmentFromLastPoint({
                         context: context,
                         last: last,
-                        current: { X: X, Y: Y },
+                        current: {
+                            X: X,
+                            Y: Y
+                        },
                         width: width
                     });
                 }
@@ -1530,25 +1655,26 @@ $(function () {
                 LastPoint.set(X, Y);
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             SpeedPencil.VARIABLES.LastPoint.X = -1;
             SpeedPencil.VARIABLES.LastPoint.Y = -1;
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider() {
                     return $('<input id="widthSpeedPencil" type="range" min="1" max="200" step="1" title="width for speed pencil tool." />');
                 }
+
                 function addSliderForLineWidth(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        slider = initialSlider()
                         .attr('value', SpeedPencil.VARIABLES.width)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             SpeedPencil.VARIABLES.width = $(this).val();
                         })
                         .appendTo(div);
@@ -1557,13 +1683,13 @@ $(function () {
                 }
                 addSliderForLineWidth(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForLineWidth(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForLineWidth(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SpeedPencilContextMenu',
@@ -1572,24 +1698,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedPencil.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = SpeedPencil.ContextMenu;
 
                 setupToolTips(tool, SpeedPencil.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -1604,7 +1730,7 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedRectangle = {
@@ -1615,56 +1741,61 @@ $(function () {
             title: 'Click to draw speed rectangles. Click again to disable.',
         },
         VARIABLES: {
-            length: 20, breadth: 10
+            length: 20,
+            breadth: 10
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            side = null,
-            xyPlaneRotationAngle = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                side = null,
+                xyPlaneRotationAngle = null;
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 var
-                mouseOptions = { event: e, relativeTo: $(canvasId) },
-                X = Actions.Mouse.getX(mouseOptions),
-                Y = Actions.Mouse.getY(mouseOptions),
-                length = SpeedRectangle.VARIABLES.length,
-                breadth = SpeedRectangle.VARIABLES.breadth;
+                    mouseOptions = {
+                        event: e,
+                        relativeTo: $(canvasId)
+                    },
+                    X = Actions.Mouse.getX(mouseOptions),
+                    Y = Actions.Mouse.getY(mouseOptions),
+                    length = SpeedRectangle.VARIABLES.length,
+                    breadth = SpeedRectangle.VARIABLES.breadth;
 
                 context.fillRect(X - length / 2, Y - breadth / 2, length, breadth);
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider(id, title) {
                     return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
                 }
+
                 function addSliderForLength(options) {
                     var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                     var lengthSlider = initialSlider(options.lengthId, options.lengthTitle)
                         .attr('value', SpeedRectangle.VARIABLES.length)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             SpeedRectangle.VARIABLES.length = $(this).val();
                         })
                         .appendTo(div);
 
                     var breadthSlider = initialSlider(options.breadthId, options.breadthTitle)
                         .attr('value', SpeedRectangle.VARIABLES.breadth)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             SpeedRectangle.VARIABLES.breadth = $(this).val();
                         })
                         .appendTo(div);
@@ -1674,7 +1805,7 @@ $(function () {
                 addSliderForLength(options);
 
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForSide(options) {
                     $('#' + options.lengthId).remove();
                     $('#' + options.breadthId).remove();
@@ -1683,7 +1814,7 @@ $(function () {
                 $('#' + SpeedRectangle.CONSTANTS.previewId).off('mousemove');
                 $('#' + SpeedRectangle.CONSTANTS.previewId).remove();
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SpeedRectangleContextMenu',
@@ -1696,21 +1827,21 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedRectangle.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = SpeedRectangle.ContextMenu;
 
                 setupToolTips(tool, SpeedRectangle.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                    function () {
+                    function() {
                         activateTool(options);
                         contextMenu.activate(contextMenu.getOptions());
                     },
-                    function () {
+                    function() {
                         contextMenu.deactivate(contextMenu.getOptions());
                         deactivateTool(options);
                     });
@@ -1728,29 +1859,35 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedRing = {
         CONSTANTS: {
-            id: 'SpeedRingTool', selectionId: '#SpeedRingTool', class: 'main-tool',
+            id: 'SpeedRingTool',
+            selectionId: '#SpeedRingTool',
+            class: 'main-tool',
             title: 'Click to draw speed rings. Click again to disable.'
         },
         VARIABLES: {
-            innerRadius: 10, outerRadius: 20
+            innerRadius: 10,
+            outerRadius: 20
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            innerRadius = null,
-            outerRadius = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                innerRadius = null,
+                outerRadius = null;
 
-            $(canvasId).on(event, function (e) {
-                mouseOptions = { event: e, relativeTo: $(this) };
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(this)
+                };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
                 innerRadius = SpeedRing.VARIABLES.innerRadius;
@@ -1765,49 +1902,50 @@ $(function () {
                 });
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider(id, title) {
                     return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
                 }
+
                 function addSliderForRadius(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
 
-                    innerSlider = initialSlider("innerRadiusSpeedRing", "inner radius for speed ring tool.")
-                                    .attr('value', SpeedRing.VARIABLES.innerRadius)
-                                    .on('mouseover', function () {
-                                        $(this).attr('title', $(this).val());
-                                    })
-                                    .on('input', function () {
-                                        SpeedRing.VARIABLES.innerRadius = $(this).val();
-                                    })
-                                    .appendTo(div),
+                        innerSlider = initialSlider("innerRadiusSpeedRing", "inner radius for speed ring tool.")
+                        .attr('value', SpeedRing.VARIABLES.innerRadius)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val());
+                        })
+                        .on('input', function() {
+                            SpeedRing.VARIABLES.innerRadius = $(this).val();
+                        })
+                        .appendTo(div),
 
-                    outerSlider = initialSlider("outerRadiusSpeedRing", "outer radius for speed ring tool.")
-                                    .attr('value', SpeedRing.VARIABLES.outerRadius)
-                                    .on('mouseover', function () {
-                                        $(this).attr('title', $(this).val());
-                                    })
-                                    .on('input', function () {
-                                        SpeedRing.VARIABLES.outerRadius = $(this).val();
-                                    })
-                                    .appendTo(div);
+                        outerSlider = initialSlider("outerRadiusSpeedRing", "outer radius for speed ring tool.")
+                        .attr('value', SpeedRing.VARIABLES.outerRadius)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val());
+                        })
+                        .on('input', function() {
+                            SpeedRing.VARIABLES.outerRadius = $(this).val();
+                        })
+                        .appendTo(div);
 
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForRadius(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForRadius(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForRadius(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SpeedRingContextMenu',
@@ -1816,24 +1954,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedRing.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = SpeedRing.ContextMenu;
 
                 setupToolTips(tool, SpeedRing.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -1848,7 +1986,7 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var SpeedSquare = {
@@ -1859,37 +1997,42 @@ $(function () {
             title: 'Click to draw speed squares. Click again to disable.',
         },
         VARIABLES: {
-            side: 10, xyPlaneRotationAngle: 360
+            side: 10,
+            xyPlaneRotationAngle: 360
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event,
-            canvasId = '#' + options.canvasId,
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            side = null,
-            xyPlaneRotationAngle = null;
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                side = null,
+                xyPlaneRotationAngle = null;
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 var
-                mouseOptions = { event: e, relativeTo: $(canvasId) },
-                X = Actions.Mouse.getX(mouseOptions),
-                Y = Actions.Mouse.getY(mouseOptions),
-                side = SpeedSquare.VARIABLES.side,
-                xyPlaneRotationAngle = (SpeedSquare.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
+                    mouseOptions = {
+                        event: e,
+                        relativeTo: $(canvasId)
+                    },
+                    X = Actions.Mouse.getX(mouseOptions),
+                    Y = Actions.Mouse.getY(mouseOptions),
+                    side = SpeedSquare.VARIABLES.side,
+                    xyPlaneRotationAngle = (SpeedSquare.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
 
                 CANVASAPI.fillRoatedSquare(X - side / 2, Y - side / 2, side, xyPlaneRotationAngle);
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             $('#' + options.canvasId).off(options.event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider(id, title, max) {
                     return $('<input id="' + id + '" type="range" min="1" max="' + max + '" step="1" title="' + title + '" />');
                 }
+
                 function getContextMenuContainer(options) {
                     var container = $('#' + options.id);
                     if (container.length === 0)
@@ -1897,48 +2040,50 @@ $(function () {
                     else
                         return container;
                 }
+
                 function addSideLengthController(options) {
                     function getSliderForSide(options) {
                         return initialSlider('sideSpeedSquare', 'side length for square tool', 200)
-                                .attr('value', SpeedSquare.VARIABLES.side)
-                                .on('mouseover', function () {
-                                    $(this).attr('title', $(this).val());
-                                })
-                                .on('input', function () {
-                                    SpeedSquare.VARIABLES.side = $(this).val();
-                                });
+                            .attr('value', SpeedSquare.VARIABLES.side)
+                            .on('mouseover', function() {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('input', function() {
+                                SpeedSquare.VARIABLES.side = $(this).val();
+                            });
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.sideLabel)
-                            .append(getSliderForSide(options));
+                        .append(options.sideLabel)
+                        .append(getSliderForSide(options));
                 }
+
                 function addXYPlaneRotationController(options) {
                     function getSliderForXYPlaneRotationAngle(options) {
                         return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360)
-                                .attr('value', SpeedSquare.VARIABLES.xyPlaneRotationAngle)
-                                .on('mouseover', function () {
-                                    $(this).attr('title', $(this).val() + ' deg');
-                                })
-                                .on('input', function () {
-                                    SpeedSquare.VARIABLES.xyPlaneRotationAngle = $(this).val();
-                                });
+                            .attr('value', SpeedSquare.VARIABLES.xyPlaneRotationAngle)
+                            .on('mouseover', function() {
+                                $(this).attr('title', $(this).val() + ' deg');
+                            })
+                            .on('input', function() {
+                                SpeedSquare.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                            });
                     }
                     return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
-                            .append(options.xyPlaneRotationAngle)
-                            .append(getSliderForXYPlaneRotationAngle(options));
+                        .append(options.xyPlaneRotationAngle)
+                        .append(getSliderForXYPlaneRotationAngle(options));
                 }
                 var contextMenuContainer = getContextMenuContainer(options);
                 addSideLengthController(options).appendTo(contextMenuContainer);
                 addXYPlaneRotationController(options).appendTo(contextMenuContainer);
                 contextMenuContainer.appendTo($(options.containerSelectionCriterion));
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForSide(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForSide(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SpeedSquareToolContextMenu',
@@ -1949,21 +2094,21 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = SpeedSquare.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = SpeedSquare.ContextMenu;
 
                 setupToolTips(tool, SpeedSquare.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                    function () {
+                    function() {
                         activateTool(options);
                         contextMenu.activate(contextMenu.getOptions());
                     },
-                    function () {
+                    function() {
                         contextMenu.deactivate(contextMenu.getOptions());
                         deactivateTool(options);
                     });
@@ -1981,7 +2126,7 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var Square = {
@@ -1993,88 +2138,93 @@ $(function () {
             previewId: 'previewSquare'
         },
         VARIABLES: {
-            side: 10, xyPlaneRotationAngle: 360
+            side: 10,
+            xyPlaneRotationAngle: 360
         },
-        start: function (options) {
+        start: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            side = null,
-            xyPlaneRotationAngle = null,
-            previewer = null,
-            canvasOffsetLeft = $(canvasId).offset().left,
-            canvasOffsetTop = $(canvasId).offset().top,
-            canvasHeight = $(canvasId).height(),
-            canvasWidth = $(canvasId).width(),
-            previewOffsetLeft = null,
-            previewOffsetTop = null;
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                side = null,
+                xyPlaneRotationAngle = null,
+                previewer = null,
+                canvasOffsetLeft = $(canvasId).offset().left,
+                canvasOffsetTop = $(canvasId).offset().top,
+                canvasHeight = $(canvasId).height(),
+                canvasWidth = $(canvasId).width(),
+                previewOffsetLeft = null,
+                previewOffsetTop = null;
 
             function generatePreview(options) {
                 var
-                div = $('<div></div>')
-                        .attr('id', Square.CONSTANTS.previewId)
-                        .css({
-                            'position': 'fixed',
-                            'z-index': '2',
-                        })
-                        .appendTo('.utilities')
-                        .on('click', function (eClick) {
-                            var
-                            mouseOptions = { event: eClick, relativeTo: $(canvasId) },
+                    div = $('<div></div>')
+                    .attr('id', Square.CONSTANTS.previewId)
+                    .css({
+                        'position': 'fixed',
+                        'z-index': '2',
+                    })
+                    .appendTo('.utilities')
+                    .on('click', function(eClick) {
+                        var
+                            mouseOptions = {
+                                event: eClick,
+                                relativeTo: $(canvasId)
+                            },
                             X = Actions.Mouse.getX(mouseOptions),
                             Y = Actions.Mouse.getY(mouseOptions),
                             side = Square.VARIABLES.side,
                             xyPlaneRotationAngle = (Square.VARIABLES.xyPlaneRotationAngle * Math.PI) / 180;
-                            
-                            CANVASAPI.fillRoatedSquare(X - side / 2, Y - side / 2, side, xyPlaneRotationAngle);
-                        })
-                        .on('mousemove', function (ev) {
-                            $(this).css('top', parseInt(ev.pageY) - parseInt(Square.VARIABLES.side / 2) - parseInt(window.scrollY))
-                                    .css('left', parseInt(ev.pageX) - parseInt(parseInt(Square.VARIABLES.side / 2)) - parseInt(window.scrollX))
-                                    .css('background-color', selectedPrimaryColor)
-                                    .css('border', 'thin dashed ' + selectedAlternativeColor)
-                                    .css('height', Square.VARIABLES.side)
-                                    .css('width', Square.VARIABLES.side);
 
-                            previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Square.VARIABLES.side / 2);
-                            previewOffsetTop = parseInt($(this).offset().top) + parseInt(Square.VARIABLES.side / 2);
-                            canvasOffsetLeft = $(canvasId).offset().left;
-                            canvasOffsetTop = $(canvasId).offset().top;
+                        CANVASAPI.fillRoatedSquare(X - side / 2, Y - side / 2, side, xyPlaneRotationAngle);
+                    })
+                    .on('mousemove', function(ev) {
+                        $(this).css('top', parseInt(ev.pageY) - parseInt(Square.VARIABLES.side / 2) - parseInt(window.scrollY))
+                            .css('left', parseInt(ev.pageX) - parseInt(parseInt(Square.VARIABLES.side / 2)) - parseInt(window.scrollX))
+                            .css('background-color', selectedPrimaryColor)
+                            .css('border', 'thin dashed ' + selectedAlternativeColor)
+                            .css('height', Square.VARIABLES.side)
+                            .css('width', Square.VARIABLES.side);
 
-                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft + canvasWidth) < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop + canvasHeight) < previewOffsetTop) {
-                                $(this).hide();
-                            }
-                        });
+                        previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Square.VARIABLES.side / 2);
+                        previewOffsetTop = parseInt($(this).offset().top) + parseInt(Square.VARIABLES.side / 2);
+                        canvasOffsetLeft = $(canvasId).offset().left;
+                        canvasOffsetTop = $(canvasId).offset().top;
+
+                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft + canvasWidth) < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop + canvasHeight) < previewOffsetTop) {
+                            $(this).hide();
+                        }
+                    });
             }
             generatePreview();
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 previewer = previewer || $('#' + Square.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - parseInt(Square.VARIABLES.side / 2) - window.scrollY)
-                        .css('left', e.pageX - parseInt(Square.VARIABLES.side / 2) - window.scrollX)
-                        .css('background-color', selectedPrimaryColor)
-                        .css('height', Square.VARIABLES.side)
-                        .css('width', Square.VARIABLES.side)
-                        .css('transform', 'rotate('+parseInt((Square.VARIABLES.xyPlaneRotationAngle*Math.PI))/180+'rad)')
-                        .show();
+                    .css('left', e.pageX - parseInt(Square.VARIABLES.side / 2) - window.scrollX)
+                    .css('background-color', selectedPrimaryColor)
+                    .css('height', Square.VARIABLES.side)
+                    .css('width', Square.VARIABLES.side)
+                    .css('transform', 'rotate(' + parseInt((Square.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
+                    .show();
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider(id, title, max) {
                     return $('<input id="' + id + '" type="range" min="1" max="' + max + '" step="1" title="' + title + '" />');
                 }
+
                 function getContextMenuContainer(options) {
                     var container = $('#' + options.id);
                     if (container.length === 0)
@@ -2082,32 +2232,34 @@ $(function () {
                     else
                         return container;
                 }
+
                 function getSliderForSide(options) {
                     return initialSlider('sideSquare', 'side length for square tool', 200)
-                            .attr('value', Square.VARIABLES.side)
-                            .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
-                            })
-                            .on('input', function () {
-                                Square.VARIABLES.side = $(this).val();
-                            });
+                        .attr('value', Square.VARIABLES.side)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val());
+                        })
+                        .on('input', function() {
+                            Square.VARIABLES.side = $(this).val();
+                        });
                 }
+
                 function getSliderForXYPlaneRotationAngle(options) {
                     return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360)
-                            .attr('value', Square.VARIABLES.xyPlaneRotationAngle)
-                            .on('mouseover', function () {
-                                $(this).attr('title', $(this).val()+' deg');
-                            })
-                            .on('input', function () {
-                                Square.VARIABLES.xyPlaneRotationAngle = $(this).val();
-                            });
+                        .attr('value', Square.VARIABLES.xyPlaneRotationAngle)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val() + ' deg');
+                        })
+                        .on('input', function() {
+                            Square.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                        });
                 }
                 var contextMenuContainer = getContextMenuContainer(options);
                 getSliderForSide(options).appendTo(contextMenuContainer);
                 getSliderForXYPlaneRotationAngle(options).appendTo(contextMenuContainer);
                 contextMenuContainer.appendTo($(options.containerSelectionCriterion));
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForSide(options) {
                     $('#' + options.id).remove();
                 }
@@ -2115,7 +2267,7 @@ $(function () {
                 $('#' + Square.CONSTANTS.previewId).off('mousemove');
                 $('#' + Square.CONSTANTS.previewId).remove();
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'SquareToolContextMenu',
@@ -2124,21 +2276,21 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = Square.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = Square.ContextMenu;
 
                 setupToolTips(tool, Square.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                    function () {
+                    function() {
                         activateTool(options);
                         contextMenu.activate(contextMenu.getOptions());
                     },
-                    function () {
+                    function() {
                         contextMenu.deactivate(contextMenu.getOptions());
                         deactivateTool(options);
                     });
@@ -2156,82 +2308,95 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var Circle = {
         CONSTANTS: {
-            id: 'CircleTool', selectionId: '#CircleTool', class: 'main-tool',
+            id: 'CircleTool',
+            selectionId: '#CircleTool',
+            class: 'main-tool',
             title: 'Click to draw circle. Click again to disable.',
             previewId: 'previewCircle'
         },
-        VARIABLES: { innerRadius: 10 },
-        start: function (options) {
+        VARIABLES: {
+            innerRadius: 10
+        },
+        start: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            innerRadius = null,
-            outerRadius = null,
-            previewer = null,
-            canvasOffsetLeft = null,
-            canvasOffsetTop = null,
-            canvasHeight = $(canvasId).height(),
-            canvasWidth = $(canvasId).width(),
-            previewOffsetLeft = null,
-            previewOffsetTop = null;
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                innerRadius = null,
+                outerRadius = null,
+                previewer = null,
+                canvasOffsetLeft = null,
+                canvasOffsetTop = null,
+                canvasHeight = $(canvasId).height(),
+                canvasWidth = $(canvasId).width(),
+                previewOffsetLeft = null,
+                previewOffsetTop = null;
 
             function generatePreview(options) {
                 var
-                div = $('<div></div>')
-                        .attr('id', Circle.CONSTANTS.previewId)
-                        .css({
-                            'position': 'fixed',
-                            'z-index': '2',
-                            'border-radius': '50%'
-                        })
-                        .appendTo('.utilities')
-                        .on('click', function (eClick) {
-                            mouseOptions = { event: eClick, relativeTo: $(canvasId) };
-                            X = Actions.Mouse.getX(mouseOptions);
-                            Y = Actions.Mouse.getY(mouseOptions);
-                            innerRadius = Circle.VARIABLES.innerRadius;
-                            outerRadius = parseInt(Circle.VARIABLES.innerRadius) + 1;
-                            CANVASAPI.drawCircle({ X: X, Y: Y, innerRadius: innerRadius, outerRadius: outerRadius, strokeColor: selectedPrimaryColor });
-                        })
-                        .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
-                                    .css('left', ev.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
-                                    .css('border', 'thin solid ' + selectedPrimaryColor)
-                                    .css('height', Circle.VARIABLES.innerRadius * 2)
-                                    .css('width', Circle.VARIABLES.innerRadius * 2);
-
-                            previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Circle.VARIABLES.innerRadius);
-                            previewOffsetTop = parseInt($(this).offset().top) + parseInt(Circle.VARIABLES.innerRadius);
-                            canvasOffsetLeft = $(canvasId).offset().left;
-                            canvasOffsetTop = $(canvasId).offset().top;
-
-                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
-                                $(this).hide();
-                            }
+                    div = $('<div></div>')
+                    .attr('id', Circle.CONSTANTS.previewId)
+                    .css({
+                        'position': 'fixed',
+                        'z-index': '2',
+                        'border-radius': '50%'
+                    })
+                    .appendTo('.utilities')
+                    .on('click', function(eClick) {
+                        mouseOptions = {
+                            event: eClick,
+                            relativeTo: $(canvasId)
+                        };
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        innerRadius = Circle.VARIABLES.innerRadius;
+                        outerRadius = parseInt(Circle.VARIABLES.innerRadius) + 1;
+                        CANVASAPI.drawCircle({
+                            X: X,
+                            Y: Y,
+                            innerRadius: innerRadius,
+                            outerRadius: outerRadius,
+                            strokeColor: selectedPrimaryColor
                         });
+                    })
+                    .on('mousemove', function(ev) {
+                        $(this).css('top', ev.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
+                            .css('left', ev.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
+                            .css('border', 'thin solid ' + selectedPrimaryColor)
+                            .css('height', Circle.VARIABLES.innerRadius * 2)
+                            .css('width', Circle.VARIABLES.innerRadius * 2);
+
+                        previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Circle.VARIABLES.innerRadius);
+                        previewOffsetTop = parseInt($(this).offset().top) + parseInt(Circle.VARIABLES.innerRadius);
+                        canvasOffsetLeft = $(canvasId).offset().left;
+                        canvasOffsetTop = $(canvasId).offset().top;
+
+                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                            $(this).hide();
+                        }
+                    });
             }
             generatePreview();
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 previewer = previewer || $('#' + Circle.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
-                        .css('left', e.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
-                        .css('border', 'thin solid ' + selectedPrimaryColor)
-                        .css('height', Circle.VARIABLES.innerRadius * 2)
-                        .css('width', Circle.VARIABLES.innerRadius * 2)
-                        .show();
+                    .css('left', e.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
+                    .css('border', 'thin solid ' + selectedPrimaryColor)
+                    .css('height', Circle.VARIABLES.innerRadius * 2)
+                    .css('width', Circle.VARIABLES.innerRadius * 2)
+                    .show();
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
@@ -2240,32 +2405,33 @@ $(function () {
             $('#' + Circle.CONSTANTS.previewId).remove();
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider(id, title) {
                     return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
                 }
+
                 function addSliderForRadius(options) {
                     var div = $('<div></div>').attr('id', options.id).addClass('menu-item');
                     var radiusSlider = initialSlider("radiusCircle", "innerRadius for circle tool.")
-                                    .attr('value', Circle.VARIABLES.innerRadius)
-                                    .on('mouseover', function () {
-                                        $(this).attr('title', $(this).val());
-                                    })
-                                    .on('input', function () {
-                                        Circle.VARIABLES.innerRadius = $(this).val();
-                                    });
+                        .attr('value', Circle.VARIABLES.innerRadius)
+                        .on('mouseover', function() {
+                            $(this).attr('title', $(this).val());
+                        })
+                        .on('input', function() {
+                            Circle.VARIABLES.innerRadius = $(this).val();
+                        });
                     radiusSlider.appendTo(div);
                     div.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForRadius(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForRadius(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForRadius(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'CircleContextMenu',
@@ -2274,24 +2440,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = Circle.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = Circle.ContextMenu;
 
                 setupToolTips(tool, Circle.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };
@@ -2305,103 +2471,111 @@ $(function () {
     });
 });
 
-$(function () {
+$(function() {
     "use strict";
 
     var Disc = {
         CONSTANTS: {
-            id: 'DiscTool', selectionId: '#DiscTool', class: 'main-tool',
+            id: 'DiscTool',
+            selectionId: '#DiscTool',
+            class: 'main-tool',
             title: 'Click to draw disc. Click again to disable.',
             previewId: 'previewDisc'
         },
-        VARIABLES: { radius: 10 },
-        start: function (options) {
+        VARIABLES: {
+            radius: 10
+        },
+        start: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-            mouseOptions = null,
-            X = null,
-            Y = null,
-            radius = null,
-            previewer = null,
-            canvasOffsetLeft = $(canvasId).offset().left,
-            canvasOffsetTop = $(canvasId).offset().top,
-            canvasHeight = $(canvasId).height(),
-            canvasWidth = $(canvasId).width(),
-            previewOffsetLeft = null,
-            previewOffsetTop = null;
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                radius = null,
+                previewer = null,
+                canvasOffsetLeft = $(canvasId).offset().left,
+                canvasOffsetTop = $(canvasId).offset().top,
+                canvasHeight = $(canvasId).height(),
+                canvasWidth = $(canvasId).width(),
+                previewOffsetLeft = null,
+                previewOffsetTop = null;
 
             function generatePreview(options) {
                 var
-                div = $('<div></div>')
-                        .attr('id', Disc.CONSTANTS.previewId)
-                        .css({
-                            'position': 'fixed',
-                            'z-index': '2',
-                            'border-radius': '50%'
-                        })
-                        .appendTo('.utilities')
-                        .on('click', function (eClick) {
-                            mouseOptions = { event: eClick, relativeTo: $(canvasId) };
-                            X = Actions.Mouse.getX(mouseOptions);
-                            Y = Actions.Mouse.getY(mouseOptions);
-                            radius = Disc.VARIABLES.radius;
-                            CANVASAPI.fillCirc(X, Y, radius);
-                        })
-                        .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - Disc.VARIABLES.radius  - window.scrollY)
-                                    .css('left', ev.pageX - Disc.VARIABLES.radius  - window.scrollX)
-                                    .css('background-color', selectedPrimaryColor)
-                                    .css('border', 'thin dashed ' + selectedAlternativeColor)
-                                    .css('height', Disc.VARIABLES.radius*2)
-                                    .css('width', Disc.VARIABLES.radius*2);
+                    div = $('<div></div>')
+                    .attr('id', Disc.CONSTANTS.previewId)
+                    .css({
+                        'position': 'fixed',
+                        'z-index': '2',
+                        'border-radius': '50%'
+                    })
+                    .appendTo('.utilities')
+                    .on('click', function(eClick) {
+                        mouseOptions = {
+                            event: eClick,
+                            relativeTo: $(canvasId)
+                        };
+                        X = Actions.Mouse.getX(mouseOptions);
+                        Y = Actions.Mouse.getY(mouseOptions);
+                        radius = Disc.VARIABLES.radius;
+                        CANVASAPI.fillCirc(X, Y, radius);
+                    })
+                    .on('mousemove', function(ev) {
+                        $(this).css('top', ev.pageY - Disc.VARIABLES.radius - window.scrollY)
+                            .css('left', ev.pageX - Disc.VARIABLES.radius - window.scrollX)
+                            .css('background-color', selectedPrimaryColor)
+                            .css('border', 'thin dashed ' + selectedAlternativeColor)
+                            .css('height', Disc.VARIABLES.radius * 2)
+                            .css('width', Disc.VARIABLES.radius * 2);
 
-                            previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Disc.VARIABLES.radius) ;
-                            previewOffsetTop = parseInt($(this).offset().top) + parseInt(Disc.VARIABLES.radius) ;
-                            canvasOffsetLeft = $(canvasId).offset().left;
-                            canvasOffsetTop = $(canvasId).offset().top;
-                            
-                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
-                                $(this).hide();
-                            }
-                        });
+                        previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Disc.VARIABLES.radius);
+                        previewOffsetTop = parseInt($(this).offset().top) + parseInt(Disc.VARIABLES.radius);
+                        canvasOffsetLeft = $(canvasId).offset().left;
+                        canvasOffsetTop = $(canvasId).offset().top;
+
+                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                            $(this).hide();
+                        }
+                    });
             }
             generatePreview();
 
-            $(canvasId).on('mousemove', function (e) {
+            $(canvasId).on('mousemove', function(e) {
                 previewer = previewer || $('#' + Disc.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - Disc.VARIABLES.radius  - window.scrollY)
-                        .css('left', e.pageX - Disc.VARIABLES.radius  - window.scrollX)
-                        .css('background-color', selectedPrimaryColor)
-                        .css('height', Disc.VARIABLES.radius*2)
-                        .css('width', Disc.VARIABLES.radius*2)
-                        .show();
+                previewer.css('top', e.pageY - Disc.VARIABLES.radius - window.scrollY)
+                    .css('left', e.pageX - Disc.VARIABLES.radius - window.scrollX)
+                    .css('background-color', selectedPrimaryColor)
+                    .css('height', Disc.VARIABLES.radius * 2)
+                    .css('width', Disc.VARIABLES.radius * 2)
+                    .show();
             });
         },
-        stop: function (options) {
+        stop: function(options) {
             var
-            event = options.event || CONSTANTS.Events.mouseclick,
-            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
+                event = options.event || CONSTANTS.Events.mouseclick,
+                canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
             $('#' + Disc.CONSTANTS.previewId).off('mousemove');
             $('#' + Disc.CONSTANTS.previewId).remove();
         },
         ContextMenu: {
-            activate: function (options) {
+            activate: function(options) {
                 function initialSlider() {
                     return $('<input id="radiusDisc" type="range" min="1" max="200" step="1" title="radius for disc tool." />');
                 }
+
                 function addSliderForRadius(options) {
                     var
-                    div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
-                    slider = initialSlider()
+                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                        slider = initialSlider()
                         .attr('value', Disc.VARIABLES.radius)
-                        .on('mouseover', function () {
+                        .on('mouseover', function() {
                             $(this).attr('title', $(this).val());
                         })
-                        .on('input', function () {
+                        .on('input', function() {
                             Disc.VARIABLES.radius = $(this).val();
                         })
                         .appendTo(div);
@@ -2410,13 +2584,13 @@ $(function () {
                 }
                 addSliderForRadius(options);
             },
-            deactivate: function (options) {
+            deactivate: function(options) {
                 function removeSliderForRadius(options) {
                     $('#' + options.id).remove();
                 }
                 removeSliderForRadius(options);
             },
-            getOptions: function () {
+            getOptions: function() {
                 return {
                     tool: this,
                     id: 'DiscContextMenu',
@@ -2425,24 +2599,24 @@ $(function () {
             }
         },
         Events: {
-            register: function (options) {
+            register: function(options) {
                 var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = Disc.ContextMenu;
+                    toolId = options.toolId,
+                    tool = $(toolId),
+                    contextMenu = Disc.ContextMenu;
 
                 setupToolTips(tool, Disc.CONSTANTS.title);
                 options.tool = tool;
 
                 tool.funcToggle('click',
-                  function () {
-                      activateTool(options);
-                      contextMenu.activate(contextMenu.getOptions());
-                  },
-                  function () {
-                      contextMenu.deactivate(contextMenu.getOptions());
-                      deactivateTool(options);
-                  });
+                    function() {
+                        activateTool(options);
+                        contextMenu.activate(contextMenu.getOptions());
+                    },
+                    function() {
+                        contextMenu.deactivate(contextMenu.getOptions());
+                        deactivateTool(options);
+                    });
             }
         }
     };

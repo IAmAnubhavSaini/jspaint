@@ -1,86 +1,119 @@
-(function ($) {
+(function($) {
     "use strict";
 
-    $(function () {
-        var
-        dimensionEvents = function () {
-            $('.dimension-options button')
-            .on('click', function () {
-                $('.dimension-options button').removeClass('btn-success');
-                $(this).addClass('btn-success');
-            });
-        },
+    $(function() {
+        var DimensionOptionsButtons = $('.dimension-options button'),
+            OrientationOptionsButtons = $('.orientation-options button'),
+            LocalStorageAvailable = function() {
+                return localStorage !== undefined && localStorage !== null;
+            },
 
-        orientationEvents = function () {
-            $('.orientation-options button')
-                .on('click', function () {
-                    $('.orientation-options button').removeClass('btn-success');
-                    $(this).addClass('btn-success');
-                });
-        },
+            dimensionEvents = function() {
+                DimensionOptionsButtons
+                    .on('click', function() {
+                        DimensionOptionsButtons.removeClass('btn-success');
+                        $(this).addClass('btn-success');
+                    });
+            },
 
-        setupEvents = function () {
-            dimensionEvents();
-            orientationEvents();
-        },
+            orientationEvents = function() {
+                OrientationOptionsButtons
+                    .on('click', function() {
+                        OrientationOptionsButtons.removeClass('btn-success');
+                        $(this).addClass('btn-success');
+                    });
+            },
 
-        getWidth = function (selected) {
-            return selected.localeCompare('Max') === 0 ?
+            setupEvents = function() {
+                dimensionEvents();
+                orientationEvents();
+            },
+
+            getWidth = function(dimensions) {
+                return dimensions.localeCompare('Max') === 0 ?
                     document.documentElement.clientWidth - 21 :
-                    $('.dimension-options button.btn-success').attr('id').split('x')[0];
-        },
+                    dimensions.split('x')[0];
+            },
 
-        getHeight = function (selected) {
-            return selected.localeCompare('Max') === 0 ?
+            getHeight = function(dimensions) {
+                return dimensions.localeCompare('Max') === 0 ?
                     document.documentElement.clientHeight :
-                    $('.dimension-options button.btn-success').attr('id').split('x')[1];
-        },
+                    dimensions.split('x')[1];
+            },
 
-        getQueryValue = function (orientation, width, height) {
-            return orientation.localeCompare('landscape') === 0 ?
+            getQueryValue = function(orientation, width, height) {
+                return orientation.localeCompare('landscape') === 0 ?
                     width + 'x' + height :
                     height + 'x' + width;
-        },
+            },
 
-        newUri = function (receiver) {
-            var
-            originalUri = receiver.attr('href'),
-            queryPrfix = '?dimension=',
-            selected = $('.dimension-options button.btn-success').attr('id'),
-            width = getWidth(selected),
-            height = getHeight(selected),
-            orientation = $('.orientation-options button.btn-success').attr('id'),
-            queryValue = getQueryValue(orientation, width, height);
+            conditionalURI = function(originalUri, queryPrfix, queryValue) {
+                var uri = '';
+                if (LocalStorageAvailable) {
+                    localStorage.setItem('dimensionsWxH', queryValue);
+                    uri = originalUri;
+                } else {
+                    uri = originalUri + queryPrfix + queryValue;
+                }
+                return uri;
+            },
 
-            return originalUri + queryPrfix + queryValue;
-        },
+            newUri = function(receiver) {
+                var originalUri = receiver.attr('href'),
+                    queryPrfix = '?dimension=',
+                    SelectedDimensionsButton = $('.dimension-options button.btn-success'),
+                    SelectedOrientationsButton = $('.orientation-options button.btn-success'),
+                    dimensions = SelectedDimensionsButton.attr('id'),
+                    width = getWidth(dimensions),
+                    height = getHeight(dimensions),
+                    orientation = SelectedOrientationsButton.attr('id'),
+                    queryValue = getQueryValue(orientation, width, height),
+                    uri = conditionalURI(originalUri, queryPrfix, queryValue);
 
-        takeMeToPaint = function (uri) {
-            window.location = uri;
-        },
+                return uri;
+            },
 
-        deferLinkAction = function (e) {
-            e.preventDefault();
-        },
+            goToPaint = function(uri) {
+                window.location = uri;
+            },
 
-        setup = function () {
-            setupEvents();
-            $('#jspaint-action')
-                .on('click', function (e) {
-                    deferLinkAction(e);
-                    takeMeToPaint(newUri($(this)));
+            deferAction = function(e) {
+                e.preventDefault();
+            },
+
+            setup = function() {
+                setupEvents();
+                $('#jspaint-action')
+                    .on('click', function(e) {
+                        deferAction(e);
+                        goToPaint(newUri($(this)));
+                    });
+            },
+
+            initTopTakerWidget = function() {
+                $('.top-taker').TopTaker({
+                    'theme': 'dark'
                 });
-        },
+            },
 
-        init = function () {
-            $('#600x400, #landscape').trigger('click');
-            $('.top-taker').TopTaker({ 'theme': 'dark' });
-        },
+            initOrientationAndDimension = function() {
+                var defaultOrientationButton = $('#landscape'),
+                    defaultDimensionButton = $('#600x400');
 
-        mustRunInSequence = function () {
-            setup();
-            init();
-        };
+                defaultDimensionButton.trigger('click');
+                defaultOrientationButton.trigger('click');
+            },
+
+            init = function() {
+                initOrientationAndDimension();
+                initTopTakerWidget();
+            },
+
+            mustRunInSequence = function() {
+                setup();
+                init();
+            };
+            
         mustRunInSequence();
     });
 })(jQuery);

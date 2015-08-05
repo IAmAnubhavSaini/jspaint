@@ -1,5 +1,13 @@
-html, body { margin: 0; }
+html,
+body {
+    margin: 0;
+}
 
-.Menu, .utilities{ display: none;}
+.Menu,
+.utilities {
+    display: none;
+}
 
-#jspaint-paint-area { border: none;}
+#jspaint-paint-area {
+    border: none;
+}

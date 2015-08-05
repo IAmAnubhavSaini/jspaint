@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     margin: 0;
     min-height: 400px;
     min-width: 600px;
@@ -15,7 +16,11 @@ body {
     padding-bottom: 20px;
 }
 
-#jspaint-tools{
+.page-header {
+    margin: 0 0 20px;
+}
+
+#jspaint-tools {
     margin-bottom: .5em;
 }
 
@@ -31,7 +36,7 @@ body {
 }
 
 .main-tool {
-    border-bottom: thin solid rgba(0,0,0, .5);
+    border-bottom: thin solid rgba(0, 0, 0, .5);
     display: inline-block;
     margin: 0 5px;
     cursor: pointer;
@@ -40,20 +45,21 @@ body {
 .main-tool-menu {
     display: inline-block;
 }
- 
-    .main-tool-menu button {
-        background-color: transparent;
-        border: none;
-        padding: 0;
-    }
 
-        .main-tool-menu button:hover, .main-tool-menu.dropdown.open button.btn-default:active {
-            background-color: transparent;
-        }
+.main-tool-menu button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
 
-    .main-tool-menu .main-tool {
-        margin-top: 5px;
-    }
+.main-tool-menu button:hover,
+.main-tool-menu.dropdown.open button.btn-default:active {
+    background-color: transparent;
+}
+
+.main-tool-menu .main-tool {
+    margin-top: 5px;
+}
 
 .common-menu-bar {
     min-width: 600px;
@@ -62,22 +68,22 @@ body {
     overflow: auto;
 }
 
-    .common-menu-bar a {
-        display: inline-block;
-        color: #000000;
-        background-color: #DDddDD;
-        text-align: center;
-        text-decoration: none;
-        font-weight: bold;
-        border: thin solid #FFFFFF;
-        outline: thin solid #000000;
-        padding: 0 2px;
-    }
+.common-menu-bar a {
+    display: inline-block;
+    color: #000000;
+    background-color: #DDddDD;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border: thin solid #FFFFFF;
+    outline: thin solid #000000;
+    padding: 0 2px;
+}
 
-        .common-menu-bar a:hover {
-            border: thin solid #000000;
-            outline: thin solid #FFFFFF;
-        }
+.common-menu-bar a:hover {
+    border: thin solid #000000;
+    outline: thin solid #FFFFFF;
+}
 
 .common-menu-bar .menu-item {
     float: left;
@@ -88,7 +94,7 @@ body {
     margin: 0 5px;
 }
 
-.menu-item label{
+.menu-item label {
     margin: 0 5px;
 }
 
@@ -96,10 +102,10 @@ i.glyphicon:active {
     color: #FF0000;
 }
 
-#status-bar{
+#status-bar {
     font-size: .8em;
 }
 
-.contextual-tool-bar input[disabled="disabled"]{
+.contextual-tool-bar input[disabled="disabled"] {
     cursor: not-allowed;
 }

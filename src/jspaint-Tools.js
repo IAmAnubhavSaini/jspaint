@@ -669,30 +669,33 @@ $(function() {
                     event: e,
                     relativeTo: $(this)
                 };
+                X = Actions.Mouse.getX(mouseOptions);
+                Y = Actions.Mouse.getY(mouseOptions);
+
+                var drawLines = function() {
+                    width = PivotedLinePattern.VARIABLES.width;
+                    last = LastPoint.get();
+                    if (last.X != -1) {
+                        CANVASAPI.drawLineSegmentFromLastPoint({
+                            context: context,
+                            last: last,
+                            current: {
+                                X: X,
+                                Y: Y
+                            },
+                            width: width
+                        });
+                    }
+                };
+
                 if (e.buttons !== undefined) {
                     if (e.buttons === 1) {
-                        X = Actions.Mouse.getX(mouseOptions);
-                        Y = Actions.Mouse.getY(mouseOptions);
-                        width = PivotedLinePattern.VARIABLES.width;
-                        last = LastPoint.get();
-                        if (last.X != -1) {
-                            drawLineSegmentFromLastPoint({
-                                context: context,
-                                last: last,
-                                current: {
-                                    X: X,
-                                    Y: Y
-                                },
-                                width: width
-                            });
-                        }
-                        CANVASAPI.fillCirc(X, Y, width / 2);
-                        LastPoint.set(X, Y);
+                        drawLines();
                     } else {
-                        PivotedLinePattern.VARIABLES.LastPoint.X = -1;
-                        PivotedLinePattern.VARIABLES.LastPoint.Y = -1;
+                        LastPoint.set(X, Y);
                     }
                 }
+
             });
         },
         stop: function(options) {

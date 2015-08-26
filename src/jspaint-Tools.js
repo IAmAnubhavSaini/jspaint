@@ -617,7 +617,13 @@ $(function() {
             id: "PivotedLinePatternTool",
             selectionId: '#PivotedLinePatternTool',
             class: 'main-tool',
-            title: 'Click to draw amazing pattern. Click again to disable.'
+            title: 'Click to draw amazing pattern. Click again to disable.',
+            ACTIONS: {
+                pivots: 'pivots',
+                Ydrops: 'drops',
+                godRays: 'god-rays',
+                Xextends: 'extends'
+            }
         },
         VARIABLES: {
             width: 2,
@@ -646,7 +652,8 @@ $(function() {
                         PivotedLinePattern.VARIABLES.LastPoint.X = x;
                         PivotedLinePattern.VARIABLES.LastPoint.Y = y;
                     }
-                };
+                },
+                action = null;
 
             function drawLineSegmentFromLastPoint(options) {
                 var
@@ -661,7 +668,6 @@ $(function() {
                 context.lineWidth = width;
                 context.strokeStyle = selectedPrimaryColor;
                 context.stroke();
-                context.endPath();
             }
 
             $(canvasId).on(event, function(e) {
@@ -669,30 +675,46 @@ $(function() {
                     event: e,
                     relativeTo: $(this)
                 };
+                X = Actions.Mouse.getX(mouseOptions);
+                Y = Actions.Mouse.getY(mouseOptions);
+                action = $('[name=tool-options]:checked').val();
+
+                var drawLines = function() {
+                    width = PivotedLinePattern.VARIABLES.width;
+                    last = LastPoint.get();
+                    if (last.X != -1) {
+                        CANVASAPI.drawLineSegmentFromLastPoint({
+                            context: context,
+                            last: last,
+                            current: {
+                                X: X,
+                                Y: Y
+                            },
+                            width: width
+                        });
+                    }
+                    if (action === PivotedLinePattern.CONSTANTS.ACTIONS.Xextends) {
+                        LastPoint.set(0, Y);
+                    }
+                    if (action === PivotedLinePattern.CONSTANTS.ACTIONS.Ydrops) {
+                        LastPoint.set(X, 0);
+                    }
+                    if (action === PivotedLinePattern.CONSTANTS.ACTIONS.godRays) {
+                        LastPoint.set(0, 0);
+                    }
+                };
+
                 if (e.buttons !== undefined) {
                     if (e.buttons === 1) {
-                        X = Actions.Mouse.getX(mouseOptions);
-                        Y = Actions.Mouse.getY(mouseOptions);
-                        width = PivotedLinePattern.VARIABLES.width;
-                        last = LastPoint.get();
-                        if (last.X != -1) {
-                            drawLineSegmentFromLastPoint({
-                                context: context,
-                                last: last,
-                                current: {
-                                    X: X,
-                                    Y: Y
-                                },
-                                width: width
-                            });
-                        }
-                        CANVASAPI.fillCirc(X, Y, width / 2);
-                        LastPoint.set(X, Y);
+                        drawLines();
                     } else {
-                        PivotedLinePattern.VARIABLES.LastPoint.X = -1;
-                        PivotedLinePattern.VARIABLES.LastPoint.Y = -1;
+                        LastPoint.set(-1, -1);
+                        if (action === PivotedLinePattern.CONSTANTS.ACTIONS.pivots) {
+                            LastPoint.set(X, Y);
+                        }
                     }
                 }
+
             });
         },
         stop: function(options) {
@@ -704,13 +726,27 @@ $(function() {
         },
         ContextMenu: {
             activate: function(options) {
+                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+
+                var createToolOptions = function() {
+                    var createBasicOption = function(id, name, value) {
+                        var option = $('<label style="color: white;">' + value + ' <input id="' + id + '" name="' + name + '" type="radio" value="' + value + '" /></label>');
+                        return option;
+                    };
+
+                    container.append(createBasicOption("option_pivot", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.pivots));
+                    container.append(createBasicOption("option_extends", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.Xextends));
+                    container.append(createBasicOption("option_drops", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.Ydrops));
+                    container.append(createBasicOption("option_god_rays", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.godRays));
+
+                };
+
                 function initialSlider() {
                     return $('<input id="widthPivotedLinePattern" type="range" min="1" max="200" step="1" title="width for pivoted line pattern tool." />');
                 }
 
                 function addSliderForLineWidth(options) {
                     var
-                        div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
                         slider = initialSlider()
                         .attr('value', PivotedLinePattern.VARIABLES.width)
                         .on('mouseover', function() {
@@ -719,12 +755,14 @@ $(function() {
                         .on('input', function() {
                             PivotedLinePattern.VARIABLES.width = $(this).val();
                         })
-                        .appendTo(div);
+                        .appendTo(container);
 
-                    div.appendTo($(options.containerSelectionCriterion));
+                    container.appendTo($(options.containerSelectionCriterion));
                 }
                 addSliderForLineWidth(options);
+                createToolOptions();
             },
+
             deactivate: function(options) {
                 function removeSliderForLineWidth(options) {
                     $('#' + options.id).remove();

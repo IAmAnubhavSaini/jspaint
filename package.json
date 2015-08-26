@@ -1,13 +1,13 @@
 {
   "name": "jspaint",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Paint without delay, online, from any device, at any time. Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "grunt release-the-hounds"
   },
   "repository": {
     "type": "git",

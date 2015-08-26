@@ -438,8 +438,6 @@ $(function() {
     });
 
     $(function() {
-
-
         var Pencil = {
             CONSTANTS: {
                 id: "PencilTool",
@@ -569,7 +567,6 @@ $(function() {
     });
 
     $(function() {
-
         var PickColor = {
             CONSTANTS: {
                 id: 'pick-color',
@@ -577,6 +574,11 @@ $(function() {
                 class: 'string-menu-item',
                 containerId: 'PickColorTool',
                 title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
+            },
+            ContextMenu: {
+                activate: function(){},
+                deactivate: function(){},
+                getOptions: function(){}
             },
             start: function(options) {
                 var
@@ -611,40 +613,23 @@ $(function() {
                     canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
                 $(canvasId).off(event);
-            },
-            Events: {
-                register: function(options) {
-                    var
-                        toolId = options.toolId,
-                        tool = $(toolId);
-
-                    setupToolTips(tool, PickColor.CONSTANTS.title);
-                    options.tool = tool;
-                    tool.funcToggle('click',
-                        function() {
-                            activateTool(options);
-                        },
-                        function() {
-                            deactivateTool(options);
-                        });
-                }
             }
         };
 
-        PickColor.Events.register({
+        COMMON.registerEventForTool({
             toolId: PickColor.CONSTANTS.selectionId,
             containerId: PickColor.CONSTANTS.containerId,
             event: CONSTANTS.Events.mouseclick,
             canvasId: CONSTANTS.canvasId,
             start: PickColor.start,
             stop: PickColor.stop,
-            toolName: 'Color picker'
+            toolName: 'Color picker',
+            contextMenu: PickColor.ContextMenu,
+            constantTitle: PickColor.CONSTANTS.title
         });
     });
 
     $(function() {
-
-
         var PivotedLinePattern = {
             CONSTANTS: {
                 id: "PivotedLinePatternTool",
@@ -814,44 +799,22 @@ $(function() {
                         containerSelectionCriterion: '.contextual-tool-bar'
                     };
                 }
-            },
-            Events: {
-                register: function(options) {
-                    var
-                        toolId = options.toolId,
-                        tool = $(toolId),
-                        contextMenu = PivotedLinePattern.ContextMenu;
-
-                    setupToolTips(tool, PivotedLinePattern.CONSTANTS.title);
-                    options.tool = tool;
-
-                    tool.funcToggle('click',
-                        function() {
-                            activateTool(options);
-                            contextMenu.activate(contextMenu.getOptions());
-                        },
-                        function() {
-                            contextMenu.deactivate(contextMenu.getOptions());
-                            deactivateTool(options);
-                        }
-                    );
-                }
             }
         };
 
-        PivotedLinePattern.Events.register({
+        COMMON.registerEventForTool({
             toolId: PivotedLinePattern.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mousemove,
             canvasId: CONSTANTS.canvasId,
             start: PivotedLinePattern.start,
             stop: PivotedLinePattern.stop,
-            toolName: 'Pivoted Line Pattern'
+            toolName: 'Pivoted Line Pattern',
+            contextMenu: PivotedLinePattern.ContextMenu,
+            constantTitle: PivotedLinePattern.CONSTANTS.title
         });
     });
 
     $(function() {
-
-
         var PointWalker = {
             CONSTANTS: {
                 id: 'PointWalkerTool',
@@ -932,37 +895,18 @@ $(function() {
                         stepLabel: 'Steps: ',
                     };
                 }
-            },
-            Events: {
-                register: function(options) {
-                    var
-                        toolId = options.toolId,
-                        tool = $(toolId),
-                        contextMenu = PointWalker.ContextMenu;
-
-                    setupToolTips(tool, PointWalker.CONSTANTS.title);
-                    options.tool = tool;
-
-                    tool.funcToggle('click',
-                        function() {
-                            activateTool(options);
-                            contextMenu.activate(contextMenu.getOptions());
-                        },
-                        function() {
-                            contextMenu.deactivate(contextMenu.getOptions());
-                            deactivateTool(options);
-                        });
-                }
             }
         };
 
-        PointWalker.Events.register({
+        COMMON.registerEventForTool({
             toolId: PointWalker.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mouseclick,
             canvasId: CONSTANTS.canvasId,
             start: PointWalker.start,
             stop: PointWalker.stop,
-            toolName: 'Point Walker'
+            toolName: 'Point Walker',
+            contextMenu: PointWalker.ContextMenu,
+            constantTitle: PointWalker.CONSTANTS.title
         });
     });
 
@@ -2065,8 +2009,6 @@ $(function() {
     });
 
     $(function() {
-
-
         var Square = {
             CONSTANTS: {
                 id: 'SquareTool',
@@ -2218,37 +2160,18 @@ $(function() {
                         containerSelectionCriterion: '.contextual-tool-bar'
                     };
                 }
-            },
-            Events: {
-                register: function(options) {
-                    var
-                        toolId = options.toolId,
-                        tool = $(toolId),
-                        contextMenu = Square.ContextMenu;
-
-                    setupToolTips(tool, Square.CONSTANTS.title);
-                    options.tool = tool;
-
-                    tool.funcToggle('click',
-                        function() {
-                            activateTool(options);
-                            contextMenu.activate(contextMenu.getOptions());
-                        },
-                        function() {
-                            contextMenu.deactivate(contextMenu.getOptions());
-                            deactivateTool(options);
-                        });
-                }
             }
         };
 
-        Square.Events.register({
+        COMMON.registerEventForTool({
             toolId: Square.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mouseclick,
             canvasId: CONSTANTS.canvasId,
             start: Square.start,
             stop: Square.stop,
-            toolName: 'Square'
+            toolName: 'Square',
+            contextMenu: Square.ContextMenu,
+            constantTitle: Square.CONSTANTS.title
         });
     });
 
@@ -2382,36 +2305,18 @@ $(function() {
                         containerSelectionCriterion: '.contextual-tool-bar'
                     };
                 }
-            },
-            Events: {
-                register: function(options) {
-                    var
-                        toolId = options.toolId,
-                        tool = $(toolId),
-                        contextMenu = Circle.ContextMenu;
-
-                    setupToolTips(tool, Circle.CONSTANTS.title);
-                    options.tool = tool;
-
-                    tool.funcToggle('click',
-                        function() {
-                            activateTool(options);
-                            contextMenu.activate(contextMenu.getOptions());
-                        },
-                        function() {
-                            contextMenu.deactivate(contextMenu.getOptions());
-                            deactivateTool(options);
-                        });
-                }
             }
         };
-        Circle.Events.register({
+        COMMON.registerEventForTool({
             toolId: Circle.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mouseclick,
             canvasId: CONSTANTS.canvasId,
             start: Circle.start,
             stop: Circle.stop,
-            toolName: 'Circle'
+            toolName: 'Circle',
+            contextMenu: Circle.ContextMenu,
+            constantTitle: Circle.CONSTANTS.title
+
         });
     });
 
@@ -2541,37 +2446,18 @@ $(function() {
                         containerSelectionCriterion: '.contextual-tool-bar'
                     };
                 }
-            },
-            Events: {
-                register: function(options) {
-                    var
-                        toolId = options.toolId,
-                        tool = $(toolId),
-                        contextMenu = Disc.ContextMenu;
-
-                    setupToolTips(tool, Disc.CONSTANTS.title);
-                    options.tool = tool;
-
-                    tool.funcToggle('click',
-                        function() {
-                            activateTool(options);
-                            contextMenu.activate(contextMenu.getOptions());
-                        },
-                        function() {
-                            contextMenu.deactivate(contextMenu.getOptions());
-                            deactivateTool(options);
-                        });
-                }
             }
         };
 
-        Disc.Events.register({
+        COMMON.registerEventForTool({
             toolId: Disc.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mouseclick,
             canvasId: CONSTANTS.canvasId,
             start: Disc.start,
             stop: Disc.stop,
-            toolName: 'Disc'
+            toolName: 'Disc',
+            contextMenu: Disc.ContextMenu,
+            constantTitle: Disc.CONSTANTS.title
         });
     });
 });

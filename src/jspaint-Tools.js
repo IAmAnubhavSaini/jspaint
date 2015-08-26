@@ -518,7 +518,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider() {
-                        return $('<input id="widthPencil" type="range" min="1" max="200" step="1" title="width for pencil tool." />');
+                        return COMMON.generateSlider({id: "widthPencil", min: 1, max: 200, step: 1, title: "Width for pencil tool."});
                     }
 
                     function addSliderForLineWidth(options) {
@@ -1234,7 +1234,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
+                        return COMMON.generateSlider({id: id, min: 1, max: 200, step: 1, title: title});
                     }
 
                     function addSliderForRadius(options) {
@@ -1337,7 +1337,7 @@ $(function() {
                     var VARS = SpeedCircle.VARIABLES;
 
                     function initialSlider() {
-                        return $('<input id="radiusSpeedCircle" type="range" min="1" max="200" step="1" title="radius for speed circle tool" />');
+                        return COMMON.generateSlider({id: "radiusSpeedCircle", min: 1, max: 200, step: 1, title: "radius for speed circle tool"});
                     }
 
                     function addSliderForRadius(options) {
@@ -1424,7 +1424,7 @@ $(function() {
                     var VARS = SpeedDisc.VARIABLES;
 
                     function initialSlider() {
-                        return $('<input id="radiusSpeedDisc" type="range" min="1" max="200" step="1" title="radius for speed disc tool" />');
+                        return COMMON.generateSlider({id: "radiusSpeedDisc", min: 1, max: 200, step: 1, title: "radius for speed disc tool"});
                     }
 
                     function addSliderForRadius(options) {
@@ -1621,7 +1621,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider() {
-                        return $('<input id="widthSpeedPencil" type="range" min="1" max="200" step="1" title="width for speed pencil tool." />');
+                        return COMMON.generateSlider({id: "widthSpeedPencil", min: 1, max: 200, step: 1, title: "width for speed pencil tool."});
                     }
 
                     function addSliderForLineWidth(options) {
@@ -1711,7 +1711,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
+                        return COMMON.generateSlider({id: id, min:1, max: 200, step: 1, title: title});
                     }
 
                     function addSliderForLength(options) {
@@ -1824,7 +1824,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
+                        return COMMON.generateSlider({id: id, min:1, max: 200, step: 1, title: title});
                     }
 
                     function addSliderForRadius(options) {
@@ -1953,7 +1953,7 @@ $(function() {
                                     SpeedSquare.VARIABLES.side = $(this).val();
                                 });
                         }
-                        return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                        return COMMON.genericLabel()
                             .append(options.sideLabel)
                             .append(getSliderForSide(options));
                     }
@@ -1969,7 +1969,7 @@ $(function() {
                                     SpeedSquare.VARIABLES.xyPlaneRotationAngle = $(this).val();
                                 });
                         }
-                        return $('<label style="color: #FFFFFF; font-size: 10px;"></label>')
+                        return COMMON.genericLabel()
                             .append(options.xyPlaneRotationAngle)
                             .append(getSliderForXYPlaneRotationAngle(options));
                     }
@@ -2274,7 +2274,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return $('<input id="' + id + '" type="range" min="1" max="200" step="1" title="' + title + '" />');
+                        return COMMON.generateSlider({id: id, min:1, max: 200, step: 1, title: title});
                     }
 
                     function addSliderForRadius(options) {
@@ -2321,8 +2321,6 @@ $(function() {
     });
 
     $(function() {
-
-
         var Disc = {
             CONSTANTS: {
                 id: 'DiscTool',
@@ -2413,7 +2411,7 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider() {
-                        return $('<input id="radiusDisc" type="range" min="1" max="200" step="1" title="radius for disc tool." />');
+                        return COMMON.generateSlider({id: "radiusDisc", min:1, max: 200, step: 1, title: "radius for disc tool."});
                     }
 
                     function addSliderForRadius(options) {

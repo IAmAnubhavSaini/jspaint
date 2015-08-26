@@ -48,6 +48,20 @@ $(function() {
     };
 
     $(function() {
+        $('#image-button').on('change', function(e) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var img = new Image();
+                img.onload = function() {
+                    context.drawImage(img, 0, 0);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        });
+    });
+
+    $(function() {
         var MandelbrotFractal = {
             CONSTANTS: {
                 id: "MandelbrotFractalTool",
@@ -1821,7 +1835,7 @@ $(function() {
             }
         };
 
-        SpeedRectangle.Events.register({
+        COMMON.registerEventForTool({
             toolId: SpeedRectangle.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mousemove,
             canvasId: CONSTANTS.canvasId,

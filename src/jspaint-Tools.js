@@ -1765,7 +1765,7 @@ $(function() {
             }
         };
 
-        SpeedRectangle.Events.register({
+        COMMON.registerEventForTool({
             toolId: SpeedRectangle.CONSTANTS.selectionId,
             event: CONSTANTS.Events.mousemove,
             canvasId: CONSTANTS.canvasId,
@@ -1927,7 +1927,7 @@ $(function() {
                     function initialSlider(id, title, max) {
                         return COMMON.generateSlider({
                             id: id,
-                            min: min,
+                            min: 10,
                             max: max,
                             step: 1,
                             title: title

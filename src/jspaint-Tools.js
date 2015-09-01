@@ -518,7 +518,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider() {
-                        return COMMON.generateSlider({id: "widthPencil", min: 1, max: 200, step: 1, title: "Width for pencil tool."});
+                        return COMMON.generateSlider({
+                            id: "widthPencil",
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: "Width for pencil tool."
+                        });
                     }
 
                     function addSliderForLineWidth(options) {
@@ -576,9 +582,9 @@ $(function() {
                 title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
             },
             ContextMenu: {
-                activate: function(){},
-                deactivate: function(){},
-                getOptions: function(){}
+                activate: function() {},
+                deactivate: function() {},
+                getOptions: function() {}
             },
             start: function(options) {
                 var
@@ -1234,7 +1240,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return COMMON.generateSlider({id: id, min: 1, max: 200, step: 1, title: title});
+                        return COMMON.generateSlider({
+                            id: id,
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: title
+                        });
                     }
 
                     function addSliderForRadius(options) {
@@ -1337,7 +1349,13 @@ $(function() {
                     var VARS = SpeedCircle.VARIABLES;
 
                     function initialSlider() {
-                        return COMMON.generateSlider({id: "radiusSpeedCircle", min: 1, max: 200, step: 1, title: "radius for speed circle tool"});
+                        return COMMON.generateSlider({
+                            id: "radiusSpeedCircle",
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: "radius for speed circle tool"
+                        });
                     }
 
                     function addSliderForRadius(options) {
@@ -1424,7 +1442,13 @@ $(function() {
                     var VARS = SpeedDisc.VARIABLES;
 
                     function initialSlider() {
-                        return COMMON.generateSlider({id: "radiusSpeedDisc", min: 1, max: 200, step: 1, title: "radius for speed disc tool"});
+                        return COMMON.generateSlider({
+                            id: "radiusSpeedDisc",
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: "radius for speed disc tool"
+                        });
                     }
 
                     function addSliderForRadius(options) {
@@ -1621,7 +1645,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider() {
-                        return COMMON.generateSlider({id: "widthSpeedPencil", min: 1, max: 200, step: 1, title: "width for speed pencil tool."});
+                        return COMMON.generateSlider({
+                            id: "widthSpeedPencil",
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: "width for speed pencil tool."
+                        });
                     }
 
                     function addSliderForLineWidth(options) {
@@ -1711,7 +1741,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return COMMON.generateSlider({id: id, min:1, max: 200, step: 1, title: title});
+                        return COMMON.generateSlider({
+                            id: id,
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: title
+                        });
                     }
 
                     function addSliderForLength(options) {
@@ -1824,7 +1860,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return COMMON.generateSlider({id: id, min:1, max: 200, step: 1, title: title});
+                        return COMMON.generateSlider({
+                            id: id,
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: title
+                        });
                     }
 
                     function addSliderForRadius(options) {
@@ -2274,7 +2316,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider(id, title) {
-                        return COMMON.generateSlider({id: id, min:1, max: 200, step: 1, title: title});
+                        return COMMON.generateSlider({
+                            id: id,
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: title
+                        });
                     }
 
                     function addSliderForRadius(options) {
@@ -2411,7 +2459,13 @@ $(function() {
             ContextMenu: {
                 activate: function(options) {
                     function initialSlider() {
-                        return COMMON.generateSlider({id: "radiusDisc", min:1, max: 200, step: 1, title: "radius for disc tool."});
+                        return COMMON.generateSlider({
+                            id: "radiusDisc",
+                            min: 1,
+                            max: 200,
+                            step: 1,
+                            title: "radius for disc tool."
+                        });
                     }
 
                     function addSliderForRadius(options) {
@@ -2458,4 +2512,260 @@ $(function() {
             constantTitle: Disc.CONSTANTS.title
         });
     });
+
+
+    var FamilyPointWalker = {
+        CONSTANTS: {
+            id: 'FamilyPointWalkerTool',
+            selectionId: '#FamilyPointWalkerTool',
+            class: 'main-tool',
+            title: 'Click to draw family random point walker. Click again to disable.'
+        },
+        VARIABLES: {
+            steps: 100,
+            durationBetweenDanceStepsInMiliSeconds: 100
+        },
+        start: function(options) {
+            var
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                i = 0,
+                oldXY = [],
+                origin = {},
+                steps,
+                fillColor;
+
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(canvasId)
+                };
+                X = Actions.Mouse.getX(mouseOptions);
+                Y = Actions.Mouse.getY(mouseOptions);
+                origin = {
+                    X: X,
+                    Y: Y,
+                    steps: FamilyPointWalker.VARIABLES.steps,
+                    fillColor: selectedPrimaryColor
+                };
+
+                function dance(origin) {
+                    X = origin.X;
+                    Y = origin.Y;
+                    steps = origin.steps;
+                    fillColor = origin.fillColor;
+
+                    for (i = 0; i < steps; i++) {
+                        oldXY[i] = {
+                            X: X,
+                            Y: Y
+                        };
+
+                        context.fillStyle = fillColor;
+                        CANVASAPI.fillCirc(X, Y, 1);
+                        X += Math.random() < 0.5 ? -1 : 1;
+                        Y -= Math.random() < 0.5 ? -1 : 1;
+                    }
+                    setTimeout(function() {
+                        dance(origin);
+                    }, 1000);
+                }
+
+                setTimeout(function() {
+                    dance(origin);
+                }, 1000);
+            });
+        },
+        stop: function(options) {
+            $('#' + options.canvasId).off(options.event);
+        },
+        ContextMenu: {
+            activate: function(options) {
+                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+
+                function getInputElement(id, min, max, title) {
+                    return COMMON.generateSlider({
+                        id: id,
+                        min: min,
+                        max: max,
+                        step: 1,
+                        title: title
+                    });
+                }
+
+                function addStepController(options) {
+                    function createStepSlider(options) {
+                        var
+                            slider = getInputElement('familyPointWalkerSptes', FamilyPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for family random point walk generation.')
+                            .attr('value', FamilyPointWalker.VARIABLES.steps)
+                            .on('mouseover', function() {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('change', function() {
+                                FamilyPointWalker.VARIABLES.steps = $(this).val();
+                            });
+                        return slider;
+                    }
+                    return COMMON.genericLabel().append(options.stepLabel).append(createStepSlider(options));
+                }
+                container.append(addStepController(options));
+                container.appendTo($(options.containerSelectionCriterion));
+            },
+            deactivate: function(options) {
+                $('#' + options.id).remove();
+            },
+            getOptions: function() {
+                return {
+                    tool: this,
+                    id: 'FamilyPointWalkerContextMenu',
+                    containerSelectionCriterion: '.contextual-tool-bar',
+                    maxStepsAllowed: 100000,
+                    stepLabel: 'Steps: ',
+                };
+            }
+        }
+    };
+
+    COMMON.registerEventForTool({
+        toolId: FamilyPointWalker.CONSTANTS.selectionId,
+        event: CONSTANTS.Events.mouseclick,
+        canvasId: CONSTANTS.canvasId,
+        start: FamilyPointWalker.start,
+        stop: FamilyPointWalker.stop,
+        toolName: 'Family Point Walker',
+        contextMenu: FamilyPointWalker.ContextMenu,
+        constantTitle: FamilyPointWalker.CONSTANTS.title
+    });
+
+    var OrganismPointWalker = {
+        CONSTANTS: {
+            id: 'OrganismPointWalkerTool',
+            selectionId: '#OrganismPointWalkerTool',
+            class: 'main-tool',
+            title: 'Click to draw organism random point walker. Click again to disable.'
+        },
+        VARIABLES: {
+            steps: 100,
+            durationBetweenDanceStepsInMiliSeconds: 100
+        },
+        start: function(options) {
+            var
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                i = 0,
+                oldXY = [],
+                origin = {},
+                steps,
+                fillColor;
+
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(canvasId)
+                };
+                X = Actions.Mouse.getX(mouseOptions);
+                Y = Actions.Mouse.getY(mouseOptions);
+                origin = {
+                    X: X,
+                    Y: Y,
+                    steps: OrganismPointWalker.VARIABLES.steps,
+                    fillColor: selectedPrimaryColor
+                };
+
+                function dance(origin) {
+                    X = origin.X;
+                    Y = origin.Y;
+                    steps = origin.steps;
+                    fillColor = origin.fillColor;
+
+                    for (i = 0; i < steps; i++) {
+                        oldXY[i] = {
+                            X: X,
+                            Y: Y
+                        };
+
+                        context.fillStyle = fillColor;
+                        CANVASAPI.fillCirc(X, Y, 1);
+                        X += Math.random() < 0.5 ? -1 : 1;
+                        Y -= Math.random() < 0.5 ? -1 : 1;
+                    }
+                    origin.X = X;
+                    origin.Y = Y;
+                    setTimeout(function() {
+                        dance(origin);
+                    }, 1000);
+                }
+
+                setTimeout(function() {
+                    dance(origin);
+                }, 1000);
+            });
+        },
+        stop: function(options) {
+            $('#' + options.canvasId).off(options.event);
+        },
+        ContextMenu: {
+            activate: function(options) {
+                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+
+                function getInputElement(id, min, max, title) {
+                    return COMMON.generateSlider({
+                        id: id,
+                        min: min,
+                        max: max,
+                        step: 1,
+                        title: title
+                    });
+                }
+
+                function addStepController(options) {
+                    function createStepSlider(options) {
+                        var
+                            slider = getInputElement('organismPointWalkerSptes', OrganismPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for organism random point walk generation.')
+                            .attr('value', OrganismPointWalker.VARIABLES.steps)
+                            .on('mouseover', function() {
+                                $(this).attr('title', $(this).val());
+                            })
+                            .on('change', function() {
+                                OrganismPointWalker.VARIABLES.steps = $(this).val();
+                            });
+                        return slider;
+                    }
+                    return COMMON.genericLabel().append(options.stepLabel).append(createStepSlider(options));
+                }
+                container.append(addStepController(options));
+                container.appendTo($(options.containerSelectionCriterion));
+            },
+            deactivate: function(options) {
+                $('#' + options.id).remove();
+            },
+            getOptions: function() {
+                return {
+                    tool: this,
+                    id: 'OrganismPointWalkerContextMenu',
+                    containerSelectionCriterion: '.contextual-tool-bar',
+                    maxStepsAllowed: 10000,
+                    stepLabel: 'Steps: ',
+                };
+            }
+        }
+    };
+
+    COMMON.registerEventForTool({
+        toolId: OrganismPointWalker.CONSTANTS.selectionId,
+        event: CONSTANTS.Events.mouseclick,
+        canvasId: CONSTANTS.canvasId,
+        start: OrganismPointWalker.start,
+        stop: OrganismPointWalker.stop,
+        toolName: 'Organism Point Walker',
+        contextMenu: OrganismPointWalker.ContextMenu,
+        constantTitle: OrganismPointWalker.CONSTANTS.title
+    });
+
 });

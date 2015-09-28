@@ -602,8 +602,7 @@ $(function() {
         start: function(options) {
             var
                 event = options.event,
-                canvasId = '#'
-            options.canvasId,
+                canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
                 Y = null,
@@ -2839,7 +2838,7 @@ $(function() {
 
         var x = d3.scale.ordinal()
             .domain(d3.range(m))
-            .rangeRoundBands([0, width], .0032);
+            .rangeRoundBands([0, width], 0.05);
 
         var y = d3.scale.linear()
             .domain([0, yStackMax])

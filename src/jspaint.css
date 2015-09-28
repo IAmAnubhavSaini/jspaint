@@ -16,6 +16,17 @@ body {
     padding-bottom: 20px;
 }
 
+header.page-header{
+    margin: auto;
+    border-bottom: thick solid #2a1d2d;
+    text-align: center;
+}
+
+header.page-header a{
+    font-size: 2em;
+    padding: 10px;
+}
+
 .page-header {
     margin: 0 0 20px;
 }
@@ -40,10 +51,14 @@ body {
     display: inline-block;
     margin: 0 5px;
     cursor: pointer;
+    padding: 2px;
+    border: thin solid rgba(0, 0, 0, 0.3);
 }
 
 .main-tool-menu {
     display: inline-block;
+    padding: 2px;
+    border: thin solid rgba(0, 0, 0, 0.3);
 }
 
 .main-tool-menu button {
@@ -64,8 +79,8 @@ body {
 .common-menu-bar {
     min-width: 600px;
     width: 100%;
-    background-color: #800080;
     overflow: auto;
+    background-color: #666;
 }
 
 .common-menu-bar a {
@@ -108,4 +123,8 @@ i.glyphicon:active {
 
 .contextual-tool-bar input[disabled="disabled"] {
     cursor: not-allowed;
+}
+
+header.Menu{
+    margin: 20px;
 }

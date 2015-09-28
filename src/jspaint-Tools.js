@@ -2904,7 +2904,7 @@ $(function() {
 
         function change() {
             clearTimeout(timeout);
-            if (this.value === "grouped") transitionGrouped();
+            if (value === "grouped") transitionGrouped();
             else transitionStacked();
         }
 

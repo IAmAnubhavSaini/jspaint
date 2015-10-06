@@ -2158,8 +2158,6 @@ $(function() {
             green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
             blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
 
-        console.log(sampleX + ", " + sampleY);
-        console.log(sampleRed + ", " + sampleGreen + ", " + sampleBlue);
         for (var i = 0; i < image.data.length; i += 4) {
             if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
                 image.data[i] += red;

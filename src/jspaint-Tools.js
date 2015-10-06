@@ -1213,7 +1213,7 @@ $(function() {
         constantTitle: Ring.CONSTANTS.title
     });
 
-var Disc = {
+    var Disc = {
         CONSTANTS: {
             id: 'DiscTool',
             selectionId: '#DiscTool',
@@ -1668,7 +1668,7 @@ var Disc = {
 
     });
 
- var PointWalker = {
+    var PointWalker = {
         CONSTANTS: {
             id: 'PointWalkerTool',
             selectionId: '#PointWalkerTool',
@@ -2014,5 +2014,55 @@ var Disc = {
         toolName: 'Organism Point Walker',
         contextMenu: OrganismPointWalker.ContextMenu,
         constantTitle: OrganismPointWalker.CONSTANTS.title
+    });
+
+    $('#SaturateRedColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 255;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#SaturateGreenColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 1; i < image.data.length; i += 4) {
+            image.data[i] = 255;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#SaturateBlueColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 2; i < image.data.length; i += 4) {
+            image.data[i] = 255;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#InvertColorsTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 255 - image.data[i];
+            image.data[i + 1] = 255 - image.data[i + 1];
+            image.data[i + 2] = 255 - image.data[i + 2];
+        }
+        context.putImageData(image, 0, 0);
     });
 });

@@ -2167,4 +2167,10 @@ $(function() {
         }
         context.putImageData(image, 0, 0);
     });
+
+    $('#FuzzyColorTool').on('click', function() {
+        for (var i = 0; i < 255; i++) {
+            $('#RandomColorTool').click();
+        }
+    });
 });

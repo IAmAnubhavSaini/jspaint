@@ -2065,4 +2065,40 @@ $(function() {
         }
         context.putImageData(image, 0, 0);
     });
+
+    $('#DesaturateRedColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            image.data[i] = 0;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#DesaturateGreenColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 1; i < image.data.length; i += 4) {
+            image.data[i] = 0;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#DesaturateBlueColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 2; i < image.data.length; i += 4) {
+            image.data[i] = 0;
+        }
+        context.putImageData(image, 0, 0);
+    });
 });

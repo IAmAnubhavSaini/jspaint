@@ -2173,4 +2173,26 @@ $(function() {
             $('#RandomColorTool').click();
         }
     });
+
+    $('#BlackAndWhiteColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height),
+            averageValue = 0,
+            newValue = 0;
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
+            if (averageValue < 112) {
+                newValue = 0;
+            } else {
+                newValue = 255;
+            }
+            image.data[i] = newValue;
+            image.data[i + 1] = newValue;
+            image.data[i + 2] = newValue;
+        }
+        context.putImageData(image, 0, 0);
+    });
 });

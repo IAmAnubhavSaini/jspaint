@@ -2130,7 +2130,7 @@ $(function() {
         context.putImageData(image, 0, 0);
     });
 
-    $('#AddNoise').on('click', function() {
+    $('#AddNoiseTool').on('click', function() {
         var canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
@@ -2140,6 +2140,76 @@ $(function() {
             image.data[i] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
             image.data[i + 1] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
             image.data[i + 2] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#RandomColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height),
+            sampleX = Math.floor(Math.random() * width),
+            sampleY = Math.floor(Math.random() * height),
+            sampleRed = image.data[sampleX * width + sampleY],
+            sampleGreen = image.data[sampleX * width + sampleY + 1],
+            sampleBlue = image.data[sampleX * width + sampleY + 2],
+            red = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
+            green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
+            blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
+                image.data[i] += red;
+                image.data[i + 1] += green;
+                image.data[i + 2] += blue;
+            }
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#FuzzyColorTool').on('click', function() {
+        for (var i = 0; i < 255; i++) {
+            $('#RandomColorTool').click();
+        }
+    });
+
+    $('#BlackAndWhiteColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height),
+            averageValue = 0,
+            newValue = 0;
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
+            if (averageValue < 112) {
+                newValue = 0;
+            } else {
+                newValue = 255;
+            }
+            image.data[i] = newValue;
+            image.data[i + 1] = newValue;
+            image.data[i + 2] = newValue;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#GrayColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height),
+            averageValue = 0,
+            newValue = 0;
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
+            newValue = Math.floor(averageValue / 16) * 16;
+            image.data[i] = newValue;
+            image.data[i + 1] = newValue;
+            image.data[i + 2] = newValue;
         }
         context.putImageData(image, 0, 0);
     });

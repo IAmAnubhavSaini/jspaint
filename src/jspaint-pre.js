@@ -156,6 +156,10 @@ $(function() {
         }
     };
 
+    saveCanvasState = function(options) {
+        CanvasState.push(context.getImageData(options.startX, options.startY, options.width, options.height));
+    };
+
     Color = {
         generateBasicColorPalette: function(options) {
             var

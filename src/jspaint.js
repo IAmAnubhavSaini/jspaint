@@ -102,7 +102,12 @@
                         }
                     });
                 $(options.canvasId).on('mousedown', function() {
-                    CanvasState.push(context.getImageData(0, 0, $(this).width(), $(this).height()));
+                    saveCanvasState({
+                        startX: 0,
+                        startY: 0,
+                        width: $(this).width(),
+                        height: $(this).height()
+                    });
                 });
             },
 

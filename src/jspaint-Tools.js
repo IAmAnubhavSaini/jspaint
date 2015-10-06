@@ -2101,4 +2101,32 @@ $(function() {
         }
         context.putImageData(image, 0, 0);
     });
+
+    $('#AddGrayTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            image.data[i] += 112;
+            image.data[i+1] += 112;
+            image.data[i+2] += 112;
+        }
+        context.putImageData(image, 0, 0);
+    });
+
+    $('#RemoveGrayTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height);
+
+        for (var i = 0; i < image.data.length; i += 4) {
+            image.data[i] -= 112;
+            image.data[i+1] -= 112;
+            image.data[i+2] -= 112;
+        }
+        context.putImageData(image, 0, 0);
+    });
 });

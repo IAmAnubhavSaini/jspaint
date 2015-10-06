@@ -2022,6 +2022,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] = 255;
         }
@@ -2034,6 +2040,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 1; i < image.data.length; i += 4) {
             image.data[i] = 255;
         }
@@ -2046,6 +2058,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 2; i < image.data.length; i += 4) {
             image.data[i] = 255;
         }
@@ -2058,6 +2076,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] = 255 - image.data[i];
             image.data[i + 1] = 255 - image.data[i + 1];
@@ -2072,6 +2096,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] = 0;
         }
@@ -2084,6 +2114,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 1; i < image.data.length; i += 4) {
             image.data[i] = 0;
         }
@@ -2096,6 +2132,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 2; i < image.data.length; i += 4) {
             image.data[i] = 0;
         }
@@ -2108,6 +2150,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] += 112;
             image.data[i + 1] += 112;
@@ -2122,6 +2170,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] -= 112;
             image.data[i + 1] -= 112;
@@ -2136,6 +2190,12 @@ $(function() {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
             image.data[i + 1] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
@@ -2158,6 +2218,12 @@ $(function() {
             green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
             blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
                 image.data[i] += red;
@@ -2169,6 +2235,16 @@ $(function() {
     });
 
     $('#FuzzyColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width();
+
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < 255; i++) {
             $('#RandomColorTool').click();
         }
@@ -2182,6 +2258,12 @@ $(function() {
             averageValue = 0,
             newValue = 0;
 
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
         for (var i = 0; i < image.data.length; i += 4) {
             averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             if (averageValue < 112) {
@@ -2203,6 +2285,13 @@ $(function() {
             image = context.getImageData(0, 0, width, height),
             averageValue = 0,
             newValue = 0;
+
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
 
         for (var i = 0; i < image.data.length; i += 4) {
             averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;

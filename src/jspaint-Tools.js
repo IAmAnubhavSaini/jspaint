@@ -2016,6 +2016,92 @@ $(function() {
         constantTitle: OrganismPointWalker.CONSTANTS.title
     });
 
+    var UniCellularParasiteTool = {
+        CONSTANTS: {
+            id: 'UniCellularParasiteTool',
+            selectionId: '#UniCellularParasiteTool',
+            class: 'main-tool',
+            title: 'Click to create a parasite. Click again to disable.'
+        },
+        VARIABLES: {
+            steps: 1,
+            durationBetweenParasiticActsInMiliSeconds: 100,
+            dieOutSteps: 10000
+        },
+        start: function(options) {
+            var
+                event = options.event,
+                canvasId = '#' + options.canvasId,
+                mouseOptions = null,
+                X = null,
+                Y = null,
+                i = 0,
+                origin = {},
+                steps,
+                fillColor;
+
+            $(canvasId).on(event, function(e) {
+                mouseOptions = {
+                    event: e,
+                    relativeTo: $(canvasId)
+                };
+                X = Actions.Mouse.getX(mouseOptions);
+                Y = Actions.Mouse.getY(mouseOptions);
+                origin = {
+                    X: X,
+                    Y: Y,
+                    steps: UniCellularParasiteTool.VARIABLES.steps,
+                    fillColor: selectedPrimaryColor,
+                    i: 0
+                };
+
+                function act(origin) {
+                    X = Math.floor(origin.X);
+                    Y = Math.floor(origin.Y);
+                    steps = origin.steps;
+                    fillColor = context.fillStyle;
+
+                    context.fillStyle = origin.fillColor;
+                    CANVASAPI.fillCirc(X, Y, 1);
+                    context.fillStyle = fillColor;
+                    X += Math.random() < 0.5 ? -1 : 1;
+                    Y += Math.random() < 0.5 ? -1 : 1;
+
+                    origin.X = X;
+                    origin.Y = Y;
+                    setTimeout(function() {
+                        act(origin);
+                    }, UniCellularParasiteTool.VARIABLES.durationBetweenParasiticActsInMiliSeconds);
+                }
+                act(origin);
+            });
+        },
+        stop: function(options) {
+            $('#' + options.canvasId).off(options.event);
+        },
+        ContextMenu: {
+            activate: function(options) {},
+            deactivate: function(options) {},
+            getOptions: function() {
+                return {
+                    tool: this,
+                    id: 'UniCellularParasiteToolContextMenu'
+                };
+            }
+        }
+    };
+
+    COMMON.registerEventForTool({
+        toolId: UniCellularParasiteTool.CONSTANTS.selectionId,
+        event: CONSTANTS.Events.mouseclick,
+        canvasId: CONSTANTS.canvasId,
+        start: UniCellularParasiteTool.start,
+        stop: UniCellularParasiteTool.stop,
+        toolName: 'UniCellular Parasite Tool',
+        contextMenu: UniCellularParasiteTool.ContextMenu,
+        constantTitle: UniCellularParasiteTool.CONSTANTS.title
+    });
+
     $('#SaturateRedColorTool').on('click', function() {
         var canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
@@ -2302,4 +2388,6 @@ $(function() {
         }
         context.putImageData(image, 0, 0);
     });
+
+
 });

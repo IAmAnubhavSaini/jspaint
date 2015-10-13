@@ -2403,12 +2403,12 @@ $(function() {
             height: height
         });
 
-        for(var i = 0; i < Math.floor(width/10); i++){
-            for(var j = 0; j < Math.floor(height/10); j++){
+        for (var i = 0; i < Math.floor(width / 10); i++) {
+            for (var j = 0; j < Math.floor(height / 10); j++) {
                 radius = Math.floor(Math.random() * 10);
                 x = Math.floor(Math.random() * width);
                 y = Math.floor(Math.random() * height);
-                context.fillStyle = "#"+CONSTANTS.basicColors[Math.floor(Math.random()*16)].hex;
+                context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
                 CANVASAPI.fillCirc(x, y, radius);
             }
         }
@@ -2416,4 +2416,39 @@ $(function() {
         context.fillStyle = fillStyle;
     });
 
+    $('#RandomCirclesColorTool').on('click', function() {
+        var canvasId = '#' + CONSTANTS.canvasId,
+            height = $(canvasId).height(),
+            width = $(canvasId).width(),
+            x, y, strokeStyle = context.strokeStyle,
+            innerRadius = 1,
+            outerRadius = 2;
+
+        saveCanvasState({
+            startX: 0,
+            startY: 0,
+            width: width,
+            height: height
+        });
+
+
+        for (var i = 0; i < Math.floor(width / 10); i++) {
+            for (var j = 0; j < Math.floor(height / 10); j++) {
+                x = Math.floor(Math.random() * width);
+                y = Math.floor(Math.random() * height);
+                innerRadius = Math.floor(Math.random() * 10);
+                strokeStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
+                CANVASAPI.drawCircle({
+                    X: x,
+                    Y: y,
+                    innerRadius: innerRadius,
+                    outerRadius: innerRadius + 1,
+                    strokeColor: strokeStyle
+                });
+
+            }
+        }
+
+        context.strokeStyle = strokeStyle;
+    });
 });

@@ -1,13 +1,17 @@
-html,
-body {
-    margin: 0;
-}
+html, body {
+  margin: 0;
+  padding: 0; }
 
-.Menu,
-.utilities {
-    display: none;
-}
+.no-show {
+  visibility: hidden; }
 
-#jspaint-paint-area {
-    border: none;
-}
+.no-exist, .Menu, .utilities {
+  display: none; }
+
+.no-border, #jspaint-paint-area {
+  border: none; }
+
+.no-outline {
+  outline: none; }
+
+/*# sourceMappingURL=print.css.map */

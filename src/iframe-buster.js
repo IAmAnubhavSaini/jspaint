@@ -1,5 +1,4 @@
-(function() {
-    "use strict";
+ "use strict";
 
   function IFrameBuster(){
 	  var self = this instanceof IFrameBuster ? this : Object.create(IFrameBuster.prototype);
@@ -52,5 +51,3 @@
 
   var buster = new IFrameBuster();
   buster.activate();
-
-})();

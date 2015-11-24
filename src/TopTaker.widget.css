@@ -1,7 +1,9 @@
+@import 'base';
+
 .top-taker {
     position: fixed;
-    left: 45%;
-    bottom: 1%;
+    right: 3%;
+    bottom: 3%;
     width: 10%;
     height: 1.6em;
     line-height: 1.6em;
@@ -10,12 +12,12 @@
 }
 
 .hide-top-taker {
-    display: none;
+    @extend .no-exist;
 }
 
 .top-taker-dark {
-    background-color: black;
-    color: white;
+    background-color: $Black;
+    color: $White;
     border-radius: 10px;
     text-align: center;
 }

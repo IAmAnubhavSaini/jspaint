@@ -4,4 +4,7 @@ switch_file.txt
 
 perf/
 
+.sass-cache/
+
 *~
+

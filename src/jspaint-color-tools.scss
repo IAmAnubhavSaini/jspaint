@@ -1,0 +1,38 @@
+﻿$White: #FFFFFF;
+$Black: #000000;
+$ColorBlockSize: 20px;
+$WhiteBorder: thin solid $White;
+$BlackBorder: thin solid $Black;
+
+.border {
+  border: $WhiteBorder;
+  outline: $BlackBorder;
+
+  :hover {
+      border: $BlackBorder;
+      outline: $WhiteBorder;
+  }
+}
+
+#SelectedPrimaryColor, #SelectedAlternativeColor {
+  width: 50px;
+  height: $ColorBlockSize;
+  margin: 2px;
+}
+
+#HTML5ColorPicker #allColorsPicker {
+  height: 45px;
+  width: 45px;
+  @extend .border;
+}
+
+.BasicColorPalette .color {
+    width: $ColorBlockSize;
+    height: $ColorBlockSize;
+    min-width: $ColorBlockSize;
+    min-height: $ColorBlockSize;
+    display: inline-block;
+    margin: 0 1px;
+    cursor: pointer;
+    @extend .border;
+}

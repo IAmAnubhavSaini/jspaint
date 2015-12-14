@@ -9,3 +9,6 @@ perf/
 *~
 *.map
 
+*.sublime-workspace
+/*.sublime-workspace
+

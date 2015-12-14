@@ -62,7 +62,7 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'src/',
-          src: ['*.css', '!*.min.css'],
+          src: ['*.css', '!*.min.css', '!*.scss'],
           dest: 'build/',
           ext: '.min.css',
           extDot: 'last'
@@ -121,7 +121,23 @@ module.exports = function(grunt) {
         src: 'src/jspaint.css',
         dest: 'src/jspaint.css'
       }
-    }
+    },
+    /* I want sass to take care of SCSS and SASS files. */
+    sass: {
+      self: {
+        options: { 
+          style: 'compressed',
+          sourcemap: 'none'
+        },
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: ['*.scss'],
+          dest: 'build/',
+          ext: '.min.css'
+        }]
+      }
+    },
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -132,9 +148,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-sass');
 
-
+  grunt.registerTask('styles', ['sass', 'cssmin']);
   grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

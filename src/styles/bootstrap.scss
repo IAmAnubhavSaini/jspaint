@@ -4,6 +4,7 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
+
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
@@ -263,8 +264,8 @@ th {
 @font-face {
   font-family: 'Glyphicons Halflings';
 
-  src: url('glyphicons-halflings-regular.eot');
-  src: url('glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('glyphicons-halflings-regular.woff2') format('woff2'), url('glyphicons-halflings-regular.woff') format('woff'), url('glyphicons-halflings-regular.ttf') format('truetype'), url('glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('../glyphicons-halflings-regular.eot');
+  src: url('../glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../glyphicons-halflings-regular.woff2') format('woff2'), url('../glyphicons-halflings-regular.woff') format('woff'), url('../glyphicons-halflings-regular.ttf') format('truetype'), url('../glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;

@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           jquery: true
         }
       },
-      files: ['src/*.js', '!src/jquery.js', '!src/bootstrap.js', '!src/jquery-ui.js']
+      files: ['Gruntfile.js', 'src/*.js', '!src/jquery.js', '!src/bootstrap.js', '!src/jquery-ui.js']
     },
     uglify: {
       options: {
@@ -31,27 +31,30 @@ module.exports = function(grunt) {
     },
     replace: {
       updateReferenceBootstrap: {
-        src: 'src/bootstrap.css',
-        dest: 'src/bootstrap.css',
+        src: 'src/styles/bootstrap.css',
+        dest: 'src/styles/bootstrap.css',
         replacements: [{
             from: '../fonts/',
-            to: ''
+            to: '../'
           }
         ]
       },
-      jsCssToMinJsCSSMoveToBuild: {
+      cssToMinCSSMove:{
+        src: 'src/styles/*',
+        dest: 'build/styles/',
+        replacements: [{
+          from: '.css',
+          to: '.min.css'
+        }]
+      },
+      jsToMinJsMoveToBuild: {
         src: 'src/*.html',
         dest: 'build/',
         replacements: [{
             from: '.js',
             to: '.min.js'
-          },
-          {
-            from: '.css',
-            to: '.min.css'
-          }
-        ]
-      }
+          }]
+      },
     },
     cssmin: {
       options: {
@@ -61,22 +64,29 @@ module.exports = function(grunt) {
       target: {
         files: [{
           expand: true,
-          cwd: 'src/',
+          cwd: 'src/styles/',
           src: ['*.css', '!*.min.css', '!*.scss'],
-          dest: 'build/',
+          dest: 'build/styles/',
           ext: '.min.css',
           extDot: 'last'
         }]
       }
     },
     copy: {
+      preBuild_bootstrapCSS:{
+        files: [{
+          expand: true,
+          flatten: true,
+          src: ["node_modules/bootstrap/dist/css/bootstrap.css"],
+          dest: "src/styles/"
+        }]
+      },
       fromNodeModules:{
         files:[
           {
             expand: true,
             flatten: true,
             src: [
-              'node_modules/bootstrap/dist/css/bootstrap.css',
               'node_modules/bootstrap/dist/js/bootstrap.js',
               'node_modules/jquery/dist/jquery.js'
             ],
@@ -118,8 +128,8 @@ module.exports = function(grunt) {
         browsers: ['last 5 versions', 'ie 8', 'ie 9']
       },
       single_file: {
-        src: 'src/jspaint.css',
-        dest: 'src/jspaint.css'
+        src: 'src/styles/jspaint.css',
+        dest: 'src/styles/jspaint.css'
       }
     },
     /* I want sass to take care of SCSS and SASS files. */
@@ -131,12 +141,15 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'src/',
+          cwd: 'src/styles/',
           src: ['*.scss'],
-          dest: 'build/',
+          dest: 'build/styles/',
           ext: '.min.css'
         }]
       }
+    },
+    clean: {
+        dist: ["build/*"]
     },
   });
 
@@ -149,9 +162,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-sass');
-
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  
   grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['copy:fromNodeModules','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
-  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
+  grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'copy:preBuild_bootstrapCSS', 'replace:updateReferenceBootstrap']);
+  //grunt.registerTask('default', ['bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsToMinJsMoveToBuild', 'replace:cssToMinCSSMove', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['clean', 'jshint', 'sass']);
+  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint']);
 };

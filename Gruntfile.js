@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           jquery: true
         }
       },
-      files: ['src/*.js', '!src/jquery.js', '!src/bootstrap.js', '!src/jquery-ui.js']
+      files: ['src/scripts/*.js', '!src/scripts/jquery.js', '!src/scripts/bootstrap.js', '!src/scripts/jquery-ui.js']
     },
     uglify: {
       options: {
@@ -22,9 +22,9 @@ module.exports = function(grunt) {
       },
       build: {
         expand: true,
-        cwd: 'src/',
+        cwd: 'src/scripts',
         src: '*.js',
-        dest: 'build/',
+        dest: 'build/scripts',
         ext: '.min.js',
         extDot: 'last'
       }
@@ -61,20 +61,6 @@ module.exports = function(grunt) {
       }
     },
     copy: {
-      fromNodeModules:{
-        files:[
-          {
-            expand: true,
-            flatten: true,
-            src: [
-              'node_modules/bootstrap/dist/css/bootstrap.css',
-              'node_modules/bootstrap/dist/js/bootstrap.js',
-              'node_modules/jquery/dist/jquery.js'
-            ],
-            dest: 'src/'
-          },
-        ]
-      },
       copyFontsToBuild : {
         files: [
           {
@@ -144,7 +130,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-haml');
 
   grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['haml', 'copy:fromNodeModules','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

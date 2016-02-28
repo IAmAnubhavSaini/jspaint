@@ -14,7 +14,7 @@ module.exports = function(grunt) {
           jquery: true
         }
       },
-      files: ['src/*.js', '!src/jquery.js', '!src/bootstrap.js', '!src/jquery-ui.js']
+      files: ['src/scripts/*.js', '!src/scripts/jquery.js', '!src/scripts/bootstrap.js', '!src/scripts/jquery-ui.js']
     },
     uglify: {
       options: {
@@ -22,23 +22,14 @@ module.exports = function(grunt) {
       },
       build: {
         expand: true,
-        cwd: 'src/',
+        cwd: 'src/scripts',
         src: '*.js',
-        dest: 'build/',
+        dest: 'build/scripts',
         ext: '.min.js',
         extDot: 'last'
       }
     },
     replace: {
-      updateReferenceBootstrap: {
-        src: 'src/bootstrap.css',
-        dest: 'src/bootstrap.css',
-        replacements: [{
-            from: '../fonts/',
-            to: ''
-          }
-        ]
-      },
       jsCssToMinJsCSSMoveToBuild: {
         src: 'src/*.html',
         dest: 'build/',
@@ -61,42 +52,22 @@ module.exports = function(grunt) {
       target: {
         files: [{
           expand: true,
-          cwd: 'src/',
+          cwd: 'src/styles/',
           src: ['*.css', '!*.min.css', '!*.scss'],
-          dest: 'build/',
+          dest: 'build/styles/',
           ext: '.min.css',
           extDot: 'last'
         }]
       }
     },
     copy: {
-      fromNodeModules:{
-        files:[
-          {
-            expand: true,
-            flatten: true,
-            src: [
-              'node_modules/bootstrap/dist/css/bootstrap.css',
-              'node_modules/bootstrap/dist/js/bootstrap.js',
-              'node_modules/jquery/dist/jquery.js'
-            ],
-            dest: 'src/'
-          },
-          {
-            expand: true,
-            flatten: true,
-            src: ['node_modules/bootstrap/dist/fonts/*'],
-            dest: 'src/'
-          }
-        ]
-      },
       copyFontsToBuild : {
         files: [
           {
             expand: true,
             flatten: true,
-            src: ['src/*.eot', 'src/*.svg', 'src/*.ttf', 'src/*.woff', 'src/*.woff2'],
-            dest: 'build/'
+            src: ['src/fonts/*.eot', 'src/fonts/*.svg', 'src/fonts/*.ttf', 'src/fonts/*.woff', 'src/fonts/*.woff2'],
+            dest: 'build/fonts/'
           }
         ]
       }
@@ -118,8 +89,8 @@ module.exports = function(grunt) {
         browsers: ['last 5 versions']
       },
       single_file: {
-        src: 'src/jspaint.css',
-        dest: 'src/jspaint.css'
+        src: 'src/styles/jspaint.css',
+        dest: 'src/styles/jspaint.css'
       }
     },
     /* I want sass to take care of SCSS and SASS files. */
@@ -131,9 +102,9 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'src/',
+          cwd: 'src/styles/',
           src: ['*.scss'],
-          dest: 'build/',
+          dest: 'build/styles/',
           ext: '.min.css'
         }]
       }
@@ -159,7 +130,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-haml');
 
   grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('setup-dev', ['copy:fromNodeModules', 'replace:updateReferenceBootstrap']);
-  grunt.registerTask('default', ['haml', 'copy:fromNodeModules','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:updateReferenceBootstrap', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

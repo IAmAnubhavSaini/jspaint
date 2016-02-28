@@ -115,7 +115,7 @@ module.exports = function(grunt) {
     },
     autoprefixer: {
       options: {
-        browsers: ['last 5 versions', 'ie 8', 'ie 9']
+        browsers: ['last 5 versions']
       },
       single_file: {
         src: 'src/jspaint.css',

@@ -116,6 +116,15 @@ module.exports = function(grunt) {
         }
       }
     },
+    jasmine: {
+      test: {
+        src: 'src/scripts/iframe-buster.js',
+        options: {
+          specs: 'tests/*.spec.js',
+          helpers: 'tests/*helper.js'
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -130,7 +139,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-haml');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
 
+
   grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
-  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
+  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'jasmine', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint', 'jasmine'])
 };

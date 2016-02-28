@@ -1,4 +1,4 @@
-(function(){
+var iFrameBuster = (function(){
    "use strict";
 
     function IFrameBuster(){
@@ -6,8 +6,14 @@
   	  self.warningPrefix = (function() { return 'You are visiting jspaint in an insecure way!'; })();
   	  self.appHomePage = (function() { return 'http://IAmAnubhavSaini.github.io/jspaint'; })();
   	  self.alertMessage = (function() { return 'Security risk! Go to original page: ' + window.self.location.href; })();
+        self.activationStatus = false;
   	  return self;
     }
+
+    IFrameBuster.prototype.isActivated = function(){
+      return this.activationStatus === true;
+    };
+
     IFrameBuster.prototype.alertUserAboutScam = function () { alert(this.alertMessage); };
 
     IFrameBuster.prototype.setBlockerStyle = function (blocker) {
@@ -47,10 +53,11 @@
         this.injectBlocker();
         this.alertUserAboutScam();
         this.goToJSPaintHome();
+        this.activationStatus = true;
       }
     };
 
     var buster = new IFrameBuster();
     buster.activate();
-
+    return buster;
 })();

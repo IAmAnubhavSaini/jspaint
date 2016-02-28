@@ -61,9 +61,9 @@ module.exports = function(grunt) {
       target: {
         files: [{
           expand: true,
-          cwd: 'src/',
+          cwd: 'src/styles/',
           src: ['*.css', '!*.min.css', '!*.scss'],
-          dest: 'build/',
+          dest: 'build/styles/',
           ext: '.min.css',
           extDot: 'last'
         }]
@@ -118,8 +118,8 @@ module.exports = function(grunt) {
         browsers: ['last 5 versions']
       },
       single_file: {
-        src: 'src/jspaint.css',
-        dest: 'src/jspaint.css'
+        src: 'src/styles/jspaint.css',
+        dest: 'src/styles/jspaint.css'
       }
     },
     /* I want sass to take care of SCSS and SASS files. */
@@ -131,9 +131,9 @@ module.exports = function(grunt) {
         },
         files: [{
           expand: true,
-          cwd: 'src/',
+          cwd: 'src/styles/',
           src: ['*.scss'],
-          dest: 'build/',
+          dest: 'build/styles/',
           ext: '.min.css'
         }]
       }

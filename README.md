@@ -7,9 +7,7 @@
 
 <h1>Paint application.</h1>
 
-<h1>Say Hello to jspaint!</h1>
-
-Online application URLs : [jspaint](http://jspaint.github.io) and [deprecated](http://iamanubhavsaini.github.io/jspaint)  
+Online application URLs : [jspaint](http://jspaint.github.io)  
 
 <h1>Development</h1>
 1. Clone repository.  
@@ -30,7 +28,7 @@ License
 
 GPL v3.0
 
-{JSPAINT}  Copyright (C) {2015-2016}  {Anubhav Saini}
+JSPAINT  Copyright (C) 2015-2016  Anubhav Saini
 
 
 Rationale behind GNU GPL License

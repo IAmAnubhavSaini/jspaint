@@ -30,15 +30,6 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      updateReferenceBootstrap: {
-        src: 'src/bootstrap.css',
-        dest: 'src/bootstrap.css',
-        replacements: [{
-            from: '../fonts/',
-            to: ''
-          }
-        ]
-      },
       jsCssToMinJsCSSMoveToBuild: {
         src: 'src/*.html',
         dest: 'build/',
@@ -82,12 +73,6 @@ module.exports = function(grunt) {
             ],
             dest: 'src/'
           },
-          {
-            expand: true,
-            flatten: true,
-            src: ['node_modules/bootstrap/dist/fonts/*'],
-            dest: 'src/'
-          }
         ]
       },
       copyFontsToBuild : {
@@ -95,8 +80,8 @@ module.exports = function(grunt) {
           {
             expand: true,
             flatten: true,
-            src: ['src/*.eot', 'src/*.svg', 'src/*.ttf', 'src/*.woff', 'src/*.woff2'],
-            dest: 'build/'
+            src: ['src/fonts/*.eot', 'src/fonts/*.svg', 'src/fonts/*.ttf', 'src/fonts/*.woff', 'src/fonts/*.woff2'],
+            dest: 'build/fonts/'
           }
         ]
       }

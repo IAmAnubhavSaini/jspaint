@@ -5,17 +5,37 @@
 
 <hr />
 
-<h1>Paint <small>without delay, online, from any device, at any time</small>.</h1>
+<h1>Paint application.</h1>
 
-<h1>Say Hello to jspaint!</h1>
-<p>Online - Offline - Quick - Social Friendly</p>
-
-Online application URLs : [jspaint](http://jspaint.github.io) and [deprecated](http://iamanubhavsaini.github.io/jspaint)  
+Online application URLs : [jspaint](http://jspaint.github.io)  
 
 <h1>Development</h1>
 1. Clone repository.  
 2. npm install  
 3. `grunt`  
-	This will make a build directory.  
+4. or you can test via `npm test`
+
+
+This will make a build directory.  
+
 
 Let me know if there's something missing.  
+
+
+
+License
+---
+
+GPL v3.0
+
+JSPAINT  Copyright (C) 2015-2016  Anubhav Saini
+
+
+Rationale behind GNU GPL License
+---
+
+I want it to be a free application forever. Free as in anybody should be able to make changes to it. And if those changes are shipped, the code that made the changes should ship too.
+
+Don't take it personally that I am not using MIT or BSD. I use them where appropriate. This time, sharing is caring, has won.
+
+

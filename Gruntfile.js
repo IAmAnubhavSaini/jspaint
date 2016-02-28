@@ -18,7 +18,7 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> Anubhav Saini (c) 2015 */\n'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> Anubhav Saini (c) 2015-2016 */\n'
       },
       build: {
         expand: true,
@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       }
     },
     replace: {
-      jsCssToMinJsCSSMoveToBuild: {
+      convertRefToMinRef: {
         src: 'src/*.html',
         dest: 'build/',
         replacements: [{
@@ -130,6 +130,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-haml');
 
   grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:jsCssToMinJsCSSMoveToBuild', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint'])
 };

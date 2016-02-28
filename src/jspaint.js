@@ -147,11 +147,7 @@
       height: sizeY
     });
   },
-
-  initializeTopTakerWidget = function() {
-    $('.top-taker').TopTaker({'theme': 'dark'});
-  },
-
+  
   init = function() {
     mustAssignDimensionsToCanvasContainer();
     context = initializeContext({
@@ -160,7 +156,6 @@
       canvasId: CONSTANTS.canvasId,
       canvasContainerId: CONSTANTS.canvasContainerId
     });
-    initializeTopTakerWidget();
     Color.generateBasicColorPalette({
       appendHere: '.BasicColorPalette',
       basicColors: CONSTANTS.basicColors

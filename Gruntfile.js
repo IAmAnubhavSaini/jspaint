@@ -128,6 +128,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-haml');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
 
   grunt.registerTask('styles', ['sass', 'cssmin']);
   grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);

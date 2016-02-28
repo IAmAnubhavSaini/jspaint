@@ -12,3 +12,4 @@ perf/
 *.sublime-workspace
 /*.sublime-workspace
 
+src/index.html

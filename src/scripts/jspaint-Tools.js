@@ -1,22 +1,25 @@
+var generateSliderString = function(options) {
+    var min = options.min,
+        max = options.max,
+        title = options.title,
+        id = options.id,
+        step = options.step;
+
+    return '<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="' + step + '" title="' + title + '" />';
+};
+var generateLabelString = function(options) {
+    var hexColor = options.hexColor,
+        fontSize = options.fontSize;
+
+    return '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
+};
+
 $(function() {
     "use strict";
 
     var COMMON = {
-        generateSlider: function(options) {
-            var min = options.min,
-                max = options.max,
-                title = options.title,
-                id = options.id,
-                step = options.step;
-
-            return $('<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="' + step + '" title="' + title + '" />');
-        },
-        generateLabel: function(options) {
-            var hexColor = options.hexColor,
-                fontSize = options.fontSize;
-
-            return $('<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>');
-        },
+        generateSlider: $(generateSliderString(options)),
+        generateLabel: $(generateLabelString(options)),
         genericLabel: function() {
             return COMMON.generateLabel({
                 hexColor: 'FFFFFF',

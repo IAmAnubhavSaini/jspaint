@@ -1,3 +1,23 @@
+function registerTasks(grunt) {
+  grunt.registerTask('styles', ['sass', 'cssmin']);
+  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'jasmine', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint', 'jasmine']);
+}
+
+function loadTasks(grunt) {
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-text-replace');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-bootlint');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-contrib-sass');
+  grunt.loadNpmTasks('grunt-haml2html');
+  grunt.loadNpmTasks('grunt-contrib-jasmine');
+}
+
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -127,20 +147,6 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-text-replace');
-  grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-bootlint');
-  grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-imagemin');
-  grunt.loadNpmTasks('grunt-autoprefixer');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-haml');
-  grunt.loadNpmTasks('grunt-contrib-jasmine');
-
-
-  grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'jasmine', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
-  grunt.registerTask('release-the-hounds', ['bootlint', 'jshint', 'jasmine'])
+  loadTasks(grunt);
+  registerTasks(grunt);
 };

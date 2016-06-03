@@ -18,8 +18,12 @@ $(function() {
     "use strict";
 
     var COMMON = {
-        generateSlider: $(generateSliderString(options)),
-        generateLabel: $(generateLabelString(options)),
+        generateSlider: function(options){
+            return $(generateSliderString(options));
+        },
+        generateLabel: function(options){
+            $(generateLabelString(options));
+        },
         genericLabel: function() {
             return COMMON.generateLabel({
                 hexColor: 'FFFFFF',

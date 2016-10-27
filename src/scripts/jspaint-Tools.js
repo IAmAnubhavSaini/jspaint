@@ -2342,8 +2342,7 @@ $(function () {
       $('#RandomColorTool').click();
     }
   });
-
-  $('#BlackAndWhiteColorTool').on('click', function () {
+  function onBlackAndWhiteColorToolClick() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
       width = $(canvasId).width(),
@@ -2369,9 +2368,10 @@ $(function () {
       image.data[i + 2] = newValue;
     }
     context.putImageData(image, 0, 0);
-  });
+  }
+  $('#BlackAndWhiteColorTool').on('click', onBlackAndWhiteColorToolClick);
 
-  $('#GrayColorTool').on('click', function () {
+  function onGrayColorToolClick() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
       width = $(canvasId).width(),
@@ -2394,9 +2394,8 @@ $(function () {
       image.data[i + 2] = newValue;
     }
     context.putImageData(image, 0, 0);
-  });
-
-  $('#RandomDisksColorTool').on('click', function () {
+  }
+  function onRandomDisksColorToolClick () {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
       width = $(canvasId).width(),
@@ -2421,9 +2420,8 @@ $(function () {
     }
 
     context.fillStyle = fillStyle;
-  });
-
-  $('#RandomCirclesColorTool').on('click', function () {
+  }
+  function onRandomCirclesColorToolClick () {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
       width = $(canvasId).width(),
@@ -2457,5 +2455,8 @@ $(function () {
     }
 
     context.strokeStyle = strokeStyle;
-  });
+  }
+  $('#GrayColorTool').on('click', onGrayColorToolClick);
+  $('#RandomDisksColorTool').on('click', onRandomDisksColorToolClick);  
+  $('#RandomCirclesColorTool').on('click', onRandomCirclesColorToolClick);
 });

@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Paint in browser.",
   "main": "index.js",
   "directories": {
@@ -41,7 +41,6 @@
     "grunt-bootlint": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-cssmin": "*",
-    "grunt-haml2html": "*",
     "grunt-contrib-imagemin": "*",
     "grunt-contrib-jasmine": "*",
     "grunt-contrib-jshint": "*",

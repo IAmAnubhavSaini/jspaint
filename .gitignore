@@ -19,3 +19,6 @@ src/index.html
 _SpecRunner.html
 
 .DS_Store
+
+*.iml
+.idea

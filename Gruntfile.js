@@ -1,6 +1,6 @@
 function registerTasks(grunt) {
   grunt.registerTask('styles', ['sass', 'cssmin']);
-  grunt.registerTask('default', ['haml','bootlint', 'autoprefixer', 'jshint', 'jasmine', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
+  grunt.registerTask('default', ['bootlint', 'autoprefixer', 'jshint', 'jasmine', 'uglify', 'replace:convertRefToMinRef', 'sass:self','cssmin', 'copy:copyFontsToBuild', 'imagemin']);
   grunt.registerTask('release-the-hounds', ['bootlint', 'jshint', 'jasmine']);
 }
 
@@ -14,7 +14,6 @@ function loadTasks(grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-haml2html');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
 }
 
@@ -127,13 +126,6 @@ module.exports = function(grunt) {
           dest: 'build/styles/',
           ext: '.min.css'
         }]
-      }
-    },
-    haml: {
-      dist: {
-        files: {
-          'src/index.html': 'src/index.haml'
-        }
       }
     },
     jasmine: {

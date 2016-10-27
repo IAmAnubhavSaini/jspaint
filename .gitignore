@@ -13,8 +13,6 @@ perf/
 *.sublime-workspace
 /*.sublime-workspace
 
-src/index.html
-
 .grunt/
 _SpecRunner.html
 

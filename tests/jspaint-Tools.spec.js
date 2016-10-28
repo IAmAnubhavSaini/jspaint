@@ -1,45 +1,81 @@
-describe("Testing jspaint-tools under GitHub issue #206", function(){
-  describe("generateSliderString generates input with type range.", function(){
-    it('generateSliderString({min: 0, max: 100, title: "title", id: "id", step: 1}) generates \'<input id="id" type="range" min="0" max="100" step="1" title="title" />\'', function(){
-      expect(generateSliderString({min: 0, max: 100, title: "title", id: "id", step: 1})).toBe('<input id="id" type="range" min="0" max="100" step="1" title="title" />');
+describe("Testing jspaint-tools under GitHub issue #206", function () {
+  describe("generateSliderString generates input with type range.", function () {
+    it('generateSliderString({min: 0, max: 100, title: "title", id: "id", step: 1}) generates \'<input id="id" type="range" min="0" max="100" step="1" title="title" />\'', function () {
+      expect(generateSliderString({ min: 0, max: 100, title: "title", id: "id", step: 1 })).toBe('<input id="id" type="range" min="0" max="100" step="1" title="title" />');
     });
-    it('generateSliderString({min: 100, max: 100, title: "title", id: "id", step: 1}) generates \'<input id="id" type="range" min="100" max="100" step="1" title="title" />\'', function(){
-      expect(generateSliderString({min: 100, max: 100, title: "title", id: "id", step: 1})).toBe('<input id="id" type="range" min="100" max="100" step="1" title="title" />');
+    it('generateSliderString({min: 100, max: 100, title: "title", id: "id", step: 1}) generates \'<input id="id" type="range" min="100" max="100" step="1" title="title" />\'', function () {
+      expect(generateSliderString({ min: 100, max: 100, title: "title", id: "id", step: 1 })).toBe('<input id="id" type="range" min="100" max="100" step="1" title="title" />');
     });
-    it('generateSliderString({min: 1000, max: 100, title: "title", id: "id", step: 1}) generates \'<input id="id" type="range" min="1000" max="100" step="1" title="title" />\'', function(){
-      expect(generateSliderString({min: 1000, max: 100, title: "title", id: "id", step: 1})).toBe('<input id="id" type="range" min="1000" max="100" step="1" title="title" />');
+    it('generateSliderString({min: 1000, max: 100, title: "title", id: "id", step: 1}) generates \'<input id="id" type="range" min="1000" max="100" step="1" title="title" />\'', function () {
+      expect(generateSliderString({ min: 1000, max: 100, title: "title", id: "id", step: 1 })).toBe('<input id="id" type="range" min="1000" max="100" step="1" title="title" />');
     });
-    it('generateSliderString({min: 200, max: 100, title: "title", id: "id", step: -1}) generates \'<input id="id" type="range" min="200" max="100" step="-1" title="title" />\'', function(){
-      expect(generateSliderString({min: 200, max: 100, title: "title", id: "id", step: -1})).toBe('<input id="id" type="range" min="200" max="100" step="-1" title="title" />');
+    it('generateSliderString({min: 200, max: 100, title: "title", id: "id", step: -1}) generates \'<input id="id" type="range" min="200" max="100" step="-1" title="title" />\'', function () {
+      expect(generateSliderString({ min: 200, max: 100, title: "title", id: "id", step: -1 })).toBe('<input id="id" type="range" min="200" max="100" step="-1" title="title" />');
     });
-    
+
   });
 
-  describe("generateLableString generates label with given color and font size", function(){
-    it('generateLabelString({hexColor: "#000000", fontSize: "10px"}) generates <label style="color: #000000; font-size: 10px;"></label>', function(){
-      expect(generateLabelString({hexColor: '000000', fontSize: '10px'})).toBe('<label style="color: #000000; font-size: 10px;"></label>');
+  describe("generateLableString generates label with given color and font size", function () {
+    it('generateLabelString({hexColor: "#000000", fontSize: "10px"}) generates <label style="color: #000000; font-size: 10px;"></label>', function () {
+      expect(generateLabelString({ hexColor: '000000', fontSize: '10px' })).toBe('<label style="color: #000000; font-size: 10px;"></label>');
     });
-    it('generateLabelString({hexColor: "#FFFFFF", fontSize: "15px"}) generates <label style="color: #FFFFFF; font-size: 15px;"></label>', function(){
-      expect(generateLabelString({hexColor: 'FFFFFF', fontSize: '15px'})).toBe('<label style="color: #FFFFFF; font-size: 15px;"></label>');
+    it('generateLabelString({hexColor: "#FFFFFF", fontSize: "15px"}) generates <label style="color: #FFFFFF; font-size: 15px;"></label>', function () {
+      expect(generateLabelString({ hexColor: 'FFFFFF', fontSize: '15px' })).toBe('<label style="color: #FFFFFF; font-size: 15px;"></label>');
     });
-    it('generateLabelString({hexColor: "#000000", fontSize: "20px"}) generates <label style="color: #000000; font-size: 20px;"></label>', function(){
-      expect(generateLabelString({hexColor: '000000', fontSize: '20px'})).toBe('<label style="color: #000000; font-size: 20px;"></label>');
+    it('generateLabelString({hexColor: "#000000", fontSize: "20px"}) generates <label style="color: #000000; font-size: 20px;"></label>', function () {
+      expect(generateLabelString({ hexColor: '000000', fontSize: '20px' })).toBe('<label style="color: #000000; font-size: 20px;"></label>');
     });
   });
 
-  describe("TOOLS", function() {
-    it("has CONSTANTS", function() {
+  describe("TOOLS", function () {
+    it("has CONSTANTS", function () {
       expect(TOOLS.CONSTANTS).toBeDefined();
     });
-    it("has VARIABLES", function() {
+    it("has VARIABLES", function () {
       expect(TOOLS.VARIABLES).toBeDefined();
     });
-    describe("CONSTANTS", function() {
-      it("has MandelbrotFractal", function() {
+    describe("CONSTANTS", function () {
+      it("has MandelbrotFractal", function () {
         expect(TOOLS.CONSTANTS.MandelbrotFractal).toBeDefined();
       });
-      describe("MandelbrotFractal", function() {
-        it("has accurate properties", function() {
+      it("has Pencil", function () {
+        expect(TOOLS.CONSTANTS.Pencil).toBeDefined();
+      });
+      it("has PickColor", function () {
+        expect(TOOLS.CONSTANTS.PickColor).toBeDefined();
+      });
+      it("has PivotedLinePattern", function () {
+        expect(TOOLS.CONSTANTS.PivotedLinePattern).toBeDefined();
+      });
+      it("has Rectangle", function () {
+        expect(TOOLS.CONSTANTS.Rectangle).toBeDefined();
+      });
+      it("has Ring", function () {
+        expect(TOOLS.CONSTANTS.Ring).toBeDefined();
+      });
+      it("has Disc", function () {
+        expect(TOOLS.CONSTANTS.Disc).toBeDefined();
+      });
+      it("has Square", function () {
+        expect(TOOLS.CONSTANTS.Square).toBeDefined();
+      });
+      it("has Circle", function () {
+        expect(TOOLS.CONSTANTS.Circle).toBeDefined();
+      });
+      it("has PointWalker", function () {
+        expect(TOOLS.CONSTANTS.PointWalker).toBeDefined();
+      });
+      it("has FamilyPointWalker", function () {
+        expect(TOOLS.CONSTANTS.FamilyPointWalker).toBeDefined();
+      });
+      it("has OrganismPointWalker", function () {
+        expect(TOOLS.CONSTANTS.OrganismPointWalker).toBeDefined();
+      });
+      it("has UniCellularParasiteTool", function () {
+        expect(TOOLS.CONSTANTS.UniCellularParasiteTool).toBeDefined();
+      });
+      describe("MandelbrotFractal", function () {
+        it("has accurate properties", function () {
           expect(TOOLS.CONSTANTS.MandelbrotFractal.id).toBeDefined();
           expect(TOOLS.CONSTANTS.MandelbrotFractal.id).toBe("MandelbrotFractalTool");
           expect(TOOLS.CONSTANTS.MandelbrotFractal.selectionId).toBeDefined();
@@ -54,11 +90,8 @@ describe("Testing jspaint-tools under GitHub issue #206", function(){
           expect(TOOLS.CONSTANTS.MandelbrotFractal.maxWidth).toBe(-1);
         });
       });
-      it("has Pencil", function() {
-        expect(TOOLS.CONSTANTS.Pencil).toBeDefined();
-      });
-      describe("Pencil", function() {
-        it("has accurate properties", function() {
+      describe("Pencil", function () {
+        it("has accurate properties", function () {
           expect(TOOLS.CONSTANTS.Pencil.id).toBeDefined();
           expect(TOOLS.CONSTANTS.Pencil.id).toBe("PencilTool");
           expect(TOOLS.CONSTANTS.Pencil.selectionId).toBeDefined();
@@ -69,11 +102,8 @@ describe("Testing jspaint-tools under GitHub issue #206", function(){
           expect(TOOLS.CONSTANTS.Pencil.title).toBe("Click to draw free-hand lines. Click again to disable.");
         });
       });
-      it("has PickColor", function() {
-        expect(TOOLS.CONSTANTS.PickColor).toBeDefined();
-      });
-      describe("PickColor", function() {
-        it("has accurate properties", function() {
+      describe("PickColor", function () {
+        it("has accurate properties", function () {
           expect(TOOLS.CONSTANTS.PickColor.id).toBeDefined();
           expect(TOOLS.CONSTANTS.PickColor.id).toBe("pick-color");
           expect(TOOLS.CONSTANTS.PickColor.selectionId).toBeDefined();
@@ -86,11 +116,8 @@ describe("Testing jspaint-tools under GitHub issue #206", function(){
           expect(TOOLS.CONSTANTS.PickColor.title).toBe("Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.");
         });
       });
-      it("has PivotedLinePattern", function() {
-        expect(TOOLS.CONSTANTS.PivotedLinePattern).toBeDefined();
-      });
-      describe("PivotedLinePattern", function() {
-        it("has accurate properties", function() {
+      describe("PivotedLinePattern", function () {
+        it("has accurate properties", function () {
           expect(TOOLS.CONSTANTS.PivotedLinePattern.id).toBeDefined();
           expect(TOOLS.CONSTANTS.PivotedLinePattern.id).toBe("PivotedLinePatternTool");
           expect(TOOLS.CONSTANTS.PivotedLinePattern.selectionId).toBeDefined();
@@ -99,9 +126,9 @@ describe("Testing jspaint-tools under GitHub issue #206", function(){
           expect(TOOLS.CONSTANTS.PivotedLinePattern.class).toBe("main-tool");
           expect(TOOLS.CONSTANTS.PivotedLinePattern.title).toBeDefined();
           expect(TOOLS.CONSTANTS.PivotedLinePattern.title).toBe("Click to draw amazing pattern. Click again to disable.");
-          describe("ACTIONS", function() {
+          describe("ACTIONS", function () {
             expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS).toBeDefined();
-            describe("has accurate properties", function() {
+            describe("has accurate properties", function () {
               it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.godRays).toBeDefined();
               it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.godRays).toBe("god-rays");
               it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.pivots).toBeDefined();
@@ -114,32 +141,125 @@ describe("Testing jspaint-tools under GitHub issue #206", function(){
           });
         });
       });
-      it("has Rectangle", function() {
-        expect(TOOLS.CONSTANTS.Rectangle).toBeDefined();
+      describe("Rectangle", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.Rectangle.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.Rectangle.id).toBe("RectangleTool");
+          expect(TOOLS.CONSTANTS.Rectangle.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Rectangle.selectionId).toBe("#RectangleTool");
+          expect(TOOLS.CONSTANTS.Rectangle.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.Rectangle.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.Rectangle.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.Rectangle.title).toBe("Click to draw rectangles. Click again to disable.");
+          expect(TOOLS.CONSTANTS.Rectangle.previewId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Rectangle.previewId).toBe("previewRectangle");
+        });
       });
-      it("has Ring", function() {
-        expect(TOOLS.CONSTANTS.Ring).toBeDefined();
+      describe("Ring", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.Ring.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.Ring.id).toBe("RingTool");
+          expect(TOOLS.CONSTANTS.Ring.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Ring.selectionId).toBe("#RingTool");
+          expect(TOOLS.CONSTANTS.Ring.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.Ring.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.Ring.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.Ring.title).toBe("Click to draw ring. Click again to disable.");
+          expect(TOOLS.CONSTANTS.Ring.previewId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Ring.previewId).toBe("previewRing");
+          expect(TOOLS.CONSTANTS.Ring.previewOuterId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Ring.previewOuterId).toBe("previewOuterRing");
+        });
       });
-      it("has Disc", function() {
-        expect(TOOLS.CONSTANTS.Disc).toBeDefined();
+      describe("Disc", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.Disc.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.Disc.id).toBe("DiscTool");
+          expect(TOOLS.CONSTANTS.Disc.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Disc.selectionId).toBe("#DiscTool");
+          expect(TOOLS.CONSTANTS.Disc.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.Disc.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.Disc.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.Disc.title).toBe("Click to draw disc. Click again to disable.");
+          expect(TOOLS.CONSTANTS.Disc.previewId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Disc.previewId).toBe("previewDisc");
+        });
       });
-      it("has Square", function() {
-        expect(TOOLS.CONSTANTS.Square).toBeDefined();
+      describe("Square", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.Square.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.Square.id).toBe("SquareTool");
+          expect(TOOLS.CONSTANTS.Square.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Square.selectionId).toBe("#SquareTool");
+          expect(TOOLS.CONSTANTS.Square.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.Square.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.Square.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.Square.title).toBe("Click to draw squares. Click again to disable.");
+          expect(TOOLS.CONSTANTS.Square.previewId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Square.previewId).toBe("previewSquare");
+        });
       });
-      it("has Circle", function() {
-        expect(TOOLS.CONSTANTS.Circle).toBeDefined();
+      describe("Circle", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.Circle.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.Circle.id).toBe("CircleTool");
+          expect(TOOLS.CONSTANTS.Circle.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Circle.selectionId).toBe("#CircleTool");
+          expect(TOOLS.CONSTANTS.Circle.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.Circle.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.Circle.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.Circle.title).toBe("Click to draw circle. Click again to disable.");
+          expect(TOOLS.CONSTANTS.Circle.previewId).toBeDefined();
+          expect(TOOLS.CONSTANTS.Circle.previewId).toBe("previewCircle");
+        });
       });
-      it("has PointWalker", function() {
-        expect(TOOLS.CONSTANTS.PointWalker).toBeDefined();
+      describe("PointWalker", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.PointWalker.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.PointWalker.id).toBe("PointWalkerTool");
+          expect(TOOLS.CONSTANTS.PointWalker.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.PointWalker.selectionId).toBe("#PointWalkerTool");
+          expect(TOOLS.CONSTANTS.PointWalker.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.PointWalker.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.PointWalker.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.PointWalker.title).toBe("Click to draw random point walker. Click again to disable.");
+        });
       });
-      it("has FamilyPointWalker", function() {
-        expect(TOOLS.CONSTANTS.FamilyPointWalker).toBeDefined();
+      describe("FamilyPointWalker", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.id).toBe("FamilyPointWalkerTool");
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.selectionId).toBe("#FamilyPointWalkerTool");
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.FamilyPointWalker.title).toBe("Click to draw family random point walker. Click again to disable.");
+        });
       });
-      it("has OrganismPointWalker", function() {
-        expect(TOOLS.CONSTANTS.OrganismPointWalker).toBeDefined();
+      describe("OrganismPointWalker", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.id).toBe("OrganismPointWalkerTool");
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.selectionId).toBe("#OrganismPointWalkerTool");
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.OrganismPointWalker.title).toBe("Click to draw organism random point walker. Click again to disable.");
+        });
       });
-      it("has UniCellularParasiteTool", function() {
-        expect(TOOLS.CONSTANTS.UniCellularParasiteTool).toBeDefined();
+      describe("UniCellularParasiteTool", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.id).toBeDefined();
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.id).toBe("UniCellularParasiteTool");
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.selectionId).toBeDefined();
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.selectionId).toBe("#UniCellularParasiteTool");
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.class).toBeDefined();
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.class).toBe("main-tool");
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.title).toBeDefined();
+          expect(TOOLS.CONSTANTS.UniCellularParasiteTool.title).toBe("Click to create a parasite. Click again to disable.");
+        });
       });
     });
   });

@@ -1,3 +1,30 @@
+if (typeof Object.assign != 'function') {
+  /* Object.assign Polyfill (comments are inside) */
+  (function () {
+    Object.assign = function (target) {
+      'use strict';
+      // We must check against these specific cases.
+      if (target === undefined || target === null) {
+        throw new TypeError('Cannot convert undefined or null to object');
+      }
+
+      var output = Object(target);
+      for (var index = 1; index < arguments.length; index++) {
+        var source = arguments[index];
+        if (source !== undefined && source !== null) {
+          for (var nextKey in source) {
+            if (source.hasOwnProperty(nextKey)) {
+              output[nextKey] = source[nextKey];
+            }
+          }
+        }
+      }
+      return output;
+    };
+  })();
+  /* Object.assign Polyfill ends here */
+}
+
 var generateSliderString = function (options) {
   var min = options.min,
     max = options.max,
@@ -12,6 +39,220 @@ var generateLabelString = function (options) {
     fontSize = options.fontSize;
 
   return '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
+};
+
+var TOOLS = {
+  CONSTANTS: {
+    /* constant values for tools in jspaint */
+    MandelbrotFractal: {
+      id: "MandelbrotFractalTool",
+      selectionId: '#MandelbrotFractalTool',
+      class: 'main-tool',
+      title: 'Click to draw Mandelbrot Fractal. Click again to disable.',
+      maxHeight: -1,
+      maxWidth: -1
+    },
+    Pencil: {
+      id: "PencilTool",
+      selectionId: '#PencilTool',
+      class: 'main-tool',
+      title: 'Click to draw free-hand lines. Click again to disable.'
+    },
+    PickColor: {
+      id: 'pick-color',
+      selectionId: '#pick-color',
+      class: 'string-menu-item',
+      containerId: 'PickColorTool',
+      title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
+    },
+    PivotedLinePattern: {
+      id: "PivotedLinePatternTool",
+      selectionId: '#PivotedLinePatternTool',
+      class: 'main-tool',
+      title: 'Click to draw amazing pattern. Click again to disable.',
+      ACTIONS: {
+        pivots: 'pivots',
+        Ydrops: 'drops',
+        godRays: 'god-rays',
+        Xextends: 'extends'
+      }
+    },
+    Rectangle: {
+      id: 'RectangleTool',
+      selectionId: '#RectangleTool',
+      class: 'main-tool',
+      title: 'Click to draw rectangles. Click again to disable.',
+      previewId: 'previewRectangle'
+    },
+    Ring: {
+      id: 'RingTool',
+      selectionId: '#RingTool',
+      class: 'main-tool',
+      title: 'Click to draw ring. Click again to disable.',
+      previewId: 'previewRing',
+      previewOuterId: 'previewOuterRing'
+    },
+    Disc: {
+      id: 'DiscTool',
+      selectionId: '#DiscTool',
+      class: 'main-tool',
+      title: 'Click to draw disc. Click again to disable.',
+      previewId: 'previewDisc'
+    },
+    Square: {
+      id: 'SquareTool',
+      selectionId: '#SquareTool',
+      class: 'main-tool',
+      title: 'Click to draw squares. Click again to disable.',
+      previewId: 'previewSquare'
+    },
+    Circle: {
+      id: 'CircleTool',
+      selectionId: '#CircleTool',
+      class: 'main-tool',
+      title: 'Click to draw circle. Click again to disable.',
+      previewId: 'previewCircle'
+    },
+    PointWalker: {
+      id: 'PointWalkerTool',
+      selectionId: '#PointWalkerTool',
+      class: 'main-tool',
+      title: 'Click to draw random point walker. Click again to disable.'
+    },
+    FamilyPointWalker: {
+      id: 'FamilyPointWalkerTool',
+      selectionId: '#FamilyPointWalkerTool',
+      class: 'main-tool',
+      title: 'Click to draw family random point walker. Click again to disable.'
+    },
+    OrganismPointWalker: {
+      id: 'OrganismPointWalkerTool',
+      selectionId: '#OrganismPointWalkerTool',
+      class: 'main-tool',
+      title: 'Click to draw organism random point walker. Click again to disable.'
+    },
+    UniCellularParasiteTool: {
+      id: 'UniCellularParasiteTool',
+      selectionId: '#UniCellularParasiteTool',
+      class: 'main-tool',
+      title: 'Click to create a parasite. Click again to disable.'
+    }
+    /* CONSTANTS ends here */
+  },
+  VARIABLES: {
+    /* variables for tools */
+    MandelbrotFractal: {
+      iterations: 1000,
+      xMax: 1,
+      yMax: 1,
+      xMin: -2,
+      yMin: -1,
+      height: -1,
+      width: -1
+    },
+    Pencil: {
+      width: 2,
+      LastPoint: {
+        X: -1,
+        Y: -1
+      }
+    },
+    PivotedLinePattern: {
+      width: 2,
+      LastPoint: {
+        X: -1,
+        Y: -1
+      }
+    },
+    Rectangle: {
+      length: 20,
+      breadth: 10,
+      xyPlaneRotationAngle: 360
+    },
+    Ring: {
+      innerRadius: 10,
+      outerRadius: 20
+    },
+    Disc: {
+      radius: 10
+    },
+    Square: {
+      side: 10,
+      xyPlaneRotationAngle: 360
+    },
+    Circle: {
+      innerRadius: 10
+    },
+    PointWalker: {
+      steps: 100
+    },
+    FamilyPointWalker: {
+      steps: 100,
+      durationBetweenDanceStepsInMiliSeconds: 100
+    },
+    OrganismPointWalker: {
+      steps: 100,
+      durationBetweenDanceStepsInMiliSeconds: 100
+    },
+    UniCellularParasiteTool: {
+      steps: 1,
+      durationBetweenParasiticActsInMiliSeconds: 100,
+      dieOutSteps: 10000
+    }
+    /* VARIABLES ends here */
+  }
+};
+
+var MandelbrotFractal = {
+  CONSTANTS: TOOLS.CONSTANTS.MandelbrotFractal,
+  VARIABLES: TOOLS.VARIABLES.MandelbrotFractal,
+};
+var Pencil = {
+  CONSTANTS: TOOLS.CONSTANTS.Pencil,
+  VARIABLES: TOOLS.VARIABLES.Pencil
+};
+var PickColor = {
+  CONSTANTS: TOOLS.CONSTANTS.PickColor
+};
+var PivotedLinePattern = {
+  CONSTANTS: TOOLS.CONSTANTS.PivotedLinePattern,
+  VARIABLES: TOOLS.VARIABLES.PivotedLinePattern
+};
+var Rectangle = {
+  CONSTANTS: TOOLS.CONSTANTS.Rectangle,
+  VARIABLES: TOOLS.CONSTANTS.Rectangle
+};
+var Ring = {
+  CONSTANTS: TOOLS.CONSTANTS.Ring,
+  VARIABLES: TOOLS.VARIABLES.Ring
+};
+var Disc = {
+  CONSTANTS: TOOLS.CONSTANTS.Disc,
+  VARIABLES: TOOLS.VARIABLES.Disc
+};
+var Square = {
+  CONSTANTS: TOOLS.CONSTANTS.Square,
+  VARIABLES: TOOLS.VARIABLES.Square
+};
+var Circle = {
+  CONSTANTS: TOOLS.CONSTANTS.Circle,
+  VARIABLES: TOOLS.VARIABLES.Circle
+};
+var PointWalker = {
+  CONSTANTS: TOOLS.CONSTANTS.PointWalker,
+  VARIABLES: TOOLS.VARIABLES.PointWalker
+};
+var FamilyPointWalker = {
+  CONSTANTS: TOOLS.CONSTANTS.FamilyPointWalker,
+  VARIABLES: TOOLS.VARIABLES.FamilyPointWalker
+};
+var OrganismPointWalker = {
+  CONSTANTS: TOOLS.CONSTANTS.OrganismPointWalker,
+  VARIABLES: TOOLS.VARIABLES.OrganismPointWalker
+};
+var UniCellularParasiteTool = {
+  CONSTANTS: TOOLS.CONSTANTS.UniCellularParasiteTool,
+  VARIABLES: TOOLS.VARIABLES.UniCellularParasiteTool
 };
 
 $(function () {
@@ -66,154 +307,7 @@ $(function () {
   }
   $('#image-button').on('change', onImageButtonChange);
 
-  var TOOLS = {
-    CONSTANTS: {
-      MandelbrotFractal: {
-        id: "MandelbrotFractalTool",
-        selectionId: '#MandelbrotFractalTool',
-        class: 'main-tool',
-        title: 'Click to draw Mandelbrot Fractal. Click again to disable.',
-        maxHeight: -1,
-        maxWidth: -1
-      },
-      PickColor: {
-        id: 'pick-color',
-        selectionId: '#pick-color',
-        class: 'string-menu-item',
-        containerId: 'PickColorTool',
-        title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
-      },
-      PivotedLinePattern: {
-        id: "PivotedLinePatternTool",
-        selectionId: '#PivotedLinePatternTool',
-        class: 'main-tool',
-        title: 'Click to draw amazing pattern. Click again to disable.',
-        ACTIONS: {
-          pivots: 'pivots',
-          Ydrops: 'drops',
-          godRays: 'god-rays',
-          Xextends: 'extends'
-        }
-      },
-      Rectangle: {
-        id: 'RectangleTool',
-        selectionId: '#RectangleTool',
-        class: 'main-tool',
-        title: 'Click to draw rectangles. Click again to disable.',
-        previewId: 'previewRectangle'
-      },
-      Ring: {
-        id: 'RingTool',
-        selectionId: '#RingTool',
-        class: 'main-tool',
-        title: 'Click to draw ring. Click again to disable.',
-        previewId: 'previewRing',
-        previewOuterId: 'previewOuterRing'
-      },
-      Disc: {
-        id: 'DiscTool',
-        selectionId: '#DiscTool',
-        class: 'main-tool',
-        title: 'Click to draw disc. Click again to disable.',
-        previewId: 'previewDisc'
-      },
-      Square: {
-        id: 'SquareTool',
-        selectionId: '#SquareTool',
-        class: 'main-tool',
-        title: 'Click to draw squares. Click again to disable.',
-        previewId: 'previewSquare'
-      },
-      Circle: {
-        id: 'CircleTool',
-        selectionId: '#CircleTool',
-        class: 'main-tool',
-        title: 'Click to draw circle. Click again to disable.',
-        previewId: 'previewCircle'
-      },
-      PointWalker: {
-        id: 'PointWalkerTool',
-        selectionId: '#PointWalkerTool',
-        class: 'main-tool',
-        title: 'Click to draw random point walker. Click again to disable.'
-      },
-      FamilyPointWalker: {
-        id: 'FamilyPointWalkerTool',
-        selectionId: '#FamilyPointWalkerTool',
-        class: 'main-tool',
-        title: 'Click to draw family random point walker. Click again to disable.'
-      },
-      OrganismPointWalker: {
-        id: 'OrganismPointWalkerTool',
-        selectionId: '#OrganismPointWalkerTool',
-        class: 'main-tool',
-        title: 'Click to draw organism random point walker. Click again to disable.'
-      },
-      UniCellularParasiteTool: {
-        id: 'UniCellularParasiteTool',
-        selectionId: '#UniCellularParasiteTool',
-        class: 'main-tool',
-        title: 'Click to create a parasite. Click again to disable.'
-      }
-    },
-    VARIABLES: {
-      MandelbrotFractal: {
-        iterations: 1000,
-        xMax: 1,
-        yMax: 1,
-        xMin: -2,
-        yMin: -1,
-        height: -1,
-        width: -1
-      },
-      PivotedLinePattern: {
-        width: 2,
-        LastPoint: {
-          X: -1,
-          Y: -1
-        }
-      },
-      Rectangle: {
-        length: 20,
-        breadth: 10,
-        xyPlaneRotationAngle: 360
-      },
-      Ring: {
-        innerRadius: 10,
-        outerRadius: 20
-      },
-      Disc: {
-        radius: 10
-      },
-      Square: {
-        side: 10,
-        xyPlaneRotationAngle: 360
-      },
-      Circle: {
-        innerRadius: 10
-      },
-      PointWalker: {
-        steps: 100
-      },
-      FamilyPointWalker: {
-        steps: 100,
-        durationBetweenDanceStepsInMiliSeconds: 100
-      },
-      OrganismPointWalker: {
-        steps: 100,
-        durationBetweenDanceStepsInMiliSeconds: 100
-      },
-      UniCellularParasiteTool: {
-        steps: 1,
-        durationBetweenParasiticActsInMiliSeconds: 100,
-        dieOutSteps: 10000
-      }
-    }
-  };
-
-  var MandelbrotFractal = {
-    CONSTANTS: TOOLS.CONSTANTS.MandelbrotFractal,
-    VARIABLES: TOOLS.VARIABLES.MandelbrotFractal,
+  var MandelbrotFractalFunctionality = {
     start: function (options) {
       var event = options.event,
         canvasId = options.canvasId;
@@ -563,29 +657,7 @@ $(function () {
     }
   };
 
-  MandelbrotFractal.Events.register({
-    toolId: MandelbrotFractal.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: '#' + CONSTANTS.canvasId,
-    start: MandelbrotFractal.start,
-    stop: MandelbrotFractal.stop,
-    toolName: 'Mandelbrot fractal'
-  });
-
-  var Pencil = {
-    CONSTANTS: {
-      id: "PencilTool",
-      selectionId: '#PencilTool',
-      class: 'main-tool',
-      title: 'Click to draw free-hand lines. Click again to disable.'
-    },
-    VARIABLES: {
-      width: 2,
-      LastPoint: {
-        X: -1,
-        Y: -1
-      }
-    },
+  var PencilFunctionality = {
     start: function (options) {
       var event = options.event,
         canvasId = '#' + options.canvasId,
@@ -692,8 +764,7 @@ $(function () {
     }
   };
 
-  var PickColor = {
-    CONSTANTS: TOOLS.CONSTANTS.PickColor,
+  var PickColorFunctionality = {
     ContextMenu: {
       activate: function () { },
       deactivate: function () { },
@@ -733,9 +804,7 @@ $(function () {
     }
   };
 
-  var PivotedLinePattern = {
-    CONSTANTS: TOOLS.CONSTANTS.PivotedLinePattern,
-    VARIABLES: TOOLS.VARIABLES.PivotedLinePattern,
+  var PivotedLinePatternFunctionality = {
     start: function (options) {
       var event = options.event || CONSTANTS.Events.mousemove,
         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
@@ -887,9 +956,7 @@ $(function () {
     }
   };
 
-  var Rectangle = {
-    CONSTANTS: TOOLS.CONSTANTS.Rectangle,
-    VARIABLES: TOOLS.CONSTANTS.Rectangle,
+  var RectangleFunctionality = {
     start: function (options) {
       var
         event = options.event,
@@ -1046,12 +1113,9 @@ $(function () {
     }
   };
 
-  var Ring = {
-    CONSTANTS: TOOLS.CONSTANTS.Ring,
-    VARIABLES: TOOLS.VARIABLES.Ring,
+  var RingFunctionality = {
     start: function (options) {
-      var
-        event = options.event || CONSTANTS.Events.mouseclick,
+      var event = options.event || CONSTANTS.Events.mouseclick,
         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
         mouseOptions = null,
         X = null,
@@ -1225,12 +1289,9 @@ $(function () {
     }
   };
 
-  var Disc = {
-    CONSTANTS: TOOLS.CONSTANTS.Disc,
-    VARIABLES: Tools.VARIABLES.Disc,
+  var DiscFunctionality = {
     start: function (options) {
-      var
-        event = options.event,
+      var event = options.event,
         canvasId = '#' + options.canvasId,
         mouseOptions = null,
         X = null,
@@ -1347,9 +1408,7 @@ $(function () {
     }
   };
 
-  var Square = {
-    CONSTANTS: TOOLS.CONSTANTS.Square,
-    VARIABLES: TOOLS.VARIABLES.Square,
+  var SquareFunctionality = {
     start: function (options) {
       var event = options.event || CONSTANTS.Events.mouseclick,
         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
@@ -1489,12 +1548,9 @@ $(function () {
     }
   };
 
-  var Circle = {
-    CONSTANTS: TOOLS.CONSTANTS.Circle,
-    VARIABLES: TOOLS.VARIABLES.Circle,
+  var CircleFunctionality = {
     start: function (options) {
-      var
-        event = options.event || CONSTANTS.Events.mouseclick,
+      var event = options.event || CONSTANTS.Events.mouseclick,
         canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
         mouseOptions = null,
         X = null,
@@ -1616,9 +1672,7 @@ $(function () {
     }
   };
 
-  var PointWalker = {
-    CONSTANTS: TOOLS.CONSTANTS.PointWalker,
-    VARIABLES: TOOLS.VARIABLES.PointWalker,
+  var PointWalkerFunctionality = {
     start: function (options) {
       var event = options.event,
         canvasId = '#' + options.canvasId,
@@ -1690,9 +1744,7 @@ $(function () {
     }
   };
 
-  var FamilyPointWalker = {
-    CONSTANTS: TOOLS.CONSTANTS.FamilyPointWalker,
-    VARIABLES: TOOLS.VARIABLES.FamilyPointWalker,
+  var FamilyPointWalkerFunctionality = {
     start: function (options) {
       var
         event = options.event,
@@ -1797,9 +1849,7 @@ $(function () {
     }
   };
 
-  var OrganismPointWalker = {
-    CONSTANTS: TOOLS.CONSTANTS.OrganismPointWalker,
-    VARIABLES: TOOLS.VARIABLES.OrganismPointWalker,
+  var OrganismPointWalkerFunctionality = {
     start: function (options) {
       var event = options.event,
         canvasId = '#' + options.canvasId,
@@ -1904,9 +1954,7 @@ $(function () {
     }
   };
 
-  var UniCellularParasiteTool = {
-    CONSTANTS: TOOLS.CONSTANTS.UniCellularParasiteTool,
-    VARIABLES: TOOLS.VARIABLES.UniCellularParasiteTool,
+  var UniCellularParasiteToolFunctionality = {
     start: function (options) {
       var event = options.event,
         canvasId = '#' + options.canvasId,
@@ -1969,129 +2017,23 @@ $(function () {
     }
   };
 
-  COMMON.registerEventForTool({
-    toolId: Pencil.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mousemove,
-    canvasId: CONSTANTS.canvasId,
-    start: Pencil.start,
-    stop: Pencil.stop,
-    toolName: 'Pencil',
-    contextMenu: Pencil.ContextMenu,
-    constantTitle: Pencil.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: PickColor.CONSTANTS.selectionId,
-    containerId: PickColor.CONSTANTS.containerId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: PickColor.start,
-    stop: PickColor.stop,
-    toolName: 'Color picker',
-    contextMenu: PickColor.ContextMenu,
-    constantTitle: PickColor.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: PivotedLinePattern.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mousemove,
-    canvasId: CONSTANTS.canvasId,
-    start: PivotedLinePattern.start,
-    stop: PivotedLinePattern.stop,
-    toolName: 'Pivoted Line Pattern',
-    contextMenu: PivotedLinePattern.ContextMenu,
-    constantTitle: PivotedLinePattern.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: Rectangle.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: Rectangle.start,
-    stop: Rectangle.stop,
-    toolName: 'Rectangle',
-    contextMenu: Rectangle.ContextMenu,
-    constantTitle: Rectangle.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: Ring.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: Ring.start,
-    stop: Ring.stop,
-    toolName: 'Ring',
-    contextMenu: Ring.ContextMenu,
-    constantTitle: Ring.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: Disc.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: Disc.start,
-    stop: Disc.stop,
-    toolName: 'Disc',
-    contextMenu: Disc.ContextMenu,
-    constantTitle: Disc.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: Square.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: Square.start,
-    stop: Square.stop,
-    toolName: 'Square',
-    contextMenu: Square.ContextMenu,
-    constantTitle: Square.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: Circle.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: Circle.start,
-    stop: Circle.stop,
-    toolName: 'Circle',
-    contextMenu: Circle.ContextMenu,
-    constantTitle: Circle.CONSTANTS.title
+  /* Assigning functionality to tools */
+  Object.assign(MandelbrotFractal, MandelbrotFractalFunctionality);
+  Object.assign(Pencil, PencilFunctionality);
+  Object.assign(PickColor, PickColorFunctionality);
+  Object.assign(PivotedLinePattern, PivotedLinePatternFunctionality);
+  Object.assign(Rectangle, RectangleFunctionality);
+  Object.assign(Ring, RingFunctionality);
+  Object.assign(Disc, DiscFunctionality);
+  Object.assign(Square, SquareFunctionality);
+  Object.assign(Circle, CircleFunctionality);
+  Object.assign(PointWalker, PointWalkerFunctionality);
+  Object.assign(FamilyPointWalker, FamilyPointWalkerFunctionality);
+  Object.assign(OrganismPointWalker, OrganismPointWalkerFunctionality);
+  Object.assign(UniCellularParasiteTool, UniCellularParasiteToolFunctionality);
+  /* Assignment of functionality to tools ends here */
 
-  });
-  COMMON.registerEventForTool({
-    toolId: PointWalker.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: PointWalker.start,
-    stop: PointWalker.stop,
-    toolName: 'Point Walker',
-    contextMenu: PointWalker.ContextMenu,
-    constantTitle: PointWalker.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: OrganismPointWalker.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: OrganismPointWalker.start,
-    stop: OrganismPointWalker.stop,
-    toolName: 'Organism Point Walker',
-    contextMenu: OrganismPointWalker.ContextMenu,
-    constantTitle: OrganismPointWalker.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: FamilyPointWalker.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: FamilyPointWalker.start,
-    stop: FamilyPointWalker.stop,
-    toolName: 'Family Point Walker',
-    contextMenu: FamilyPointWalker.ContextMenu,
-    constantTitle: FamilyPointWalker.CONSTANTS.title
-  });
-  COMMON.registerEventForTool({
-    toolId: UniCellularParasiteTool.CONSTANTS.selectionId,
-    event: CONSTANTS.Events.mouseclick,
-    canvasId: CONSTANTS.canvasId,
-    start: UniCellularParasiteTool.start,
-    stop: UniCellularParasiteTool.stop,
-    toolName: 'UniCellular Parasite Tool',
-    contextMenu: UniCellularParasiteTool.ContextMenu,
-    constantTitle: UniCellularParasiteTool.CONSTANTS.title
-  });
-
+  /* Actions */
   function onSaturateRedColorToolClick() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
@@ -2421,7 +2363,6 @@ $(function () {
       height: height
     });
 
-
     for (var i = 0; i < Math.floor(width / 10); i++) {
       for (var j = 0; j < Math.floor(height / 10); j++) {
         x = Math.floor(Math.random() * width);
@@ -2441,7 +2382,138 @@ $(function () {
 
     context.strokeStyle = strokeStyle;
   }
+  /* Actions ends here */
+  /* Settings things up */
+  MandelbrotFractal.Events.register({
+    toolId: MandelbrotFractal.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: '#' + CONSTANTS.canvasId,
+    start: MandelbrotFractal.start,
+    stop: MandelbrotFractal.stop,
+    toolName: 'Mandelbrot fractal'
+  });
+  COMMON.registerEventForTool({
+    toolId: Pencil.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mousemove,
+    canvasId: CONSTANTS.canvasId,
+    start: Pencil.start,
+    stop: Pencil.stop,
+    toolName: 'Pencil',
+    contextMenu: Pencil.ContextMenu,
+    constantTitle: Pencil.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: PickColor.CONSTANTS.selectionId,
+    containerId: PickColor.CONSTANTS.containerId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: PickColor.start,
+    stop: PickColor.stop,
+    toolName: 'Color picker',
+    contextMenu: PickColor.ContextMenu,
+    constantTitle: PickColor.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: PivotedLinePattern.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mousemove,
+    canvasId: CONSTANTS.canvasId,
+    start: PivotedLinePattern.start,
+    stop: PivotedLinePattern.stop,
+    toolName: 'Pivoted Line Pattern',
+    contextMenu: PivotedLinePattern.ContextMenu,
+    constantTitle: PivotedLinePattern.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: Rectangle.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: Rectangle.start,
+    stop: Rectangle.stop,
+    toolName: 'Rectangle',
+    contextMenu: Rectangle.ContextMenu,
+    constantTitle: Rectangle.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: Ring.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: Ring.start,
+    stop: Ring.stop,
+    toolName: 'Ring',
+    contextMenu: Ring.ContextMenu,
+    constantTitle: Ring.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: Disc.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: Disc.start,
+    stop: Disc.stop,
+    toolName: 'Disc',
+    contextMenu: Disc.ContextMenu,
+    constantTitle: Disc.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: Square.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: Square.start,
+    stop: Square.stop,
+    toolName: 'Square',
+    contextMenu: Square.ContextMenu,
+    constantTitle: Square.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: Circle.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: Circle.start,
+    stop: Circle.stop,
+    toolName: 'Circle',
+    contextMenu: Circle.ContextMenu,
+    constantTitle: Circle.CONSTANTS.title
 
+  });
+  COMMON.registerEventForTool({
+    toolId: PointWalker.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: PointWalker.start,
+    stop: PointWalker.stop,
+    toolName: 'Point Walker',
+    contextMenu: PointWalker.ContextMenu,
+    constantTitle: PointWalker.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: OrganismPointWalker.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: OrganismPointWalker.start,
+    stop: OrganismPointWalker.stop,
+    toolName: 'Organism Point Walker',
+    contextMenu: OrganismPointWalker.ContextMenu,
+    constantTitle: OrganismPointWalker.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: FamilyPointWalker.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: FamilyPointWalker.start,
+    stop: FamilyPointWalker.stop,
+    toolName: 'Family Point Walker',
+    contextMenu: FamilyPointWalker.ContextMenu,
+    constantTitle: FamilyPointWalker.CONSTANTS.title
+  });
+  COMMON.registerEventForTool({
+    toolId: UniCellularParasiteTool.CONSTANTS.selectionId,
+    event: CONSTANTS.Events.mouseclick,
+    canvasId: CONSTANTS.canvasId,
+    start: UniCellularParasiteTool.start,
+    stop: UniCellularParasiteTool.stop,
+    toolName: 'UniCellular Parasite Tool',
+    contextMenu: UniCellularParasiteTool.ContextMenu,
+    constantTitle: UniCellularParasiteTool.CONSTANTS.title
+  });
   $('#SaturateRedColorTool').on('click', onSaturateRedColorToolClick);
   $('#SaturateGreenColorTool').on('click', onSaturateGreenColorToolClick);
   $('#SaturateBlueColorTool').on('click', onSaturateBlueColorToolClick);
@@ -2458,4 +2530,5 @@ $(function () {
   $('#GrayColorTool').on('click', onGrayColorToolClick);
   $('#RandomDisksColorTool').on('click', onRandomDisksColorToolClick);
   $('#RandomCirclesColorTool').on('click', onRandomCirclesColorToolClick);
+
 });

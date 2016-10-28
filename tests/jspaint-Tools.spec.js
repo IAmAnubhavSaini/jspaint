@@ -126,18 +126,20 @@ describe("Testing jspaint-tools under GitHub issue #206", function () {
           expect(TOOLS.CONSTANTS.PivotedLinePattern.class).toBe("main-tool");
           expect(TOOLS.CONSTANTS.PivotedLinePattern.title).toBeDefined();
           expect(TOOLS.CONSTANTS.PivotedLinePattern.title).toBe("Click to draw amazing pattern. Click again to disable.");
-          describe("ACTIONS", function () {
+        });
+        describe("ACTIONS", function () {
+          it("is defined", function () {
             expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS).toBeDefined();
-            describe("has accurate properties", function () {
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.godRays).toBeDefined();
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.godRays).toBe("god-rays");
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.pivots).toBeDefined();
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.pivots).toBe("pivots");
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Xextends).toBeDefined();
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Xextends).toBe("extends");
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Ydrops).toBeDefined();
-              it(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Ydrops).toBe("drops ");
-            });
+          });
+          it("has accurate properties", function () {
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.godRays).toBeDefined();
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.godRays).toBe("god-rays");
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.pivots).toBeDefined();
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.pivots).toBe("pivots");
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Xextends).toBeDefined();
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Xextends).toBe("extends");
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Ydrops).toBeDefined();
+            expect(TOOLS.CONSTANTS.PivotedLinePattern.ACTIONS.Ydrops).toBe("drops");
           });
         });
       });
@@ -261,6 +263,96 @@ describe("Testing jspaint-tools under GitHub issue #206", function () {
           expect(TOOLS.CONSTANTS.UniCellularParasiteTool.title).toBe("Click to create a parasite. Click again to disable.");
         });
       });
+    });
+    describe("VARIABLES", function () {
+      it("has MandelbrotFractal", function () {
+        expect(TOOLS.VARIABLES.MandelbrotFractal).toBeDefined();
+      });
+      it("has Pencil", function () {
+        expect(TOOLS.VARIABLES.Pencil).toBeDefined();
+      });
+      it("has PivotedLinePattern", function () {
+        expect(TOOLS.VARIABLES.PivotedLinePattern).toBeDefined();
+      });
+      it("has Rectangle", function () {
+        expect(TOOLS.VARIABLES.Rectangle).toBeDefined();
+      });
+      it("has Ring", function () {
+        expect(TOOLS.VARIABLES.Ring).toBeDefined();
+      });
+      it("has Disc", function () {
+        expect(TOOLS.VARIABLES.Disc).toBeDefined();
+      });
+      it("has Square", function () {
+        expect(TOOLS.VARIABLES.Square).toBeDefined();
+      });
+      it("has Circle", function () {
+        expect(TOOLS.VARIABLES.Circle).toBeDefined();
+      });
+      it("has PointWalker", function () {
+        expect(TOOLS.VARIABLES.PointWalker).toBeDefined();
+      });
+      it("has FamilyPointWalker", function () {
+        expect(TOOLS.VARIABLES.FamilyPointWalker).toBeDefined();
+      });
+      it("has OrganismPointWalker", function () {
+        expect(TOOLS.VARIABLES.OrganismPointWalker).toBeDefined();
+      });
+      it("has UniCellularParasiteTool", function () {
+        expect(TOOLS.VARIABLES.UniCellularParasiteTool).toBeDefined();
+      });
+      describe("MandelbrotFractal", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.MandelbrotFractal.iterations).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.xMax).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.yMax).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.xMin).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.yMin).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.height).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.width).toBeDefined();
+          expect(TOOLS.VARIABLES.MandelbrotFractal.iterations).toBe(1000);
+          expect(TOOLS.VARIABLES.MandelbrotFractal.xMax).toBe(1);
+          expect(TOOLS.VARIABLES.MandelbrotFractal.yMax).toBe(1);
+          expect(TOOLS.VARIABLES.MandelbrotFractal.xMin).toBe(-2);
+          expect(TOOLS.VARIABLES.MandelbrotFractal.yMin).toBe(-1);
+          expect(TOOLS.VARIABLES.MandelbrotFractal.height).toBe(-1);
+          expect(TOOLS.VARIABLES.MandelbrotFractal.width).toBe(-1);
+        });
+      });
+      describe("Pencil", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.Pencil.width).toBeDefined();
+          expect(TOOLS.VARIABLES.Pencil.width).toBe(2);
+        });
+        describe("LastPoint", function () {
+          it("is defined", function () {
+            expect(TOOLS.VARIABLES.Pencil.LastPoint).toBeDefined();
+          });
+          it("has accurate properties", function () {
+            expect(TOOLS.VARIABLES.Pencil.LastPoint.X).toBeDefined();
+            expect(TOOLS.VARIABLES.Pencil.LastPoint.Y).toBeDefined();
+            expect(TOOLS.VARIABLES.Pencil.LastPoint.X).toBe(-1);
+            expect(TOOLS.VARIABLES.Pencil.LastPoint.Y).toBe(-1);
+          });
+        });
+      }/* Pencil describe ends here */);
+      describe("PivotedLinePattern", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.PivotedLinePattern.width).toBeDefined();
+          expect(TOOLS.VARIABLES.PivotedLinePattern.width).toBe(2);
+        });
+        describe("LastPoint", function () {
+          it("is defined", function () {
+            expect(TOOLS.VARIABLES.PivotedLinePattern.LastPoint).toBeDefined();
+          });
+          it("has accurate properties", function () {
+            expect(TOOLS.VARIABLES.PivotedLinePattern.LastPoint.X).toBeDefined();
+            expect(TOOLS.VARIABLES.PivotedLinePattern.LastPoint.Y).toBeDefined();
+            expect(TOOLS.VARIABLES.PivotedLinePattern.LastPoint.X).toBe(-1);
+            expect(TOOLS.VARIABLES.PivotedLinePattern.LastPoint.Y).toBe(-1);
+          });
+        });
+      }/* PivotedLinePattern describe ends here */);
     });
   });
 });

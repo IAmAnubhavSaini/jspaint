@@ -301,6 +301,7 @@ describe("Testing jspaint-tools under GitHub issue #206", function () {
       it("has UniCellularParasiteTool", function () {
         expect(TOOLS.VARIABLES.UniCellularParasiteTool).toBeDefined();
       });
+
       describe("MandelbrotFractal", function () {
         it("has accurate properties", function () {
           expect(TOOLS.VARIABLES.MandelbrotFractal.iterations).toBeDefined();
@@ -318,7 +319,8 @@ describe("Testing jspaint-tools under GitHub issue #206", function () {
           expect(TOOLS.VARIABLES.MandelbrotFractal.height).toBe(-1);
           expect(TOOLS.VARIABLES.MandelbrotFractal.width).toBe(-1);
         });
-      });
+      }/* MandelbrotFractal describe ends here */);
+
       describe("Pencil", function () {
         it("has accurate properties", function () {
           expect(TOOLS.VARIABLES.Pencil.width).toBeDefined();
@@ -336,6 +338,7 @@ describe("Testing jspaint-tools under GitHub issue #206", function () {
           });
         });
       }/* Pencil describe ends here */);
+
       describe("PivotedLinePattern", function () {
         it("has accurate properties", function () {
           expect(TOOLS.VARIABLES.PivotedLinePattern.width).toBeDefined();
@@ -353,6 +356,78 @@ describe("Testing jspaint-tools under GitHub issue #206", function () {
           });
         });
       }/* PivotedLinePattern describe ends here */);
-    });
+
+      describe("Rectangle", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.Rectangle.length).toBeDefined();
+          expect(TOOLS.VARIABLES.Rectangle.length).toBe(20);
+          expect(TOOLS.VARIABLES.Rectangle.breadth).toBeDefined();
+          expect(TOOLS.VARIABLES.Rectangle.breadth).toBe(10);
+          expect(TOOLS.VARIABLES.Rectangle.xyPlaneRotationAngle).toBeDefined();
+          expect(TOOLS.VARIABLES.Rectangle.xyPlaneRotationAngle).toBe(360);
+        });
+      }/* Rectangle describe ends here */);
+
+      describe("Ring", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.Ring.innerRadius).toBeDefined();
+          expect(TOOLS.VARIABLES.Ring.innerRadius).toBe(10);
+          expect(TOOLS.VARIABLES.Ring.outerRadius).toBeDefined();
+          expect(TOOLS.VARIABLES.Ring.outerRadius).toBe(20);
+        });
+      }/* Ring describe ends here */);
+
+      describe("Disc", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.Disc.radius).toBeDefined();
+          expect(TOOLS.VARIABLES.Disc.radius).toBe(10);
+        });
+      }/* Disc describe ends here */);
+
+      describe("Square", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.Square.side).toBeDefined();
+          expect(TOOLS.VARIABLES.Square.side).toBe(10);
+          expect(TOOLS.VARIABLES.Square.xyPlaneRotationAngle).toBeDefined();
+          expect(TOOLS.VARIABLES.Square.xyPlaneRotationAngle).toBe(360);
+        });
+      }/* Square describe ends here */);
+
+      describe("PointWalker", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.PointWalker.steps).toBeDefined();
+          expect(TOOLS.VARIABLES.PointWalker.steps).toBe(100);
+        });
+      }/* PointWalker describe ends here */);
+
+      describe("FamilyPointWalker", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.FamilyPointWalker.steps).toBeDefined();
+          expect(TOOLS.VARIABLES.FamilyPointWalker.steps).toBe(100);
+          expect(TOOLS.VARIABLES.FamilyPointWalker.durationBetweenDanceStepsInMiliSeconds).toBeDefined();
+          expect(TOOLS.VARIABLES.FamilyPointWalker.durationBetweenDanceStepsInMiliSeconds).toBe(100);
+        });
+      }/* FamilyPointWalker describe ends here */);
+
+      describe("OrganismPointWalker", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.OrganismPointWalker.steps).toBeDefined();
+          expect(TOOLS.VARIABLES.OrganismPointWalker.steps).toBe(100);
+          expect(TOOLS.VARIABLES.OrganismPointWalker.durationBetweenDanceStepsInMiliSeconds).toBeDefined();
+          expect(TOOLS.VARIABLES.OrganismPointWalker.durationBetweenDanceStepsInMiliSeconds).toBe(100);
+        });
+      }/* OrganismPointWalker describe ends here */);
+
+      describe("UniCellularParasiteTool", function () {
+        it("has accurate properties", function () {
+          expect(TOOLS.VARIABLES.UniCellularParasiteTool.steps).toBeDefined();
+          expect(TOOLS.VARIABLES.UniCellularParasiteTool.steps).toBe(1);
+          expect(TOOLS.VARIABLES.UniCellularParasiteTool.durationBetweenParasiticActsInMiliSeconds).toBeDefined();
+          expect(TOOLS.VARIABLES.UniCellularParasiteTool.durationBetweenParasiticActsInMiliSeconds).toBe(100);
+          expect(TOOLS.VARIABLES.UniCellularParasiteTool.dieOutSteps).toBeDefined();
+          expect(TOOLS.VARIABLES.UniCellularParasiteTool.dieOutSteps).toBe(10000);
+        });
+      }/* UniCellularParasiteTool describe ends here */);
+    }/* VARIABLES describe ends here */);
   });
 });

@@ -1,7 +1,5 @@
 [![Build Status](https://travis-ci.org/IAmAnubhavSaini/jspaint.svg)](https://travis-ci.org/IAmAnubhavSaini/jspaint)
 
-[![Build Status](https://drone.io/github.com/IAmAnubhavSaini/jspaint/status.png)]  (https://drone.io/github.com/IAmAnubhavSaini/jspaint/latest)
-
 [![Coverage Status](https://coveralls.io/repos/github/IAmAnubhavSaini/jspaint/badge.svg?branch=master)](https://coveralls.io/github/IAmAnubhavSaini/jspaint?branch=master)
 
 <hr />

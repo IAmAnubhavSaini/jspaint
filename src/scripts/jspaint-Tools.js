@@ -2320,33 +2320,6 @@ $(function () {
     context.putImageData(image, 0, 0);
   }
 
-  function onRandomDisksColorToolClick() {
-    var canvasId = '#' + CONSTANTS.canvasId,
-      height = $(canvasId).height(),
-      width = $(canvasId).width(),
-      radius = 1,
-      x, y, fillStyle = context.fillStyle;
-
-    saveCanvasState({
-      startX: 0,
-      startY: 0,
-      width: width,
-      height: height
-    });
-
-    for (var i = 0; i < Math.floor(width / 10); i++) {
-      for (var j = 0; j < Math.floor(height / 10); j++) {
-        radius = Math.floor(Math.random() * 10);
-        x = Math.floor(Math.random() * width);
-        y = Math.floor(Math.random() * height);
-        context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
-        CANVASAPI.fillCirc(x, y, radius);
-      }
-    }
-
-    context.fillStyle = fillStyle;
-  }
-
   function getCanvasDetails() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
@@ -2357,6 +2330,29 @@ $(function () {
       height: height,
       width: width,
     };
+  }
+
+  function onRandomDisksColorToolClick() {
+    var canvas = getCanvasDetails(),
+      radius = 1,
+      x, y, fillStyle;
+
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: canvas.width,
+      height: canvas.height
+    });
+
+    for (var i = 0; i < Math.floor(canvas.width / 10); i++) {
+      for (var j = 0; j < Math.floor(canvas.height / 10); j++) {
+        radius = Math.floor(Math.random() * 10);
+        x = Math.floor(Math.random() * canvas.width);
+        y = Math.floor(Math.random() * canvas.height);
+        context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
+        CANVASAPI.fillCirc(x, y, radius);
+      }
+    }
   }
 
   function onRandomCirclesColorToolClick() {

@@ -2295,19 +2295,32 @@ $(function () {
     context.putImageData(image, 0, 0);
   }
 
-  function onGrayColorToolClick() {
+  function getCanvasDetails() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
       width = $(canvasId).width(),
-      image = context.getImageData(0, 0, width, height),
+      image = context.getImageData(0, 0, width, height);
+
+    return {
+      canvasId: canvasId,
+      height: height,
+      width: width,
+      image: image,
+      context: context
+    };
+  }
+
+  function onGrayColorToolClick() {
+    var canvas = getCanvasDetails(),
+      image = canvas.image,
       averageValue = 0,
       newValue = 0;
 
     saveCanvasState({
       startX: 0,
       startY: 0,
-      width: width,
-      height: height
+      width: canvas.width,
+      height: canvas.height
     });
 
     for (var i = 0; i < image.data.length; i += 4) {
@@ -2318,18 +2331,6 @@ $(function () {
       image.data[i + 2] = newValue;
     }
     context.putImageData(image, 0, 0);
-  }
-
-  function getCanvasDetails() {
-    var canvasId = '#' + CONSTANTS.canvasId,
-      height = $(canvasId).height(),
-      width = $(canvasId).width();
-
-    return {
-      canvasId: canvasId,
-      height: height,
-      width: width,
-    };
   }
 
   function onRandomDisksColorToolClick() {

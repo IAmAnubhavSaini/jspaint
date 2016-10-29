@@ -305,7 +305,6 @@ $(function () {
     };
     reader.readAsDataURL(e.target.files[0]);
   }
-  $('#image-button').on('change', onImageButtonChange);
 
   var MandelbrotFractalFunctionality = {
     start: function (options) {
@@ -2514,6 +2513,8 @@ $(function () {
     contextMenu: UniCellularParasiteTool.ContextMenu,
     constantTitle: UniCellularParasiteTool.CONSTANTS.title
   });
+
+  $('#image-button').on('change', onImageButtonChange);
   $('#SaturateRedColorTool').on('click', onSaturateRedColorToolClick);
   $('#SaturateGreenColorTool').on('click', onSaturateGreenColorToolClick);
   $('#SaturateBlueColorTool').on('click', onSaturateBlueColorToolClick);

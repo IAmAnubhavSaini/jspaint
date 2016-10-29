@@ -180,7 +180,9 @@ var pre = $(function () {
   };
 
   saveCanvasState = function (options) {
-    CanvasState.push(context.getImageData(options.startX, options.startY, options.width, options.height));
+    var image = context.getImageData(options.startX, options.startY, options.width, options.height);
+    CanvasState.push(image);
+    // #TODO: Figure out a way to persist image data. #210
   };
 
   Color = {

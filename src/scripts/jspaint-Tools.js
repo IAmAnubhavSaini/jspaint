@@ -41,6 +41,17 @@ var generateLabelString = function (options) {
   return '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
 };
 
+function randomLoop(width, height, operation) {
+  var x, y;
+  for (var i = 0; i < Math.floor(width / 10); i++) {
+    for (var j = 0; j < Math.floor(height / 10); j++) {
+      x = Math.floor(Math.random() * width);
+      y = Math.floor(Math.random() * height);
+      operation(x, y, i, j);
+    }
+  }
+}
+
 var TOOLS = {
   CONSTANTS: {
     /* constant values for tools in jspaint */
@@ -2315,30 +2326,16 @@ $(function () {
   function onGrayColorToolClick() {
     var canvas = getCanvasDetails(),
       image = canvas.image,
-      averageValue = 0,
+      average = 0,
       newValue = 0;
 
     saveCanvasState(canvas);
-
     for (var i = 0; i < image.data.length; i += 4) {
-      averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
-      newValue = Math.floor(averageValue / 16) * 16;
-      image.data[i] = newValue;
-      image.data[i + 1] = newValue;
-      image.data[i + 2] = newValue;
+      average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
+      newValue = Math.floor(average / 16) * 16;
+      image.data[i + 2] = image.data[i + 1] = image.data[i] = newValue;
     }
     context.putImageData(image, 0, 0);
-  }
-
-  function randomLoop(width, height, operation) {
-    var x, y;
-    for (var i = 0; i < Math.floor(width / 10); i++) {
-      for (var j = 0; j < Math.floor(height / 10); j++) {
-        x = Math.floor(Math.random() * width);
-        y = Math.floor(Math.random() * height);
-        operation(x, y, i, j);
-      }
-    }
   }
 
   function onRandomDisksColorToolClick() {
@@ -2355,9 +2352,7 @@ $(function () {
 
   function onRandomCirclesColorToolClick() {
     var canvas = getCanvasDetails();
-
     saveCanvasState(canvas);
-
     function circleDrawOperation(x, y, indexI, indexJ) {
       var innerRadius = Math.floor(Math.random() * 10),
         strokeStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
@@ -2373,7 +2368,8 @@ $(function () {
     randomLoop(canvas.width, canvas.height, circleDrawOperation);
   }
   /* Actions ends here */
-  /* Settings things up */
+
+  /* Setting things up */
   MandelbrotFractal.Events.register({
     toolId: MandelbrotFractal.CONSTANTS.selectionId,
     event: CONSTANTS.Events.mouseclick,

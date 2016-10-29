@@ -2347,25 +2347,35 @@ $(function () {
     context.fillStyle = fillStyle;
   }
 
-  function onRandomCirclesColorToolClick() {
+  function getCanvasDetails() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
-      width = $(canvasId).width(),
-      x, y, strokeStyle = context.strokeStyle,
+      width = $(canvasId).width();
+
+    return {
+      canvasId: canvasId,
+      height: height,
+      width: width,
+    };
+  }
+
+  function onRandomCirclesColorToolClick() {
+    var canvas = getCanvasDetails(),
+      x, y, strokeStyle,
       innerRadius = 1,
       outerRadius = 2;
 
     saveCanvasState({
       startX: 0,
       startY: 0,
-      width: width,
-      height: height
+      width: canvas.width,
+      height: canvas.height
     });
 
-    for (var i = 0; i < Math.floor(width / 10); i++) {
-      for (var j = 0; j < Math.floor(height / 10); j++) {
-        x = Math.floor(Math.random() * width);
-        y = Math.floor(Math.random() * height);
+    for (var i = 0; i < Math.floor(canvas.width / 10); i++) {
+      for (var j = 0; j < Math.floor(canvas.height / 10); j++) {
+        x = Math.floor(Math.random() * canvas.width);
+        y = Math.floor(Math.random() * canvas.height);
         innerRadius = Math.floor(Math.random() * 10);
         strokeStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
         CANVASAPI.drawCircle({
@@ -2375,11 +2385,8 @@ $(function () {
           outerRadius: innerRadius + 1,
           strokeColor: strokeStyle
         });
-
       }
     }
-
-    context.strokeStyle = strokeStyle;
   }
   /* Actions ends here */
   /* Settings things up */

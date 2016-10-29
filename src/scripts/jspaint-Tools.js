@@ -2333,34 +2333,36 @@ $(function () {
     context.putImageData(image, 0, 0);
   }
 
-  function onRandomDisksColorToolClick() {
-    var canvas = getCanvasDetails(),
-      radius = 1,
-      x, y, fillStyle;
-
-    saveCanvasState({
-      startX: 0,
-      startY: 0,
-      width: canvas.width,
-      height: canvas.height
-    });
-
-    for (var i = 0; i < Math.floor(canvas.width / 10); i++) {
-      for (var j = 0; j < Math.floor(canvas.height / 10); j++) {
-        radius = Math.floor(Math.random() * 10);
-        x = Math.floor(Math.random() * canvas.width);
-        y = Math.floor(Math.random() * canvas.height);
-        context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
-        CANVASAPI.fillCirc(x, y, radius);
+  function randomLoop(width, height, operation) {
+    var x, y;
+    for (var i = 0; i < Math.floor(width / 10); i++) {
+      for (var j = 0; j < Math.floor(height / 10); j++) {
+        x = Math.floor(Math.random() * width);
+        y = Math.floor(Math.random() * height);
+        operation(x, y, i, j);
       }
     }
   }
 
+  function onRandomDisksColorToolClick() {
+    var canvas = getCanvasDetails();
+
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: canvas.width,
+      height: canvas.height
+    });
+    function discDrawOperation(x, y, indexI, indexJ) {
+      var radius = Math.floor(Math.random() * 10);
+      context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
+      CANVASAPI.fillCirc(x, y, radius);
+    }
+    randomLoop(canvas.width, canvas.height, discDrawOperation);
+  }
+
   function onRandomCirclesColorToolClick() {
-    var canvas = getCanvasDetails(),
-      x, y, strokeStyle,
-      innerRadius = 1,
-      outerRadius = 2;
+    var canvas = getCanvasDetails();
 
     saveCanvasState({
       startX: 0,
@@ -2369,21 +2371,19 @@ $(function () {
       height: canvas.height
     });
 
-    for (var i = 0; i < Math.floor(canvas.width / 10); i++) {
-      for (var j = 0; j < Math.floor(canvas.height / 10); j++) {
-        x = Math.floor(Math.random() * canvas.width);
-        y = Math.floor(Math.random() * canvas.height);
-        innerRadius = Math.floor(Math.random() * 10);
+    function circleDrawOperation(x, y, indexI, indexJ) {
+      var innerRadius = Math.floor(Math.random() * 10),
         strokeStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
-        CANVASAPI.drawCircle({
-          X: x,
-          Y: y,
-          innerRadius: innerRadius,
-          outerRadius: innerRadius + 1,
-          strokeColor: strokeStyle
-        });
-      }
+
+      CANVASAPI.drawCircle({
+        X: x,
+        Y: y,
+        innerRadius: innerRadius,
+        outerRadius: innerRadius + 1,
+        strokeColor: strokeStyle
+      });
     }
+    randomLoop(canvas.width, canvas.height, circleDrawOperation);
   }
   /* Actions ends here */
   /* Settings things up */

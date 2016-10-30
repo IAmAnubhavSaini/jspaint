@@ -272,17 +272,17 @@ $(function () {
   function getCanvasDetails() {
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
-      width = $(canvasId).width(),
-      image = context.getImageData(0, 0, width, height);
+      width = $(canvasId).width();
 
     return {
       canvasId: canvasId,
       height: height,
       width: width,
-      image: image,
+      image: context.getImageData(0, 0, width, height),
       context: context,
       startX: 0,
-      startY: 0
+      startY: 0,
+      strokeStyle: context.strokeStyle
     };
   }
 
@@ -2319,7 +2319,8 @@ $(function () {
   }
 
   function onRandomDisksColorToolClick() {
-    var canvas = getCanvasDetails();
+    var canvas = getCanvasDetails(),
+      savedStrokeStyle = canvas.strokeStyle;
     saveCanvasState(canvas);
     function discDrawOperation(x, y, indexI, indexJ) {
       var radius = Math.floor(Math.random() * 10);
@@ -2327,10 +2328,13 @@ $(function () {
       CANVASAPI.fillCirc(x, y, radius);
     }
     randomLoop(canvas.width, canvas.height, discDrawOperation);
+    context.strokeStyle = savedStrokeStyle;
   }
 
   function onRandomCirclesColorToolClick() {
-    var canvas = getCanvasDetails();
+    var canvas = getCanvasDetails(),
+      savedStrokeStyle = canvas.strokeStyle;
+
     saveCanvasState(canvas);
     function circleDrawOperation(x, y, indexI, indexJ) {
       var innerRadius = Math.floor(Math.random() * 10),
@@ -2345,6 +2349,7 @@ $(function () {
       });
     }
     randomLoop(canvas.width, canvas.height, circleDrawOperation);
+    context.strokeStyle = savedStrokeStyle;
   }
   /* Actions ends here */
 

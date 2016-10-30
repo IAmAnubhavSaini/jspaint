@@ -269,6 +269,23 @@ var UniCellularParasiteTool = {
 $(function () {
   "use strict";
 
+  function getCanvasDetails() {
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
+
+    return {
+      canvasId: canvasId,
+      height: height,
+      width: width,
+      image: image,
+      context: context,
+      startX: 0,
+      startY: 0
+    };
+  }
+
   var COMMON = {
     generateSlider: function (options) {
       return $(generateSliderString(options));
@@ -2233,25 +2250,18 @@ $(function () {
   }
 
   function onRandomColorToolClick() {
-    var canvasId = '#' + CONSTANTS.canvasId,
-      height = $(canvasId).height(),
-      width = $(canvasId).width(),
-      image = context.getImageData(0, 0, width, height),
-      sampleX = Math.floor(Math.random() * width),
-      sampleY = Math.floor(Math.random() * height),
-      sampleRed = image.data[sampleX * width + sampleY],
-      sampleGreen = image.data[sampleX * width + sampleY + 1],
-      sampleBlue = image.data[sampleX * width + sampleY + 2],
+    var canvas = getCanvasDetails(),
+      image = canvas.image,
+      sampleX = Math.floor(Math.random() * canvas.width),
+      sampleY = Math.floor(Math.random() * canvas.height),
+      sampleRed = image.data[sampleX * canvas.width + sampleY],
+      sampleGreen = image.data[sampleX * canvas.width + sampleY + 1],
+      sampleBlue = image.data[sampleX * canvas.width + sampleY + 2],
       red = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
       green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
       blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
 
-    saveCanvasState({
-      startX: 0,
-      startY: 0,
-      width: width,
-      height: height
-    });
+    saveCanvasState(canvas);
     for (var i = 0; i < image.data.length; i += 4) {
       if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
         image.data[i] += red;
@@ -2263,38 +2273,25 @@ $(function () {
   }
 
   function onFuzzyColorToolClick() {
-    var canvasId = '#' + CONSTANTS.canvasId,
-      height = $(canvasId).height(),
-      width = $(canvasId).width();
+    var canvas = getCanvasDetails();
 
-    saveCanvasState({
-      startX: 0,
-      startY: 0,
-      width: width,
-      height: height
-    });
+    saveCanvasState(canvas);
     for (var i = 0; i < 255; i++) {
       $('#RandomColorTool').click();
     }
   }
 
   function onBlackAndWhiteColorToolClick() {
-    var canvasId = '#' + CONSTANTS.canvasId,
-      height = $(canvasId).height(),
-      width = $(canvasId).width(),
-      image = context.getImageData(0, 0, width, height),
-      averageValue = 0,
+    var canvas = getCanvasDetails(),
+      image = canvas.image,
+      average = 0,
       newValue = 0;
 
-    saveCanvasState({
-      startX: 0,
-      startY: 0,
-      width: width,
-      height: height
-    });
+    saveCanvasState(canvas);
+
     for (var i = 0; i < image.data.length; i += 4) {
-      averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
-      if (averageValue < 112) {
+      average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
+      if (average < 112) {
         newValue = 0;
       } else {
         newValue = 255;
@@ -2304,23 +2301,6 @@ $(function () {
       image.data[i + 2] = newValue;
     }
     context.putImageData(image, 0, 0);
-  }
-
-  function getCanvasDetails() {
-    var canvasId = '#' + CONSTANTS.canvasId,
-      height = $(canvasId).height(),
-      width = $(canvasId).width(),
-      image = context.getImageData(0, 0, width, height);
-
-    return {
-      canvasId: canvasId,
-      height: height,
-      width: width,
-      image: image,
-      context: context,
-      startX: 0,
-      startY: 0
-    };
   }
 
   function onGrayColorToolClick() {
@@ -2340,7 +2320,6 @@ $(function () {
 
   function onRandomDisksColorToolClick() {
     var canvas = getCanvasDetails();
-
     saveCanvasState(canvas);
     function discDrawOperation(x, y, indexI, indexJ) {
       var radius = Math.floor(Math.random() * 10);

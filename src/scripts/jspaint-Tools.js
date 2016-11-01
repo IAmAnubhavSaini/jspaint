@@ -1,10 +1,14 @@
+logger.log('Entering into jspaint-Tools.js');
+
 if (typeof Object.assign != 'function') {
+  logger.log('Object.assign Polyfill');
   /* Object.assign Polyfill (comments are inside) */
   (function () {
     Object.assign = function (target) {
       'use strict';
       // We must check against these specific cases.
       if (target === undefined || target === null) {
+        logger.error('Object.assign Polyfill: ', 'Cannot convert undefined or null to object');
         throw new TypeError('Cannot convert undefined or null to object');
       }
 
@@ -26,19 +30,26 @@ if (typeof Object.assign != 'function') {
 }
 
 var generateSliderString = function (options) {
+  logger.log('generateSliderString:', 'options', options);
   var min = options.min,
     max = options.max,
     title = options.title,
     id = options.id,
     step = options.step;
 
-  return '<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="' + step + '" title="' + title + '" />';
+  var output = '<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="' + step + '" title="' + title + '" />';
+  logger.log('generateSliderString:', 'output', output); 
+  return output;
 };
+
 var generateLabelString = function (options) {
+  logger.log('generateLabelString:', 'options', options);
   var hexColor = options.hexColor,
     fontSize = options.fontSize;
 
-  return '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
+  var output = '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
+  logger.log('generateLabelString:', 'output', output); 
+  return output;
 };
 
 function randomLoop(width, height, operation) {
@@ -269,12 +280,15 @@ var UniCellularParasiteTool = {
 $(function () {
   "use strict";
 
+  logger.log('jspaint-Tools -> document.load event');
+
   function getCanvasDetails() {
+    logger.log('getCanvasDetails');
     var canvasId = '#' + CONSTANTS.canvasId,
       height = $(canvasId).height(),
       width = $(canvasId).width();
 
-    return {
+    var output = {
       canvasId: canvasId,
       height: height,
       width: width,
@@ -284,6 +298,8 @@ $(function () {
       startY: 0,
       strokeStyle: context.strokeStyle
     };
+    logger.log('getCanvasDetails', 'output', output);
+    return output;
   }
 
   var COMMON = {
@@ -2434,3 +2450,5 @@ $(function () {
   $('#RandomCirclesColorTool').on('click', onRandomCirclesColorToolClick);
 
 });
+
+logger.log('Exiting jspaint-Tools.js');

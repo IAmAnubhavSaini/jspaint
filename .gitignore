@@ -1,0 +1,15 @@
+bower_components/
+node_modules/
+build/
+perf/
+.sass-cache/
+.grunt/
+
+*~
+*.map
+*.sublime-workspace
+/*.sublime-workspace
+_SpecRunner.html
+.DS_Store
+*.iml
+.idea

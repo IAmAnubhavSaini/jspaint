@@ -2062,10 +2062,17 @@ $(function () {
 
   /* Actions */
   function onSaturateRedColorToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 0; i < image.data.length; i += 4) {
       image.data[i] = 255;
     }
@@ -2073,10 +2080,17 @@ $(function () {
   }
 
   function onSaturateGreenColorToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 1; i < image.data.length; i += 4) {
       image.data[i] = 255;
     }
@@ -2084,10 +2098,17 @@ $(function () {
   }
 
   function onSaturateBlueColorToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 2; i < image.data.length; i += 4) {
       image.data[i] = 255;
     }
@@ -2095,10 +2116,17 @@ $(function () {
   }
 
   function onInvertColorsToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 0; i < image.data.length; i += 4) {
       image.data[i] = 255 - image.data[i];
       image.data[i + 1] = 255 - image.data[i + 1];
@@ -2108,10 +2136,17 @@ $(function () {
   }
 
   function onDesaturateRedColorToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 0; i < image.data.length; i += 4) {
       image.data[i] = 0;
     }
@@ -2119,10 +2154,17 @@ $(function () {
   }
 
   function onDesaturateGreenColorToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 1; i < image.data.length; i += 4) {
       image.data[i] = 0;
     }
@@ -2130,10 +2172,17 @@ $(function () {
   }
 
   function onDesaturateBlueColorToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 2; i < image.data.length; i += 4) {
       image.data[i] = 0;
     }
@@ -2141,10 +2190,17 @@ $(function () {
   }
 
   function onAddGrayToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 0; i < image.data.length; i += 4) {
       image.data[i] += 112;
       image.data[i + 1] += 112;
@@ -2154,10 +2210,17 @@ $(function () {
   }
 
   function onRemoveGrayToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 0; i < image.data.length; i += 4) {
       image.data[i] -= 112;
       image.data[i + 1] -= 112;
@@ -2167,10 +2230,17 @@ $(function () {
   }
 
   function onAddNoiseToolClick() {
-    var canvas = getCanvasDetails(),
-      image = canvas.image;
+    var canvasId = '#' + CONSTANTS.canvasId,
+      height = $(canvasId).height(),
+      width = $(canvasId).width(),
+      image = context.getImageData(0, 0, width, height);
 
-    saveCanvasState(canvas);
+    saveCanvasState({
+      startX: 0,
+      startY: 0,
+      width: width,
+      height: height
+    });
     for (var i = 0; i < image.data.length; i += 4) {
       image.data[i] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
       image.data[i + 1] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;

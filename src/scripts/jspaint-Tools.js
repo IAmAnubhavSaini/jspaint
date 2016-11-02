@@ -43,12 +43,10 @@ var generateSliderString = function (options) {
 };
 
 var generateLabelString = function (options) {
-  logger.log('generateLabelString:', 'options', options);
   var hexColor = options.hexColor,
     fontSize = options.fontSize;
 
-  var output = '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
-  logger.log('generateLabelString:', 'output', output); 
+  var output = '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>'; 
   return output;
 };
 

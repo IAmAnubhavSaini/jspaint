@@ -1,3 +1,5 @@
+logger.log('Entering index.js');
+
 (function ($) {
   "use strict";
 
@@ -110,3 +112,5 @@
     mustRunInSequence();
   });
 })(jQuery);
+
+logger.log('Exiting index.js');

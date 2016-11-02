@@ -1,3 +1,5 @@
+logger.log('Entering jspaint.js');
+
 (function ($) {
   "use strict";
   $(function () {
@@ -169,3 +171,5 @@
     init();
   });
 })(jQuery);
+
+logger.log('Exiting jspaint.js');

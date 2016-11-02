@@ -1,3 +1,5 @@
+logger.log('Entering iframe-buster.js');
+
 var iFrameBuster = (function(){
    "use strict";
 
@@ -61,3 +63,5 @@ var iFrameBuster = (function(){
     buster.activate();
     return buster;
 })();
+
+logger.log('Exiting iframe-buster.js');

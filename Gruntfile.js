@@ -130,7 +130,7 @@ module.exports = function(grunt) {
     },
     jasmine: {
       test: {
-        src: ['src/scripts/iframe-buster.js', 'src/scripts/jspaint-pre.js', 'src/scripts/jspaint-Tools.js'],
+        src: ['src/scripts/logging.js', 'src/scripts/iframe-buster.js', 'src/scripts/jspaint-pre.js', 'src/scripts/jspaint-Tools.js'],
         options: {
           specs: 'tests/*.spec.js',
           helpers: 'tests/*helper.js'

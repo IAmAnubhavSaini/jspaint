@@ -2,25 +2,15 @@ function strike(tests) {
   var success = 0;
   var failure = 0;
   tests.forEach(function (t) {
-    var res = match(t.toTest, t.testedFor, t.description);
-    if (res) {
-      success++;
-    } else {
-      failure++;
-    }
+    match(t.toTest, t.testedFor, t.description) ? success++ : failure++;
   });
   console.log(success, 'succeeded;', failure, 'failed!');
 }
 
 function match(a, b, desc) {
-  var out;
-  if (a === b) {
-    out = true;
-  } else {
-    out = false;
-    if (console) {
-      console.log('match failed: ', desc, ':', a, '(toTest) is not (testedFor)', b);
-    }
+  var out = a === b ? true : false;
+  if (console && !out) {
+    console.log('match failed: ', desc, ':', a, '(toTest) is not (testedFor)', b);
   }
   return out;
 }

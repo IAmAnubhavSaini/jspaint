@@ -36,6 +36,21 @@ var tests = [
     testedFor: 0,
     description: 'alertMessage'
   },
+  {
+    toTest: (new IFrameBuster()).activationStatus,
+    testedFor: false,
+    description: 'activationStatus'
+  },
+  {
+    toTest: typeof IFrameBuster.prototype.isActivated,
+    testedFor: typeof function () { },
+    description: 'IFrameBuster.prototype.isActivated is a function'
+  },
+  {
+    toTest: typeof (new IFrameBuster()).isActivated,
+    testedFor: typeof function () { },
+    description: 'typeof (new IFrameBuster()).isActivated is a function'
+  }
 ];
 
 strike(tests);

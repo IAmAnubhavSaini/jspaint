@@ -46,3 +46,7 @@ RGBColor.prototype.toHexColor = function () {
     var b = this.blue.toString(16);
     return new HexColor(r, g, b);
 };
+
+RGBColor.prototype.toColorString = function () {
+    return 'rgb(' + this.red + ', ' + this.green + ', ' + this.blue + ')';
+}

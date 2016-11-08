@@ -73,4 +73,4 @@ var tests = [
   }
 ];
 
-strike(tests, 'test-iframe-buster.js');
+strike(tests, 'IFrameBuster.test.js');

@@ -12,29 +12,21 @@
 </head>
 
 <body>
+<header class='page-header'>
+    <h1><a href="../index.html">jspaint</a></h1>
+</header>
 <header class="Menu">
     <div class="common-menu-bar">
-        <div class="menu-item">
-            <a href="../index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
-        </div>
-        <div class="menu-item">
-            <div id="SelectedPrimaryColor" title="Primary/Draw color." data-toggle="tooltip"
-                 data-placement="bottom"></div>
-            <div id="SelectedAlternativeColor" title="Alternative/Background color." data-toggle="tooltip"
-                 data-placement="bottom"></div>
-        </div>
-        <div class="menu-item">
-            <div class="BasicColorPalette"></div>
-        </div>
+
         <div class="menu-item">
             <div id="HTML5ColorPicker">
-                <input type="color" id="allColorsPicker"/>
+                <label for="allColorsPicker">Color</label><input type="color" id="allColorsPicker"/>
             </div>
         </div>
         <div class="menu-item">
             <div id="PickColorTool">
                 <a id="pick-color">
-                    <i class="glyphicon glyphicon-screenshot"></i>
+                    pick color
                 </a>
             </div>
         </div>
@@ -172,6 +164,7 @@
 <div id="jspaint-paint-area"></div>
 <div class="utilities">
 </div>
+<footer class="app-footer">&copy; Anubhav Saini 2015-2021</footer>
 <script src="./scripts/jquery.js" type="text/javascript"></script>
 <script src="./scripts/jquery-ui.js" type="text/javascript"></script>
 <script src="./scripts/jquery.func_toggle.js" type="text/javascript"></script>

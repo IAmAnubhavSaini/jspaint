@@ -29,31 +29,54 @@ html, body {
 
 /* header */
 header.page-header {
-    margin: auto;
     border-bottom: thick solid #2a1d2d;
-    text-align: center;
+    padding: .5em;
+    margin: .5em;
 }
 
 header.page-header a {
-    font-size: 2em;
-    padding: 10px;
+    text-decoration: none;
 }
 
-.page-header {
-    margin: 0 0 20px;
+/* Section on index.html */
+section.setup-container {
+    width: 70%;
+    padding: .5em;
+    margin: .5em auto;
+}
+
+section.setup-container button {
+    padding: .7em;
+    margin: .3em;
+    display: inline-block;
+}
+
+section.setup-container div.lets-go-container {
+    margin: 1em;
+}
+
+section.setup-container div.lets-go-container a.btn {
+    background-color: green;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px black;
+    color: white;
+    margin: 1em;
+    padding: 1em;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px black;
 }
 
 /* footer */
 footer.app-footer {
     position: fixed;
-    height: 2vh;
+    height: 2em;
+    line-height: 2em;
     bottom: 0;
     background-color: black;
     color: white;
     width: 100%;
-    padding: 1vh;
+    padding: .2em;
 }
-
 
 #jspaint-tools {
     margin-bottom: .5em;

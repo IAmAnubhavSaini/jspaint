@@ -4,8 +4,19 @@ html, body {
   margin: 0;
   padding: 0;
 }
-.no-show { visibility: hidden; }
-.no-exist { display: none; }
-.no-border { border: none; }
-.no-outline { outline: none; }
 
+.no-show {
+  visibility: hidden;
+}
+
+.no-exist {
+  display: none;
+}
+
+.no-border {
+  border: none;
+}
+
+.no-outline {
+  outline: none;
+}

@@ -118,13 +118,13 @@ header.page-header a {
   min-width: 600px;
   width: 100%;
   overflow: auto;
-  background-color: #666;
+  background-color: #000;
 }
 
 .common-menu-bar a {
   display: inline-block;
   color: #000;
-  background-color: #DDddDD;
+  background-color: #FFF;
   text-align: center;
   text-decoration: none;
   font-weight: bold;
@@ -157,14 +157,7 @@ i.glyphicon:active {
   color: #FF0000;
 }
 
-#status-bar {
-  font-size: .8em;
-}
-
 .contextual-tool-bar input[disabled="disabled"] {
   cursor: not-allowed;
 }
 
-header.Menu {
-  margin: 20px;
-}

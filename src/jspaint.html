@@ -14,8 +14,67 @@
 
 <body>
 <header class="Menu">
+  <div class="common-menu-bar">
+    <div class="menu-item">
+      <a href="../index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
+    </div>
+    <div class="menu-item">
+      <div id="SelectedPrimaryColor" title="Primary/Draw color." data-toggle="tooltip" data-placement="bottom"></div>
+      <div id="SelectedAlternativeColor" title="Alternative/Background color." data-toggle="tooltip"
+           data-placement="bottom"></div>
+    </div>
+    <div class="menu-item">
+      <div class="BasicColorPalette"></div>
+    </div>
+    <div class="menu-item">
+      <div id="HTML5ColorPicker">
+        <input type="color" id="allColorsPicker"/>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div id="PickColorTool">
+        <a id="pick-color">
+          <i class="glyphicon glyphicon-screenshot"></i>
+        </a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div id="SaveImageButton" title="Save the image as seen on data area." data-toggle="tooltip"
+           data-placement="bottom">
+        <a id="save-as-image" class="string-menu-item">imagify</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div id="ResetCanvas">
+        <a id="reset-canvas" title="Click to clear the draw area." data-toggle="tooltip"
+           data-placement="bottom">reset</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div id="UndoButton" title="Undo." data-toggle="tooltip" data-placement="bottom">
+        <a id="undo-button" class="string-menu-item">undo</a>
+      </div>
+    </div>
+    <div class="menu-item">
+      <div id="ImageButton" title="Image." data-toggle="tooltip" data-placement="bottom">
+        <input type="file" id="image-button" name="image-button" class="string-menu-item"/>
+      </div>
+    </div>
+  </div>
   <div id="jspaint-tools">
-    <div id="PencilTool" class="main-tool">Pencil</div>
+    <div class="main-tool-menu dropdown">
+      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="true">
+        Pencils
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="ShapeToolsMenu">
+        <li>
+          <div id="PencilTool" class="main-tool">Pencil</div>
+        </li>
+      </ul>
+
+    </div>
     <div id="ShapeTool" class="main-tool-menu dropdown">
       <button class="btn btn-default dropdown-toggle" type="button" id="ShapeToolsMenu" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="true">
@@ -105,53 +164,7 @@
     <label id="primary-color-name"></label> | alternative color:
     <label id="alternative-color-name"></label>
   </div>
-  <div class="common-menu-bar">
-    <div class="menu-item">
-      <a href="../index.html" class="string-menu-item" id="jspaint-brand">jspaint</a>
-    </div>
-    <div class="menu-item">
-      <div id="SelectedPrimaryColor" title="Primary/Draw color." data-toggle="tooltip" data-placement="bottom"></div>
-      <div id="SelectedAlternativeColor" title="Alternative/Background color." data-toggle="tooltip"
-           data-placement="bottom"></div>
-    </div>
-    <div class="menu-item">
-      <div class="BasicColorPalette"></div>
-    </div>
-    <div class="menu-item">
-      <div id="HTML5ColorPicker">
-        <input type="color" id="allColorsPicker"/>
-      </div>
-    </div>
-    <div class="menu-item">
-      <div id="PickColorTool">
-        <a id="pick-color">
-          <i class="glyphicon glyphicon-screenshot"></i>
-        </a>
-      </div>
-    </div>
-    <div class="menu-item">
-      <div id="SaveImageButton" title="Save the image as seen on data area." data-toggle="tooltip"
-           data-placement="bottom">
-        <a id="save-as-image" class="string-menu-item">imagify</a>
-      </div>
-    </div>
-    <div class="menu-item">
-      <div id="ResetCanvas">
-        <a id="reset-canvas" title="Click to clear the draw area." data-toggle="tooltip"
-           data-placement="bottom">reset</a>
-      </div>
-    </div>
-    <div class="menu-item">
-      <div id="UndoButton" title="Undo." data-toggle="tooltip" data-placement="bottom">
-        <a id="undo-button" class="string-menu-item">undo</a>
-      </div>
-    </div>
-    <div class="menu-item">
-      <div id="ImageButton" title="Image." data-toggle="tooltip" data-placement="bottom">
-        <input type="file" id="image-button" name="image-button" class="string-menu-item"/>
-      </div>
-    </div>
-  </div>
+
   <div class="contextual-tool-bar">
   </div>
 </header>

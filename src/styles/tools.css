@@ -1,0 +1,18 @@
+div.main-tool,
+div.main-tool-menu {
+  padding: .7em;
+  box-shadow: 2px 2px 2px black;
+  margin: .3em;
+  min-width: 100px;
+}
+
+#status-bar {
+  font-size: 1em;
+  font-family: monospace;
+}
+
+#status-bar #activated-tool-name {
+  font-weight: bold;
+  color: black;
+  text-shadow: 1px 0 1px black;
+}

@@ -16,3 +16,23 @@ div.main-tool-menu {
   color: black;
   text-shadow: 1px 0 1px black;
 }
+
+.menu-item a,
+.menu-item input {
+  padding: .7em;
+  margin: .3em;
+  box-sizing: unset;
+  -webkit-box-sizing: unset;
+}
+
+.contextual-tool-bar {
+  padding: 1em;
+  width: 80%;
+  margin: .1em auto;
+  background-color: #000;
+  border-radius: 5px;
+}
+
+.contextual-tool-bar .menu-item {
+  width: 80%;
+}

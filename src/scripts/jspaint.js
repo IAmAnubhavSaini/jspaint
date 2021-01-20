@@ -162,7 +162,6 @@
                 });
                 registerEvents();
                 $('#PencilTool').trigger('click');
-                $('[data-toggle="tooltip"]').tooltip();
                 $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
                 $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
             };

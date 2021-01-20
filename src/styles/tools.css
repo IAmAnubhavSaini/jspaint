@@ -1,37 +1,43 @@
 div.main-tool,
 div.main-tool-menu {
-  padding: .7em;
-  box-shadow: 2px 2px 2px black;
-  margin: .3em;
-  min-width: 100px;
+    /*padding: .7em;*/
+    /*box-shadow: 2px 2px 2px black;*/
+    /*margin: .3em;*/
+    /*min-width: 100px;*/
+}
+
+div.main-tool-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 #status-bar {
-  font-size: 1em;
-  font-family: monospace;
+    font-size: 1em;
+    font-family: monospace;
 }
 
 #status-bar #activated-tool-name {
-  font-weight: bold;
-  color: black;
-  text-shadow: 1px 0 1px black;
+    font-weight: bold;
+    color: black;
+    text-shadow: 1px 0 1px black;
 }
 
 .menu-item a,
 .menu-item input {
-  padding: .7em;
-  margin: .3em;
-  box-sizing: unset;
-  -webkit-box-sizing: unset;
+    padding: .7em;
+    margin: .3em;
+    box-sizing: unset;
+    -webkit-box-sizing: unset;
 }
 
 .contextual-tool-bar {
-  padding: 1em;
-  margin: .1em;
-  background-color: #000;
-  border-radius: 5px;
+    padding: 1em;
+    margin: .1em;
+    background-color: #000;
+    border-radius: 5px;
 }
 
 .contextual-tool-bar .menu-item {
-  width: 80%;
+    width: 80%;
 }

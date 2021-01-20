@@ -1,163 +1,153 @@
 html, body {
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
+    min-height: 400px;
+    min-width: 600px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .no-show {
-  visibility: hidden;
+    visibility: hidden;
 }
 
 .no-exist {
-  display: none;
+    display: none;
 }
 
 .no-border {
-  border: none;
+    border: none;
 }
 
 .no-outline {
-  outline: none;
+    outline: none;
 }
 
-.no-show {
-  visibility: hidden;
-}
-
-@mixin selection() {
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-
-html,
-body {
-  min-height: 400px;
-  min-width: 600px;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
-
-body {
-  margin-bottom: 50px;
-  padding-bottom: 20px;
-}
-
+/* header */
 header.page-header {
-  margin: auto;
-  border-bottom: thick solid #2a1d2d;
-  text-align: center;
+    margin: auto;
+    border-bottom: thick solid #2a1d2d;
+    text-align: center;
 }
 
 header.page-header a {
-  font-size: 2em;
-  padding: 10px;
+    font-size: 2em;
+    padding: 10px;
 }
 
 .page-header {
-  margin: 0 0 20px;
+    margin: 0 0 20px;
 }
 
+/* footer */
+footer.app-footer {
+    position: fixed;
+    height: 2vh;
+    bottom: 0;
+    background-color: black;
+    color: white;
+    width: 100%;
+    padding: 1vh;
+}
+
+
 #jspaint-tools {
-  margin-bottom: .5em;
+    margin-bottom: .5em;
 }
 
 #jspaint-paint-area {
-  min-height: 320px;
-  min-width: 400px;
-  border: thin solid #333;
-  margin: 5px auto;
+    min-height: 320px;
+    min-width: 400px;
+    border: thin solid #333;
+    margin: 5px auto;
 }
 
 #jspaint-canvas.working-with-tools {
-  cursor: crosshair;
+    cursor: crosshair;
 }
 
 .main-tool {
-  border-bottom: thin solid rgba(0, 0, 0, .5);
-  display: inline-block;
-  margin: 0 5px;
-  cursor: pointer;
-  padding: 2px;
-  border: thin solid rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    margin: 0 5px;
+    cursor: pointer;
+    padding: 2px;
+    border: thin solid rgba(0, 0, 0, 0.3);
+    border-bottom: thin solid rgba(0, 0, 0, .5);
 }
 
 .main-tool-menu {
-  display: inline-block;
-  padding: 2px;
-  border: thin solid rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    padding: 2px;
+    border: thin solid rgba(0, 0, 0, 0.3);
 }
 
 .main-tool-menu button {
-  background-color: transparent;
-  padding: 0;
-  border: none;
+    background-color: transparent;
+    padding: 0;
+    border: none;
 }
 
 .main-tool-menu button:hover,
 .main-tool-menu.dropdown.open button.btn-default:active {
-  background-color: transparent;
+    background-color: transparent;
 }
 
 .main-tool-menu .main-tool {
-  margin-top: 5px;
+    margin-top: 5px;
 }
 
 .common-menu-bar {
-  min-width: 600px;
-  width: 100%;
-  overflow: auto;
-  background-color: #000;
+    min-width: 600px;
+    width: 100%;
+    overflow: auto;
+    background-color: #000;
 }
 
 .common-menu-bar a {
-  display: inline-block;
-  color: #000;
-  background-color: #FFF;
-  text-align: center;
-  text-decoration: none;
-  font-weight: bold;
-  border: thin solid #FFF;
-  outline: thin solid #000;
-  padding: 0 2px;
+    display: inline-block;
+    color: #000;
+    background-color: #FFF;
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border: thin solid #FFF;
+    outline: thin solid #000;
+    padding: 0 2px;
 }
 
 .common-menu-bar a:hover {
-  border: thin solid #000;
-  outline: thin solid #FFF;
+    border: thin solid #000;
+    outline: thin solid #FFF;
 }
 
 .common-menu-bar .menu-item {
-  float: left;
-  margin: 1em;
-  max-width: 200px;
+    float: left;
+    margin: 1em;
+    max-width: 200px;
 }
 
 .menu-item .menu-item {
 
-  margin: 0 5px;
+    margin: 0 5px;
 }
 
 .menu-item label {
-  margin: 0 5px;
+    margin: 0 5px;
 }
 
 i.glyphicon:active {
-  color: #FF0000;
+    color: #FF0000;
 }
 
 .contextual-tool-bar input[disabled="disabled"] {
-  cursor: not-allowed;
+    cursor: not-allowed;
 }
 
+/* buttons */
+.btn-success {
+    border: thick solid green;
+}

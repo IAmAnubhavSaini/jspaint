@@ -1,8 +1,8 @@
-var iFrameBuster = (function () {
+const iFrameBuster = (function () {
     "use strict";
 
     function IFrameBuster() {
-        var self = this instanceof IFrameBuster ? this : Object.create(IFrameBuster.prototype);
+        const self = this instanceof IFrameBuster ? this : Object.create(IFrameBuster.prototype);
         self.warningPrefix = (function () {
             return 'You are visiting jspaint in an insecure way!';
         })();
@@ -42,8 +42,7 @@ var iFrameBuster = (function () {
     };
 
     IFrameBuster.prototype.createBlocker = function () {
-        var blocker = document.createElement('div');
-        blocker = this.setBlockerStyle(blocker);
+        const blocker = this.setBlockerStyle(document.createElement('div'));
         blocker.innerHTML = this.warningPrefix + 'Please visit ' + this.appHomePage;
         return blocker;
     };
@@ -65,7 +64,7 @@ var iFrameBuster = (function () {
         }
     };
 
-    var buster = new IFrameBuster();
+    const buster = new IFrameBuster();
     buster.activate();
     return buster;
 })();

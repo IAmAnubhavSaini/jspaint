@@ -291,7 +291,7 @@ $(function () {
             return $(generateSliderString(options));
         },
         generateLabel: function (options) {
-            $(generateLabelString(options));
+            return $(generateLabelString(options));
         },
         genericLabel: function () {
             return COMMON.generateLabel({

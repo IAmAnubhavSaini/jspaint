@@ -7,7 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "grunt release-the-hounds"
+    "test": "grunt release-the-hounds",
+    "serve": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -29,9 +30,13 @@
   },
   "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
   "dependencies": {
+    "@f0c1s/color-blue": "0.0.1",
+    "@f0c1s/color-red": "0.0.1",
+    "@f0c1s/color-yellow": "0.0.1",
     "blanket": "*",
     "bootstrap": "*",
     "chai": "*",
+    "express": "^4.17.1",
     "jquery": "*",
     "mocha": "*"
   },

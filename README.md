@@ -1,6 +1,6 @@
 # jspaint
 
-[Online application](http://jspaint.github.io)
+[Online application](https://iamanubhavsaini.github.io/jspaint/index.html)
 
 ## Build
 

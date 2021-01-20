@@ -1,13 +1,12 @@
 {
   "name": "jspaint",
-  "version": "0.2.6",
+  "version": "2021.1.0",
   "description": "Paint in browser.",
-  "main": "index.js",
+  "main": "server.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "grunt release-the-hounds",
     "serve": "node server.js"
   },
   "repository": {
@@ -23,13 +22,14 @@
     "free",
     "online-paint"
   ],
-  "author": "Anubhav Saini <IAmAnubhavSaini@GMail.com>",
-  "license": "GPL",
+  "author": "Anubhav Saini <iamanubhavsaini@gmail.com>",
+  "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"
   },
   "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
   "dependencies": {
+    "@f0c1s/bg-colored-strings": "^2018.11.13",
     "@f0c1s/color-blue": "0.0.1",
     "@f0c1s/color-red": "0.0.1",
     "@f0c1s/color-yellow": "0.0.1",
@@ -39,19 +39,5 @@
     "express": "^4.17.1",
     "jquery": "*",
     "mocha": "*"
-  },
-  "devDependencies": {
-    "grunt": "*",
-    "grunt-autoprefixer": "*",
-    "grunt-bootlint": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-cssmin": "*",
-    "grunt-contrib-imagemin": "*",
-    "grunt-contrib-jasmine": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-nodeunit": "*",
-    "grunt-contrib-sass": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-text-replace": "*"
   }
 }

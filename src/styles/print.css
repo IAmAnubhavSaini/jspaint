@@ -1,0 +1,8 @@
+.Menu,
+.utilities {
+  display: none;
+}
+
+#jspaint-paint-area {
+  border: none;
+}

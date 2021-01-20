@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "test": "jasmine",
     "serve": "node server.js"
   },
   "repository": {
@@ -15,7 +16,6 @@
   },
   "keywords": [
     "javascript",
-    "jquery",
     "paint",
     "paint-application",
     "free-paint",
@@ -33,11 +33,10 @@
     "@f0c1s/color-blue": "0.0.1",
     "@f0c1s/color-red": "0.0.1",
     "@f0c1s/color-yellow": "0.0.1",
-    "blanket": "*",
-    "bootstrap": "*",
-    "chai": "*",
-    "express": "^4.17.1",
-    "jquery": "*",
-    "mocha": "*"
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@types/jasmine": "^3.6.3",
+    "jasmine": "^3.6.4"
   }
 }

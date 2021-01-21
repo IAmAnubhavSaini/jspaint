@@ -23,19 +23,17 @@ div.main-tool-menu ul {
     text-shadow: 1px 0 1px black;
 }
 
-.menu-item a,
-.menu-item input {
-    padding: .7em;
-    margin: .3em;
-    box-sizing: unset;
-    -webkit-box-sizing: unset;
+.menu-item a {
+    padding: .1em;
+    margin: .1em;
 }
 
 .contextual-tool-bar {
-    padding: 1em;
+    padding: .1em;
     margin: .1em;
-    background-color: #000;
     border-radius: 5px;
+    display: inline-block;
+    color: #000;
 }
 
 .contextual-tool-bar .menu-item {

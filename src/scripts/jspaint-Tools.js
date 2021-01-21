@@ -69,13 +69,13 @@ var TOOLS = {
             class: 'main-tool',
             title: 'Click to draw free-hand lines. Click again to disable.'
         },
-        PickColor: {
-            id: 'pick-color',
-            selectionId: '#pick-color',
-            class: 'string-menu-item',
-            containerId: 'PickColorTool',
-            title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
-        },
+        // PickColor: {
+        //     id: 'pick-color',
+        //     selectionId: '#pick-color',
+        //     class: 'string-menu-item',
+        //     containerId: 'PickColorTool',
+        //     title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
+        // },
         PivotedLinePattern: {
             id: "PivotedLinePatternTool",
             selectionId: '#PivotedLinePatternTool',
@@ -222,9 +222,9 @@ var Pencil = {
     CONSTANTS: TOOLS.CONSTANTS.Pencil,
     VARIABLES: TOOLS.VARIABLES.Pencil
 };
-var PickColor = {
-    CONSTANTS: TOOLS.CONSTANTS.PickColor
-};
+// var PickColor = {
+//     CONSTANTS: TOOLS.CONSTANTS.PickColor
+// };
 var PivotedLinePattern = {
     CONSTANTS: TOOLS.CONSTANTS.PivotedLinePattern,
     VARIABLES: TOOLS.VARIABLES.PivotedLinePattern
@@ -803,48 +803,48 @@ $(function () {
         }
     };
 
-    var PickColorFunctionality = {
-        ContextMenu: {
-            activate: function () {
-            },
-            deactivate: function () {
-            },
-            getOptions: function () {
-            }
-        },
-        start: function (options) {
-            var event = options.event,
-                canvasId = '#' + options.canvasId,
-                mouseOptions = null,
-                X = null,
-                Y = null,
-                data = null,
-                r = 0,
-                g = 0,
-                b = 0,
-                a = 0;
-            $(canvasId).on(event, function (e) {
-                mouseOptions = {
-                    event: e,
-                    relativeTo: $(this)
-                };
-                X = Actions.Mouse.getX(mouseOptions);
-                Y = Actions.Mouse.getY(mouseOptions);
-                data = context.getImageData(X - 0.5, Y - 0.5, X + 0.5, Y + 0.5).data;
-                r = data[0];
-                g = data[1];
-                b = data[2];
-                a = data[3];
-                selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-            });
-        },
-        stop: function (options) {
-            var event = options.event,
-                canvasId = '#' + options.canvasId;
-
-            $(canvasId).off(event);
-        }
-    };
+    // var PickColorFunctionality = {
+    //     ContextMenu: {
+    //         activate: function () {
+    //         },
+    //         deactivate: function () {
+    //         },
+    //         getOptions: function () {
+    //         }
+    //     },
+    //     start: function (options) {
+    //         var event = options.event,
+    //             canvasId = '#' + options.canvasId,
+    //             mouseOptions = null,
+    //             X = null,
+    //             Y = null,
+    //             data = null,
+    //             r = 0,
+    //             g = 0,
+    //             b = 0,
+    //             a = 0;
+    //         $(canvasId).on(event, function (e) {
+    //             mouseOptions = {
+    //                 event: e,
+    //                 relativeTo: $(this)
+    //             };
+    //             X = Actions.Mouse.getX(mouseOptions);
+    //             Y = Actions.Mouse.getY(mouseOptions);
+    //             data = context.getImageData(X - 0.5, Y - 0.5, X + 0.5, Y + 0.5).data;
+    //             r = data[0];
+    //             g = data[1];
+    //             b = data[2];
+    //             a = data[3];
+    //             selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+    //         });
+    //     },
+    //     stop: function (options) {
+    //         var event = options.event,
+    //             canvasId = '#' + options.canvasId;
+    //
+    //         $(canvasId).off(event);
+    //     }
+    // };
 
     var PivotedLinePatternFunctionality = {
         start: function (options) {
@@ -2087,7 +2087,7 @@ $(function () {
     /* Assigning functionality to tools */
     Object.assign(MandelbrotFractal, MandelbrotFractalFunctionality);
     Object.assign(Pencil, PencilFunctionality);
-    Object.assign(PickColor, PickColorFunctionality);
+    // Object.assign(PickColor, PickColorFunctionality);
     Object.assign(PivotedLinePattern, PivotedLinePatternFunctionality);
     Object.assign(Rectangle, RectangleFunctionality);
     Object.assign(Ring, RingFunctionality);
@@ -2417,17 +2417,17 @@ $(function () {
         contextMenu: Pencil.ContextMenu,
         constantTitle: Pencil.CONSTANTS.title
     });
-    COMMON.registerEventForTool({
-        toolId: PickColor.CONSTANTS.selectionId,
-        containerId: PickColor.CONSTANTS.containerId,
-        event: CONSTANTS.Events.mouseclick,
-        canvasId: CONSTANTS.canvasId,
-        start: PickColor.start,
-        stop: PickColor.stop,
-        toolName: 'Color picker',
-        contextMenu: PickColor.ContextMenu,
-        constantTitle: PickColor.CONSTANTS.title
-    });
+    // COMMON.registerEventForTool({
+    //     toolId: PickColor.CONSTANTS.selectionId,
+    //     containerId: PickColor.CONSTANTS.containerId,
+    //     event: CONSTANTS.Events.mouseclick,
+    //     canvasId: CONSTANTS.canvasId,
+    //     start: PickColor.start,
+    //     stop: PickColor.stop,
+    //     toolName: 'Color picker',
+    //     contextMenu: PickColor.ContextMenu,
+    //     constantTitle: PickColor.CONSTANTS.title
+    // });
     COMMON.registerEventForTool({
         toolId: PivotedLinePattern.CONSTANTS.selectionId,
         event: CONSTANTS.Events.mousemove,

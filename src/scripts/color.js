@@ -22,7 +22,3 @@ const COLOR = {
             .pop()
     }
 }
-
-if (module) {
-    module.exports = COLOR
-}

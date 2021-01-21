@@ -38,6 +38,11 @@ header.page-header a {
     text-decoration: none;
 }
 
+header.Menu {
+    width:98%;
+    margin: auto;
+}
+
 /* Section on index.html */
 section.setup-container {
     width: 70%;
@@ -123,13 +128,6 @@ footer.app-footer {
     margin-top: 5px;
 }
 
-.common-menu-bar {
-    min-width: 600px;
-    width: 100%;
-    overflow: auto;
-    background-color: #000;
-}
-
 .common-menu-bar a {
     display: inline-block;
     color: #000;
@@ -148,13 +146,10 @@ footer.app-footer {
 }
 
 .common-menu-bar .menu-item {
-    float: left;
-    margin: 1em;
-    max-width: 200px;
+    display: inline-block;
 }
 
 .menu-item .menu-item {
-
     margin: 0 5px;
 }
 

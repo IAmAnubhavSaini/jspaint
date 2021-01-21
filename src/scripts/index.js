@@ -31,13 +31,13 @@
 
             getWidth = function (dimensions) {
                 return dimensions.localeCompare('Max') === 0 ?
-                    document.documentElement.clientWidth - 100 :
+                    document.documentElement.clientWidth - 50 :
                     dimensions.split('x')[0];
             },
 
             getHeight = function (dimensions) {
                 return dimensions.localeCompare('Max') === 0 ?
-                    document.documentElement.clientHeight - 200 :
+                    document.documentElement.clientHeight - 250 :
                     dimensions.split('x')[1];
             },
 

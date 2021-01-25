@@ -1,13 +1,11 @@
-const express = require('express')
-const app = express()
-const {join} = require('path')
-
-const blue = require('@f0c1s/color-blue')
-const red = require('@f0c1s/color-red')
-const yellow = require('@f0c1s/color-yellow')
-
-console.log(red(' getting started with server '))
-
-app.get('/', (req, res) => {
-    res.sendFile(join(__dirname, './src/index.html'))
-}).listen(9050)
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var express = require('express');
+var app = express();
+var join = require('path').join;
+var red = require('@f0c1s/color-red');
+console.log(red(' getting started with server '));
+app.get('/', function (_req, res) {
+    res.sendFile(join(__dirname, './src/jspaint.html'));
+}).listen(9050);
+//# sourceMappingURL=server.js.map

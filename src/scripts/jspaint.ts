@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import {Color, BasicColors} from './Color';
-import {LocalStorage, SessionStorage} from './Storage';
+import {LocalStorage, SessionStorage} from '@f0c1s/browser-storage';
 
 var CONSTANTS = {
   canvasId: 'jspaint-canvas',

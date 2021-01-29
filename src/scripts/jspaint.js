@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Storage_1 = require("./Storage");
+var browser_storage_1 = require("@f0c1s/browser-storage");
 var CONSTANTS = {
     canvasId: 'jspaint-canvas',
     canvasContainerId: 'jspaint-paint-area',
@@ -63,10 +63,10 @@ var CONSTANTS = {
     }
 };
 var activeTool;
-var LocalStorageAvailable = Storage_1.LocalStorage.exists(), getSizeFromURL = function () {
+var getSizeFromURL = function () {
     return (window.location.toString().split('?')[1] || '=').split('=')[1];
 }, size = function () {
-    return (LocalStorageAvailable() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL()) || 'x';
+    return (browser_storage_1.LocalStorage.exists() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL()) || 'x';
 };
 var sizeX = size().split('x')[0] || '', sizeY = size().split('x')[1] || '', selectedAlternativeColor = '#FF0000', selectedPrimaryColor = '#000000', context = null, CanvasState = [], Actions = {
     Mouse: {

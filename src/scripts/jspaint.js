@@ -1,97 +1,74 @@
 "use strict";
-var COLOR = {
-    rgb2hex: function (r, g, b) {
-        return [r, g, b]
-            .map(function (c) { return parseInt(c).toString(16); })
-            .map(function (c) { return c.toUpperCase(); })
-            .map(function (c) { return c.padStart(2, '0'); })
-            .reduce(function (a, c) { return a + c; }, '#');
-    },
-    hex2rgb: function (hex) {
-        return [hex || '#000']
-            .map(function (h) { return h.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, function (_matches, r, g, b) { return '' + r + r + g + g + b + b; }); })
-            .map(function (h) { return /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(h); })
-            .map(function (mrgb) { return (mrgb || [0, 0, 0, 0]).slice(1); })
-            .map(function (rgb) { return rgb.map(function (c) { return parseInt(c.toString()).toString(16); }); })
-            .map(function (rgb) { return ({
-            r: rgb[0],
-            g: rgb[1],
-            b: rgb[2],
-            rgb: "rgb(" + rgb.join(', ') + ")",
-            rgba: "rgba(" + rgb.join(', ') + ", 1)"
-        }); })
-            .pop();
-    }
-};
+Object.defineProperty(exports, "__esModule", { value: true });
+var Storage_1 = require("./Storage");
 var CONSTANTS = {
-    canvasId: "jspaint-canvas",
-    canvasContainerId: "jspaint-paint-area",
+    canvasId: 'jspaint-canvas',
+    canvasContainerId: 'jspaint-paint-area',
     defaultColor: {
         hex: '000000',
-        name: "Black"
+        name: 'Black'
     },
     basicColors: [{
             hex: '00FFFF',
-            name: "Aqua"
+            name: 'Aqua'
         }, {
             hex: '000000',
-            name: "Black"
+            name: 'Black'
         }, {
             hex: '0000FF',
-            name: "Blue"
+            name: 'Blue'
         }, {
             hex: 'FF00FF',
-            name: "Fuchsia"
+            name: 'Fuchsia'
         }, {
             hex: '808080',
-            name: "Gray"
+            name: 'Gray'
         }, {
             hex: '008000',
-            name: "Green"
+            name: 'Green'
         }, {
             hex: '00FF00',
-            name: "Lime"
+            name: 'Lime'
         }, {
             hex: '800000',
-            name: "Maroon"
+            name: 'Maroon'
         }, {
             hex: '000080',
-            name: "Navy"
+            name: 'Navy'
         }, {
             hex: '808000',
-            name: "Olive"
+            name: 'Olive'
         }, {
             hex: '800080',
-            name: "Purple"
+            name: 'Purple'
         }, {
             hex: 'FF0000',
-            name: "Red"
+            name: 'Red'
         }, {
             hex: 'C0C0C0',
-            name: "Silver"
+            name: 'Silver'
         }, {
             hex: '008080',
-            name: "Teal"
+            name: 'Teal'
         }, {
             hex: 'FFFFFF',
-            name: "White"
+            name: 'White'
         }, {
             hex: 'FFFF00',
-            name: "Yellow"
-        },],
+            name: 'Yellow'
+        }],
     Events: {
         mousemove: 'mousemove',
         mouseclick: 'click'
     }
 };
 var activeTool;
-var LocalStorageAvailable = function () {
-    return localStorage !== undefined && localStorage !== null;
-}, getSizeFromURL = function () {
+var LocalStorageAvailable = Storage_1.LocalStorage.exists(), getSizeFromURL = function () {
     return (window.location.toString().split('?')[1] || '=').split('=')[1];
 }, size = function () {
     return (LocalStorageAvailable() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL()) || 'x';
-}, sizeX = size().split('x')[0] || '', sizeY = size().split('x')[1] || '', selectedAlternativeColor = '#FF0000', selectedPrimaryColor = '#000000', context = null, CanvasState = [], Actions = {
+};
+var sizeX = size().split('x')[0] || '', sizeY = size().split('x')[1] || '', selectedAlternativeColor = '#FF0000', selectedPrimaryColor = '#000000', context = null, CanvasState = [], Actions = {
     Mouse: {
         getX: function (options) {
             var event = options.event, relativeTo = options.relativeTo, X = event.pageX - relativeTo.offset().left;
@@ -170,8 +147,8 @@ var LocalStorageAvailable = function () {
         div1.appendTo(IContainBasicColors);
         div2.appendTo(IContainBasicColors);
     },
-    hexToRgb: COLOR.hex2rgb,
-    rgbToHex: COLOR.rgb2hex
+    hexToRgb: Color.hex2rgb,
+    rgbToHex: Color.rgb2hex
 }, setupToolTips = function (tool, title) {
     tool.attr('title', title)
         .attr('data-toggle', 'tooltip')
@@ -232,7 +209,7 @@ function randomLoop(width, height, operation) {
 var TOOLS = {
     CONSTANTS: {
         MandelbrotFractal: {
-            id: "MandelbrotFractalTool",
+            id: 'MandelbrotFractalTool',
             selectionId: '#MandelbrotFractalTool',
             class: 'main-tool',
             title: 'Click to draw Mandelbrot Fractal. Click again to disable.',
@@ -240,13 +217,13 @@ var TOOLS = {
             maxWidth: -1
         },
         Pencil: {
-            id: "PencilTool",
+            id: 'PencilTool',
             selectionId: '#PencilTool',
             class: 'main-tool',
             title: 'Click to draw free-hand lines. Click again to disable.'
         },
         PivotedLinePattern: {
-            id: "PivotedLinePatternTool",
+            id: 'PivotedLinePatternTool',
             selectionId: '#PivotedLinePatternTool',
             class: 'main-tool',
             title: 'Click to draw amazing pattern. Click again to disable.',
@@ -440,7 +417,7 @@ var UniCellularParasiteTool = {
     start: undefined, stop: undefined, ContextMenu: undefined, Events: {}
 };
 $(function () {
-    "use strict";
+    'use strict';
     function getCanvasDetails() {
         var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width();
         return {
@@ -763,7 +740,7 @@ $(function () {
                     xMaxLabel: 'XMax: ',
                     yMaxLabel: 'YMax: ',
                     xMinLabel: 'XMin: ',
-                    yMinLabel: 'YMin: ',
+                    yMinLabel: 'YMin: '
                 };
             }
         },
@@ -840,11 +817,11 @@ $(function () {
             activate: function (options) {
                 function initialSlider() {
                     return COMMON.generateSlider({
-                        id: "widthPencil",
+                        id: 'widthPencil',
                         min: 1,
                         max: 200,
                         step: 1,
-                        title: "Width for pencil tool."
+                        title: 'Width for pencil tool.'
                     });
                 }
                 function addSliderForLineWidth(options) {
@@ -955,18 +932,18 @@ $(function () {
                     var createBasicOption = function (id, name, value) {
                         return COMMON.genericLabel().append(value).append(' <input id="' + id + '" name="' + name + '" type="radio" value="' + value + '" /></label>');
                     };
-                    container.append(createBasicOption("option_pivot", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.pivots));
-                    container.append(createBasicOption("option_extends", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.Xextends));
-                    container.append(createBasicOption("option_drops", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.Ydrops));
-                    container.append(createBasicOption("option_god_rays", "tool-options", PivotedLinePattern.CONSTANTS.ACTIONS.godRays));
+                    container.append(createBasicOption('option_pivot', 'tool-options', PivotedLinePattern.CONSTANTS.ACTIONS.pivots));
+                    container.append(createBasicOption('option_extends', 'tool-options', PivotedLinePattern.CONSTANTS.ACTIONS.Xextends));
+                    container.append(createBasicOption('option_drops', 'tool-options', PivotedLinePattern.CONSTANTS.ACTIONS.Ydrops));
+                    container.append(createBasicOption('option_god_rays', 'tool-options', PivotedLinePattern.CONSTANTS.ACTIONS.godRays));
                 };
                 function initialSlider() {
                     return COMMON.generateSlider({
-                        id: "widthPivotedLinePattern",
+                        id: 'widthPivotedLinePattern',
                         min: 1,
                         max: 200,
                         step: 1,
-                        title: "width for pivoted line pattern tool."
+                        title: 'width for pivoted line pattern tool.'
                     });
                 }
                 function addSliderForLineWidth(options) {
@@ -1007,7 +984,7 @@ $(function () {
                     .attr('id', Rectangle.CONSTANTS.previewId)
                     .css({
                     'position': 'fixed',
-                    'z-index': '2',
+                    'z-index': '2'
                 })
                     .appendTo('.utilities')
                     .on('click', function (eClick) {
@@ -1133,7 +1110,7 @@ $(function () {
                     'border-radius': '50%',
                     'height': Ring.VARIABLES.outerRadius * 2,
                     'width': Ring.VARIABLES.outerRadius * 2,
-                    'backgruond-color': selectedPrimaryColor,
+                    'backgruond-color': selectedPrimaryColor
                 })
                     .appendTo('.utilities');
                 var div = $('<div></div>')
@@ -1177,7 +1154,7 @@ $(function () {
                         'border-radius': '50%',
                         'height': Ring.VARIABLES.outerRadius * 2,
                         'width': Ring.VARIABLES.outerRadius * 2,
-                        'background-color': selectedPrimaryColor,
+                        'background-color': selectedPrimaryColor
                     });
                     previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius);
                     previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius);
@@ -1208,7 +1185,7 @@ $(function () {
                     'border-radius': '50%',
                     'height': Ring.VARIABLES.outerRadius * 2,
                     'width': Ring.VARIABLES.outerRadius * 2,
-                    'background-color': selectedPrimaryColor,
+                    'background-color': selectedPrimaryColor
                 }).show();
             });
         },
@@ -1231,7 +1208,7 @@ $(function () {
                     });
                 }
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'), innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
+                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'), innerSlider = initialSlider('innerRadiusRing', 'inner radius for ring tool.')
                         .attr('value', Ring.VARIABLES.innerRadius)
                         .on('mouseover', function () {
                         $(this).attr('title', $(this).val());
@@ -1239,7 +1216,7 @@ $(function () {
                         .on('input', function () {
                         Ring.VARIABLES.innerRadius = $(this).val();
                     })
-                        .appendTo(div), outerSlider = initialSlider("outerRadiusRing", "outer radius for ring tool.")
+                        .appendTo(div), outerSlider = initialSlider('outerRadiusRing', 'outer radius for ring tool.')
                         .attr('value', Ring.VARIABLES.outerRadius)
                         .on('mouseover', function () {
                         $(this).attr('title', $(this).val());
@@ -1327,11 +1304,11 @@ $(function () {
             activate: function (options) {
                 function initialSlider() {
                     return COMMON.generateSlider({
-                        id: "radiusDisc",
+                        id: 'radiusDisc',
                         min: 1,
                         max: 200,
                         step: 1,
-                        title: "radius for disc tool."
+                        title: 'radius for disc tool.'
                     });
                 }
                 function addSliderForRadius(options) {
@@ -1371,7 +1348,7 @@ $(function () {
                     .attr('id', Square.CONSTANTS.previewId)
                     .css({
                     'position': 'fixed',
-                    'z-index': '2',
+                    'z-index': '2'
                 })
                     .appendTo('.utilities')
                     .on('click', function (eClick) {
@@ -1548,7 +1525,7 @@ $(function () {
                     });
                 }
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'), radiusSlider = initialSlider("radiusCircle", "innerRadius for circle tool.")
+                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'), radiusSlider = initialSlider('radiusCircle', 'innerRadius for circle tool.')
                         .attr('value', Circle.VARIABLES.innerRadius)
                         .on('mouseover', function () {
                         $(this).attr('title', $(this).val());
@@ -1634,7 +1611,7 @@ $(function () {
                     id: 'PointWalkerContextMenu',
                     containerSelectionCriterion: '.contextual-tool-bar',
                     maxStepsAllowed: 100000,
-                    stepLabel: 'Steps: ',
+                    stepLabel: 'Steps: '
                 };
             }
         }
@@ -1720,7 +1697,7 @@ $(function () {
                     id: 'FamilyPointWalkerContextMenu',
                     containerSelectionCriterion: '.contextual-tool-bar',
                     maxStepsAllowed: 100000,
-                    stepLabel: 'Steps: ',
+                    stepLabel: 'Steps: '
                 };
             }
         }
@@ -1808,7 +1785,7 @@ $(function () {
                     id: 'OrganismPointWalkerContextMenu',
                     containerSelectionCriterion: '.contextual-tool-bar',
                     maxStepsAllowed: 10000,
-                    stepLabel: 'Steps: ',
+                    stepLabel: 'Steps: '
                 };
             }
         }
@@ -2066,7 +2043,7 @@ $(function () {
         saveCanvasState(canvas);
         function discDrawOperation(x, y, indexI, indexJ) {
             var radius = Math.floor(Math.random() * 10);
-            context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
+            context.fillStyle = '#' + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
             CANVASAPI.fillCirc(x, y, radius);
         }
         randomLoop(canvas.width, canvas.height, discDrawOperation);
@@ -2076,7 +2053,7 @@ $(function () {
         var canvas = getCanvasDetails(), savedStrokeStyle = canvas.strokeStyle;
         saveCanvasState(canvas);
         function circleDrawOperation(x, y) {
-            var innerRadius = Math.floor(Math.random() * 10), i = Math.floor(Math.random() * 16) || 0, color = CONSTANTS.basicColors[i] || CONSTANTS.defaultColor, strokeStyle = "#" + color.hex;
+            var innerRadius = Math.floor(Math.random() * 10), i = Math.floor(Math.random() * 16) || 0, color = CONSTANTS.basicColors[i] || CONSTANTS.defaultColor, strokeStyle = '#' + color.hex;
             CANVASAPI.drawCircle({
                 X: x,
                 Y: y,
@@ -2226,7 +2203,7 @@ $(function () {
 });
 ;
 (function ($) {
-    "use strict";
+    'use strict';
     $(function () {
         function initializeCanvas(options) {
             var canvas = $('<canvas/>', {
@@ -2286,7 +2263,7 @@ $(function () {
         }, registerSaveImageEvents = function (options) {
             $('#' + options.toolId)
                 .on('click', function () {
-                window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
+                window.open($('#' + CONSTANTS.canvasId)[0].toDataURL('image/png'), '_blank');
             });
         }, registerResetCanvasEvents = function (options) {
             $('#' + options.toolId)

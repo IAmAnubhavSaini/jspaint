@@ -1,34 +1,24 @@
+// @ts-nocheck
+
+import {IPoint, Point} from './Point.js';
+
+
 class Pencil {
-  id = "PencilTool"
-  selectionId = '#PencilTool'
-  width = 2
-  LastPoint = {
-    X: -1,
-    Y: -1
-  }
-  classes = 'main-tool'
-  title = 'Click to draw free-hand lines. Click again to disable.'
+  id = 'PencilTool';
+  selectionId = '#PencilTool';
+  width = 2;
+  LastPoint: IPoint = new Point();
+  classes = 'main-tool';
+  title = 'Click to draw free-hand lines. Click again to disable.';
 
   start(options: any) {
     var event = options.event,
       canvasId = '#' + options.canvasId,
-      mouseOptions:any = null,
+      mouseOptions: any = null,
       X = null,
       Y = null,
       width = null,
-      last = null,
-      LastPoint = {
-        get: () => {
-          return {
-            X: this.LastPoint.X,
-            Y: this.LastPoint.Y
-          };
-        },
-        set: (x: number, y: number) => {
-          this.LastPoint.X = x;
-          this.LastPoint.Y = y;
-        }
-      };
+      last = null;
 
     $(canvasId).on(event, function (e) {
       mouseOptions = {
@@ -63,7 +53,7 @@ class Pencil {
           this.LastPoint.Y = -1;
         }
       }
-    })
+    });
   }
 
   stop(options: any) {
@@ -77,11 +67,11 @@ class Pencil {
     activate: function (options: any) {
       function initialSlider() {
         return COMMON.generateSlider({
-          id: "widthPencil",
+          id: 'widthPencil',
           min: 1,
           max: 200,
           step: 1,
-          title: "Width for pencil tool."
+          title: 'Width for pencil tool.'
         });
       }
 
@@ -116,7 +106,7 @@ class Pencil {
         containerSelectionCriterion: '.contextual-tool-bar'
       };
     }
-  }
+  };
 }
 
 COMMON.registerEventForTool({

@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import {Color, BasicColors} from './Color';
+import {Color, BasicColors} from '@f0c1s/transform-color';
 import {LocalStorage, SessionStorage} from '@f0c1s/browser-storage';
 
 var CONSTANTS = {

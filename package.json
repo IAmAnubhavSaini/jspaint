@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "2021.1.5",
+  "version": "2021.1.6",
   "description": "Paint in browser.",
   "main": "server.ts",
   "directories": {
@@ -35,6 +35,7 @@
     "@f0c1s/color-blue": "0.0.1",
     "@f0c1s/color-red": "0.0.1",
     "@f0c1s/color-yellow": "0.0.1",
+    "@f0c1s/transform-color": "^2021.1.4",
     "express": "^4.17.1"
   },
   "devDependencies": {

@@ -66,7 +66,7 @@ var activeTool;
 var getSizeFromURL = function () {
     return (window.location.toString().split('?')[1] || '=').split('=')[1];
 }, size = function () {
-    return (browser_storage_1.LocalStorage.exists() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL()) || 'x';
+    return (browser_storage_1.LocalStorage.exists() ? browser_storage_1.LocalStorage.get('dimensionsWxH').value : getSizeFromURL()) || 'x';
 };
 var sizeX = size().split('x')[0] || '', sizeY = size().split('x')[1] || '', selectedAlternativeColor = '#FF0000', selectedPrimaryColor = '#000000', context = null, CanvasState = [], Actions = {
     Mouse: {

@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "2021.1.4",
+  "version": "2021.1.5",
   "description": "Paint in browser.",
   "main": "server.ts",
   "directories": {
@@ -31,7 +31,7 @@
   "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
   "dependencies": {
     "@f0c1s/bg-colored-strings": "^2018.11.13",
-    "@f0c1s/browser-storage": "^1.0.0",
+    "@f0c1s/browser-storage": "^2.0.0",
     "@f0c1s/color-blue": "0.0.1",
     "@f0c1s/color-red": "0.0.1",
     "@f0c1s/color-yellow": "0.0.1",

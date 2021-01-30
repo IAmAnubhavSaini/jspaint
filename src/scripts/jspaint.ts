@@ -72,7 +72,7 @@ let
   },
 
   size = function (): string {
-    return (LocalStorage.exists() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL()) || 'x';
+    return (LocalStorage.exists() ? LocalStorage.get('dimensionsWxH').value : getSizeFromURL()) || 'x';
   };
 
 let

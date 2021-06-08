@@ -4,7 +4,7 @@ paint application
 
 - [App](https://iamanubhavsaini.github.io/jspaint)
 - [GitHub](https://github.com/IAmAnubhavSaini/jspaint)
-- [NPM](https://www.npmjs.com/package/jspaint)
+- [NPM](https://www.npmjs.com/package/@f0c1s/jspaint)
 
 v2021.2.0
 

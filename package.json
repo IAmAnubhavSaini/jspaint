@@ -1,19 +1,18 @@
 {
-  "name": "client",
+  "name": "jspaint",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
     "canvas-js": "^6.0.0",
+    "gh-pages": "^3.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
+    "styled-components": "^5.3.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
@@ -40,5 +39,29 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IAmAnubhavSaini/jspaint.git"
+  },
+  "keywords": [
+    "javascript",
+    "paint",
+    "paint-application",
+    "free-paint",
+    "free",
+    "online-paint"
+  ],
+  "author": "Anubhav",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"
+  },
+  "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@types/react": "^17.0.9",
+    "@types/react-dom": "^17.0.6",
+    "@types/styled-components": "^5.1.9"
   }
 }

@@ -1,8 +1,12 @@
 # jspaint
 
+paint application
+
 - [App](https://iamanubhavsaini.github.io/jspaint)
 - [GitHub](https://github.com/IAmAnubhavSaini/jspaint)
 - [NPM](https://www.npmjs.com/package/jspaint)
+
+v2021.2.0
 
 ## Related Dependencies
 

@@ -1,47 +1,61 @@
 :root {
-  --black: #333;
-  --white: #eee;
-  --gold: goldenrod;
-  --red: firebrick;
-  --primary-color: var(--black);
-  --primar-bgcolor: #eee;
-  --accent-color: #5e00ff;
-  --accent-bgcolor: #ff6f00;
-  --default-length: .5vh;
-  --default-width: .5vw;
-  --default-min-length: .1vh;
-  --default-min-width: .1vw;
-  --default-border: 1px solid var(--accent-bgcolor);
-  --default-margin: calc(.2 * var(--default-length));
-  --default-padding: calc(.2 * var(--default-length));
+    --black: #222;
+    --white: #eee;
+    --gold: #f7b81a;
+    --red: #f12c2c;
+    --primary-color: var(--black);
+    --primary-bgcolor: #ddd;
+    --accent-color-primary: #f523f9;
+    --accent-color-secondary: #fff200;
+    --accent-color-tertiary: #10b405;
 
-  --muted-text-color: #6c757d;
+    --default-height: 1vh;
+    --default-width: 1vw;
 
-  --muted-red: #dc3545;
-  --muted-red-dark: #c82333;
-  --muted-green: #28a745;
-  --muted-green-dark: #218838;
-  --muted-yellow: #f9c72f;
-  --muted-yellow-dark: #d39e00;
-  --muted-orange: #e9a11f;
-  --muted-orange-dark: #c18108;
-  --muted-blue: #007bff;
-  --muted-blue-dark: #0062cc;
-  --muted-black: #343a40;
-  --muted-black-dark: #23272b;
+    --default-min-height: 5px;
+    --default-min-width: 5px;
+
+    --default-border: 1px solid var(--accent-color-secondary);
+    --default-margin: 1vh 1vw;
+    --default-padding: 1vh 1vw;
+
+    --muted-text-color: #6c757d;
+
+    --muted-red: #dc3545;
+    --muted-red-dark: #c82333;
+    --muted-green: #28a745;
+    --muted-green-dark: #218838;
+    --muted-yellow: #f9c72f;
+    --muted-yellow-dark: #d39e00;
+    --muted-orange: #e9a11f;
+    --muted-orange-dark: #c18108;
+    --muted-blue: #007bff;
+    --muted-blue-dark: #0062cc;
+    --muted-black: #343a40;
+    --muted-black-dark: #23272b;
 }
 
-
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--primary-bgcolor);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+*, *::after, *::before {
+    box-sizing: border-box;
 }

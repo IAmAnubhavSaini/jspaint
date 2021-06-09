@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Canvas from "./components/Canvas";
 
 const StyledAppContainer = styled.div`
   .app {
@@ -22,6 +23,10 @@ const StyledAppContainer = styled.div`
       top: 0;
     }
 
+    footer.footer {
+      height: auto;
+    }
+
     main.content {
       margin: 10vh 0;
       padding: var(--default-min-height) var(--default-min-width);
@@ -31,15 +36,31 @@ const StyledAppContainer = styled.div`
   }
 `;
 
+const StyledCanvasContainer = styled.div`
+  .canvas {
+    height: 80vh;
+    width: calc(100vw - 20px);
+    zoom: 1;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0 0 3px black;
+  }
+`;
+
 function App() {
     return (
         <StyledAppContainer>
             <div className="app">
                 <header className="header">
                     <h1>Welcome to jspaint!</h1>
+                    <div className="tools">
+                        Tools
+                    </div>
                 </header>
                 <main className="content">
-                    Where are we now?
+                    <StyledCanvasContainer>
+                        <Canvas klass="canvas-first"/>
+                    </StyledCanvasContainer>
                 </main>
                 <footer className="footer">
                     v2021.2.0

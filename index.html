@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jspaint app</title>
+    <style>
+        body, h1 {
+            padding: 0;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+        }
+
+        .canvas {
+            /*min-ht: 150px;*/
+            /*width: 300px;*/
+            border: thin solid red;
+        }
+    </style>
+</head>
+<body>
+<noscript>Please enable JavaScript</noscript>
+
+<header>
+</header>
+<main>
+    <div class="controls">
+        <button onclick="circle()">random circle</button>
+        <button onclick="square()">random square</button>
+        <button onclick="pencil()" id="pencil-button">pencil</button>
+    </div>
+    <div class="canvas-container">
+        <canvas id="canvas" class="canvas">
+            Your browser doesn't support canvas
+        </canvas>
+    </div>
+</main>
+<footer></footer>
+<script src="dist/jspaint.js"></script>
+<script>
+    const canvas = document.querySelector('canvas.canvas#canvas');
+    const context = canvas.getContext('2d');
+    const width = window.innerWidth * 0.95;
+    const height = width * 0.5;
+    canvas.height = height;
+    canvas.width = width;
+
+    function circle() {
+        window.jspaint.randomCircle(context, width);
+    }
+
+    function square() {
+        window.jspaint.randomSquare(context, width);
+    }
+
+    function pencil() {
+        const offset = {y: canvas.offsetTop, x: canvas.offsetLeft};
+        window.jspaint.runPencil(context, offset);
+    }
+</script>
+</body>
+</html>

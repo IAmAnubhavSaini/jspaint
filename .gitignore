@@ -2,6 +2,7 @@
 .build/
 build/
 node_modules/
+dist/
 
 # OLD
 bower_components/

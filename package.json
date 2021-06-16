@@ -1,6 +1,6 @@
 {
   "name": "@f0c1s/jspaint",
-  "version": "2021.5.0-3",
+  "version": "2021.5.0-4",
   "private": false,
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "gh-pages": "^3.2.1"
   },
   "dependencies": {
-    "canvas-js": "file:../canvas-js/canvas-js-7.2.0.tgz"
+    "canvas-js": "^8.0.0"
   },
   "scripts": {
     "build": "browserify src/jspaint.js -o dist/jspaint.js",

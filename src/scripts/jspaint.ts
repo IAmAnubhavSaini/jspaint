@@ -1,3 +1,240 @@
+let RGBToHex = function (r: number, g: number, b: number): string {
+    function componentToHex(c: number) {
+        let hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+};
+
+let HexToRGB = function (hex: string) {
+    let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+        return r + r + g + g + b + b;
+    });
+    let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+};
+
+let CONSTANTS = {
+    canvasId: "jspaint-canvas",
+    canvasContainerId: "jspaint-paint-area",
+    basicColors: [{
+        hex: '00FFFF',
+        name: "Aqua"
+    }, {
+        hex: '000000',
+        name: "Black"
+    }, {
+        hex: '0000FF',
+        name: "Blue"
+    }, {
+        hex: 'FF00FF',
+        name: "Fuchsia"
+    }, {
+        hex: '808080',
+        name: "Gray"
+    }, {
+        hex: '008000',
+        name: "Green"
+    }, {
+        hex: '00FF00',
+        name: "Lime"
+    }, {
+        hex: '800000',
+        name: "Maroon"
+    }, {
+        hex: '000080',
+        name: "Navy"
+    }, {
+        hex: '808000',
+        name: "Olive"
+    }, {
+        hex: '800080',
+        name: "Purple"
+    }, {
+        hex: 'FF0000',
+        name: "Red"
+    }, {
+        hex: 'C0C0C0',
+        name: "Silver"
+    }, {
+        hex: '008080',
+        name: "Teal"
+    }, {
+        hex: 'FFFFFF',
+        name: "White"
+    }, {
+        hex: 'FFFF00',
+        name: "Yellow"
+    },],
+    Events: {
+        mousemove: 'mousemove',
+        mouseclick: 'click'
+    }
+};
+
+let LocalStorageAvailable = function () {
+    return localStorage !== undefined && localStorage !== null;
+};
+let getSizeFromURL = function () {
+    return window.location.toString().split('?')[1].split('=')[1];
+};
+
+let size = function () {
+    return LocalStorageAvailable() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL();
+};
+
+let sizeX: string = size().split('x')[0];
+let sizeY: string = size().split('x')[1];
+
+let selectedAlternativeColor: string = '#FF0000';
+let selectedPrimaryColor: string = '#000000';
+let context = null;
+let CanvasState = [];
+
+let Actions = {
+    Mouse: {
+        getX: function (options) {
+            let
+                event = options.event,
+                relativeTo = options.relativeTo;
+
+            return event.pageX - relativeTo.offset().left;
+        },
+        getY: function (options) {
+            let
+                event = options.event,
+                relativeTo = options.relativeTo;
+
+            return event.pageY - relativeTo.offset().top;
+        }
+    }
+};
+
+let CANVASAPI = {
+    fillCirc: function (x: number, y: number, radius: number) {
+        context.beginPath();
+        context.arc(x, y, radius, 0, 2 * Math.PI, false);
+        context.fill();
+    },
+    drawCircle: function (options) {
+        context.save();
+        context.beginPath();
+        context.arc(options.X, options.Y, options.innerRadius, 0, 2 * Math.PI, false);
+        context.lineWidth = options.outerRadius - options.innerRadius;
+        context.strokeStyle = options.strokeColor;
+        context.stroke();
+        context.restore();
+    },
+    fillSquare: function (x, y, side) {
+        context.fillRect(x, y, side, side);
+    },
+    fillRoatedSquare: function (x, y, side, xyPlaneRotationAngle) {
+        context.save();
+        context.translate(x + side / 2, y + side / 2);
+        context.rotate(xyPlaneRotationAngle);
+        context.translate(-1 * (x + side / 2), -1 * (y + side / 2));
+        CANVASAPI.fillSquare(x, y, side);
+        context.restore();
+    },
+    fillRotatedRectangle: function (x, y, length, breadth, xyPlaneRotationAngle) {
+        context.save();
+        context.translate(x + length / 2, y + breadth / 2);
+        context.rotate(xyPlaneRotationAngle);
+        context.translate(-1 * (x + length / 2), -1 * (y + breadth / 2));
+        context.fillRect(x, y, length, breadth);
+        context.restore();
+    },
+    fillRing: function (options) {
+        CANVASAPI.fillCirc(options.X, options.Y, options.outerRadius);
+        context.save();
+        context.fillStyle = options.fillColor;
+        CANVASAPI.fillCirc(options.X, options.Y, options.innerRadius);
+        context.restore();
+    },
+    drawLineSegmentFromLastPoint: function (options) {
+        let
+            context = options.context,
+            last = options.last,
+            current = options.current,
+            width = options.width;
+
+        context.beginPath();
+        context.moveTo(last.X, last.Y);
+        context.lineTo(current.X, current.Y);
+        context.lineWidth = width;
+        context.strokeStyle = selectedPrimaryColor;
+        context.stroke();
+
+        CANVASAPI.fillCirc(current.X, current.Y, width / 2);
+    }
+};
+
+let saveCanvasState = function (options) {
+    let image = context.getImageData(options.startX, options.startY, options.width, options.height);
+    CanvasState.push(image);
+    // #TODO: Figure out a way to persist image data. #210
+};
+
+let Color = {
+    generateBasicColorPalette: function (options) {
+        let
+            IContainBasicColors = options.appendHere || '.BasicColorPalette',
+            div1 = $('<div></div>'),
+            div2 = $('<div></div>'),
+            row = div1,
+            hex = null,
+            color = null,
+            colors = options.basicColors || CONSTANTS.basicColors,
+            len = colors.length,
+            i = 0;
+
+        for (i = 0; i < len; i++) {
+            row = i < len / 2 ? div1 : div2;
+            hex = '#' + colors[i].hex;
+            color = $('<div></div>')
+                .addClass('color')
+                .attr('id', 'Color-Hex-' + hex)
+                .css('background-color', hex)
+                .appendTo(row);
+        }
+        div1.appendTo(IContainBasicColors);
+        div2.appendTo(IContainBasicColors);
+    },
+    hexToRgb: HexToRGB,
+    rgbToHex: RGBToHex
+};
+
+let setupToolTips = function (tool, title) {
+    tool.attr('title', title)
+        .attr('data-toggle', 'tooltip')
+        .attr('data-placement', 'bottom');
+};
+
+let activeTool = null;
+
+let activateTool = function (options) {
+    if (activeTool !== null) {
+        activeTool.trigger('click');
+    }
+    activeTool = options.tool;
+    $('label#activated-tool-name').html(options.toolName);
+    options.start(options);
+};
+
+let deactivateTool = function (options) {
+    activeTool = null;
+    $('label#activated-tool-name').html('no active tool');
+    options.stop(options);
+};
+
+
 if (typeof Object.assign != 'function') {
     /* Object.assign Polyfill (comments are inside) */
     (function () {
@@ -8,11 +245,11 @@ if (typeof Object.assign != 'function') {
                 throw new TypeError('Cannot convert undefined or null to object');
             }
 
-            var output = Object(target);
-            for (var index = 1; index < arguments.length; index++) {
-                var source = arguments[index];
+            let output = Object(target);
+            for (let index = 1; index < arguments.length; index++) {
+                let source = arguments[index];
                 if (source !== undefined && source !== null) {
-                    for (var nextKey in source) {
+                    for (let nextKey in source) {
                         if (source.hasOwnProperty(nextKey)) {
                             output[nextKey] = source[nextKey];
                         }
@@ -25,8 +262,8 @@ if (typeof Object.assign != 'function') {
     /* Object.assign Polyfill ends here */
 }
 
-var generateSliderString = function (options) {
-    var min = options.min,
+let generateSliderString = function (options) {
+    let min = options.min,
         max = options.max,
         title = options.title,
         id = options.id,
@@ -34,17 +271,17 @@ var generateSliderString = function (options) {
 
     return '<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="' + step + '" title="' + title + '" />';
 };
-var generateLabelString = function (options) {
-    var hexColor = options.hexColor,
+let generateLabelString = function (options) {
+    let hexColor = options.hexColor,
         fontSize = options.fontSize;
 
     return '<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>';
 };
 
 function randomLoop(width, height, operation) {
-    var x, y;
-    for (var i = 0; i < Math.floor(width / 10); i++) {
-        for (var j = 0; j < Math.floor(height / 10); j++) {
+    let x, y;
+    for (let i = 0; i < Math.floor(width / 10); i++) {
+        for (let j = 0; j < Math.floor(height / 10); j++) {
             x = Math.floor(Math.random() * width);
             y = Math.floor(Math.random() * height);
             operation(x, y, i, j);
@@ -52,7 +289,19 @@ function randomLoop(width, height, operation) {
     }
 }
 
-var TOOLS = {
+interface BaseTool {
+    id: string;
+    selectionId: string;
+    class: string;
+    title: string;
+    containerId?: string;
+    ACTIONS?: any;
+    previewId?: string;
+    previewOuterId?: string;
+}
+
+
+let TOOLS = {
     CONSTANTS: {
         /* constant values for tools in jspaint */
         MandelbrotFractal: {
@@ -68,14 +317,14 @@ var TOOLS = {
             selectionId: '#PencilTool',
             class: 'main-tool',
             title: 'Click to draw free-hand lines. Click again to disable.'
-        },
+        } as BaseTool,
         PickColor: {
             id: 'pick-color',
             selectionId: '#pick-color',
             class: 'string-menu-item',
             containerId: 'PickColorTool',
             title: 'Click to pick color under mouse pointer tip; picks until some other tool is selected. Click again to disable.'
-        },
+        } as BaseTool,
         PivotedLinePattern: {
             id: "PivotedLinePatternTool",
             selectionId: '#PivotedLinePatternTool',
@@ -87,14 +336,14 @@ var TOOLS = {
                 godRays: 'god-rays',
                 Xextends: 'extends'
             }
-        },
+        } as BaseTool,
         Rectangle: {
             id: 'RectangleTool',
             selectionId: '#RectangleTool',
             class: 'main-tool',
             title: 'Click to draw rectangles. Click again to disable.',
             previewId: 'previewRectangle'
-        },
+        } as BaseTool,
         Ring: {
             id: 'RingTool',
             selectionId: '#RingTool',
@@ -102,52 +351,52 @@ var TOOLS = {
             title: 'Click to draw ring. Click again to disable.',
             previewId: 'previewRing',
             previewOuterId: 'previewOuterRing'
-        },
+        } as BaseTool,
         Disc: {
             id: 'DiscTool',
             selectionId: '#DiscTool',
             class: 'main-tool',
             title: 'Click to draw disc. Click again to disable.',
             previewId: 'previewDisc'
-        },
+        } as BaseTool,
         Square: {
             id: 'SquareTool',
             selectionId: '#SquareTool',
             class: 'main-tool',
             title: 'Click to draw squares. Click again to disable.',
             previewId: 'previewSquare'
-        },
+        } as BaseTool,
         Circle: {
             id: 'CircleTool',
             selectionId: '#CircleTool',
             class: 'main-tool',
             title: 'Click to draw circle. Click again to disable.',
             previewId: 'previewCircle'
-        },
+        } as BaseTool,
         PointWalker: {
             id: 'PointWalkerTool',
             selectionId: '#PointWalkerTool',
             class: 'main-tool',
             title: 'Click to draw random point walker. Click again to disable.'
-        },
+        } as BaseTool,
         FamilyPointWalker: {
             id: 'FamilyPointWalkerTool',
             selectionId: '#FamilyPointWalkerTool',
             class: 'main-tool',
             title: 'Click to draw family random point walker. Click again to disable.'
-        },
+        } as BaseTool,
         OrganismPointWalker: {
             id: 'OrganismPointWalkerTool',
             selectionId: '#OrganismPointWalkerTool',
             class: 'main-tool',
             title: 'Click to draw organism random point walker. Click again to disable.'
-        },
+        } as BaseTool,
         UniCellularParasiteTool: {
             id: 'UniCellularParasiteTool',
             selectionId: '#UniCellularParasiteTool',
             class: 'main-tool',
             title: 'Click to create a parasite. Click again to disable.'
-        }
+        } as BaseTool
         /* CONSTANTS ends here */
     },
     VARIABLES: {
@@ -214,54 +463,62 @@ var TOOLS = {
     }
 };
 
-var MandelbrotFractal = {
+interface ToolType {
+    CONSTANTS: any,
+    VARIABLES: any,
+    start: Function,
+    stop: Function,
+    contextMenu: any
+}
+
+let MandelbrotFractal = {
     CONSTANTS: TOOLS.CONSTANTS.MandelbrotFractal,
     VARIABLES: TOOLS.VARIABLES.MandelbrotFractal,
 };
-var Pencil = {
+let Pencil = {
     CONSTANTS: TOOLS.CONSTANTS.Pencil,
     VARIABLES: TOOLS.VARIABLES.Pencil
 };
-var PickColor = {
+let PickColor = {
     CONSTANTS: TOOLS.CONSTANTS.PickColor
 };
-var PivotedLinePattern = {
+let PivotedLinePattern = {
     CONSTANTS: TOOLS.CONSTANTS.PivotedLinePattern,
     VARIABLES: TOOLS.VARIABLES.PivotedLinePattern
 };
-var Rectangle = {
+let Rectangle = {
     CONSTANTS: TOOLS.CONSTANTS.Rectangle,
     VARIABLES: TOOLS.CONSTANTS.Rectangle
 };
-var Ring = {
+let Ring: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Ring,
-    VARIABLES: TOOLS.VARIABLES.Ring
+    VARIABLES: TOOLS.VARIABLES.Ring,
 };
-var Disc = {
+let Disc = {
     CONSTANTS: TOOLS.CONSTANTS.Disc,
     VARIABLES: TOOLS.VARIABLES.Disc
 };
-var Square = {
+let Square = {
     CONSTANTS: TOOLS.CONSTANTS.Square,
     VARIABLES: TOOLS.VARIABLES.Square
 };
-var Circle = {
+let Circle = {
     CONSTANTS: TOOLS.CONSTANTS.Circle,
     VARIABLES: TOOLS.VARIABLES.Circle
 };
-var PointWalker = {
+let PointWalker = {
     CONSTANTS: TOOLS.CONSTANTS.PointWalker,
     VARIABLES: TOOLS.VARIABLES.PointWalker
 };
-var FamilyPointWalker = {
+let FamilyPointWalker = {
     CONSTANTS: TOOLS.CONSTANTS.FamilyPointWalker,
     VARIABLES: TOOLS.VARIABLES.FamilyPointWalker
 };
-var OrganismPointWalker = {
+let OrganismPointWalker = {
     CONSTANTS: TOOLS.CONSTANTS.OrganismPointWalker,
     VARIABLES: TOOLS.VARIABLES.OrganismPointWalker
 };
-var UniCellularParasiteTool = {
+let UniCellularParasiteTool = {
     CONSTANTS: TOOLS.CONSTANTS.UniCellularParasiteTool,
     VARIABLES: TOOLS.VARIABLES.UniCellularParasiteTool
 };
@@ -270,7 +527,7 @@ $(function () {
     "use strict";
 
     function getCanvasDetails() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width();
 
@@ -286,14 +543,14 @@ $(function () {
         };
     }
 
-    var COMMON = {
+    let COMMON = {
         generateSlider: function (options) {
             return $(generateSliderString(options));
         },
-        generateLabel: function (options) {
-            $(generateLabelString(options));
+        generateLabel: function (options): JQuery<HTMLElement> {
+            return $(generateLabelString(options));
         },
-        genericLabel: function () {
+        genericLabel: function (): JQuery<HTMLElement> {
             return COMMON.generateLabel({
                 hexColor: 'FFFFFF',
                 fontSize: '10px'
@@ -301,7 +558,7 @@ $(function () {
         },
 
         registerEventForTool: function (options) {
-            var toolId = options.toolId,
+            let toolId = options.toolId,
                 tool = $(toolId),
                 contextMenu = options.contextMenu,
                 title = options.constantTitle;
@@ -323,25 +580,25 @@ $(function () {
     };
 
     function onImageButtonChange(e) {
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function (event) {
-            var img = new Image();
+            let img = new Image();
             img.onload = function () {
                 context.drawImage(img, 0, 0);
             };
-            img.src = event.target.result;
+            img.src = event.target.result.toString();
         };
         reader.readAsDataURL(e.target.files[0]);
     }
 
-    var MandelbrotFractalFunctionality = {
+    let MandelbrotFractalFunctionality = {
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = options.canvasId;
 
             function drawMandelbrotFractal(options) {
                 function mandelIter(cx, cy, maxIter) {
-                    var x = 0.0,
+                    let x = 0.0,
                         y = 0.0,
                         xx = 0,
                         yy = 0,
@@ -359,7 +616,7 @@ $(function () {
                 }
 
                 function mandelbrot(options) {
-                    var ctx = options.context,
+                    let ctx = options.context,
                         xmin = options.XMin,
                         ymin = options.YMin,
                         xmax = options.XMax,
@@ -409,12 +666,12 @@ $(function () {
                 mandelbrot(options);
             }
 
-            var getOverflowInXAxis = function (startX) {
+            let getOverflowInXAxis = function (startX) {
                 return startX + Math.floor(MandelbrotFractal.VARIABLES.width) - MandelbrotFractal.CONSTANTS.maxWidth;
             };
 
-            var getStartingXCoordinate = function (mouseOptions) {
-                var X = Actions.Mouse.getX(mouseOptions),
+            let getStartingXCoordinate = function (mouseOptions) {
+                let X = Actions.Mouse.getX(mouseOptions),
                     startX = Math.max(X - Math.floor(MandelbrotFractal.VARIABLES.width / 2), 0),
                     overflowX = getOverflowInXAxis(startX);
                 if (overflowX > 0) {
@@ -423,12 +680,12 @@ $(function () {
                 return startX;
             };
 
-            var getOverflowInYAxis = function (startY) {
+            let getOverflowInYAxis = function (startY) {
                 return startY + Math.floor(MandelbrotFractal.VARIABLES.height) - MandelbrotFractal.CONSTANTS.maxHeight;
             };
 
-            var getStartingYCoordinate = function (mouseOptions) {
-                var Y = Actions.Mouse.getY(mouseOptions),
+            let getStartingYCoordinate = function (mouseOptions) {
+                let Y = Actions.Mouse.getY(mouseOptions),
                     startY = Math.max(Y - Math.floor(MandelbrotFractal.VARIABLES.height / 2), 0),
                     overflowY = getOverflowInYAxis(startY);
 
@@ -439,7 +696,7 @@ $(function () {
             };
 
             $(canvasId).on(event, function (e) {
-                var mouseOptions = {
+                let mouseOptions = {
                         event: e,
                         relativeTo: $(canvasId)
                     },
@@ -465,7 +722,7 @@ $(function () {
 
         ContextMenu: {
             activate: function (options) {
-                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                let container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function getInputElement(id, min, max, title) {
                     return COMMON.generateSlider({
@@ -479,15 +736,15 @@ $(function () {
 
                 function addIterationController(options) {
                     function createIterationSlider(options) {
-                        var slider = getInputElement('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
+                        let slider = getInputElement('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
                             .attr('value', MandelbrotFractal.VARIABLES.iterations)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                var val = $(this).val();
+                                let val = parseInt($(this).val().toString().toString());
                                 if (val > options.maxIterationsAllowed) {
-                                    if (confirm('Beware! It might crash your browser. Go back?', 'back', 'No, I want these many iterations. I know what I am doing!')) {
+                                    if (confirm('Beware! It might crash your browser. Go back?')) {
                                         val = options.maxIterationsAllowed;
                                     }
                                 }
@@ -496,7 +753,7 @@ $(function () {
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.iterationLabel)
                         .append(createIterationSlider(options));
 
@@ -505,13 +762,13 @@ $(function () {
 
                 function addHeightController(options) {
                     function createHeightSlider(options) {
-                        var slider = getInputElement('mandelbrotHeight', '100', MandelbrotFractal.CONSTANTS.maxHeight, 'Height for mandelbrot fractal generation.')
+                        let slider = getInputElement('mandelbrotHeight', '100', MandelbrotFractal.CONSTANTS.maxHeight, 'Height for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxHeight)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString().toString());
                             })
                             .on('change', function () {
-                                var val = $(this).val();
+                                let val = parseInt($(this).val().toString().toString());
                                 if (val > MandelbrotFractal.CONSTANTS.maxHeight) {
                                     val = MandelbrotFractal.CONSTANTS.maxHeight;
                                 }
@@ -520,7 +777,7 @@ $(function () {
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.heightLabel)
                         .append(createHeightSlider(options));
 
@@ -529,13 +786,13 @@ $(function () {
 
                 function addWidthController(options) {
                     function createWidthSlider(options) {
-                        var slider = getInputElement('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
+                        let slider = getInputElement('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxWidth)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                var val = $(this).val();
+                                let val = $(this).val().toString();
                                 if (val > MandelbrotFractal.CONSTANTS.maxWidth) {
                                     val = MandelbrotFractal.CONSTANTS.maxWidth;
                                 }
@@ -544,7 +801,7 @@ $(function () {
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.widthLabel)
                         .append(createWidthSlider(options));
 
@@ -553,19 +810,19 @@ $(function () {
 
                 function addXMaxController(options) {
                     function createXMaxSlider(options) {
-                        var slider = getInputElement('mandelbrotXMax', '0', '3', 'XMax for mandelbrot fractal generation.')
+                        let slider = getInputElement('mandelbrotXMax', '0', '3', 'XMax for mandelbrot fractal generation.')
                             .attr('value', '1')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                MandelbrotFractal.VARIABLES.xMax = $(this).val();
+                                MandelbrotFractal.VARIABLES.xMax = $(this).val().toString();
                             });
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.xMaxLabel)
                         .append(createXMaxSlider(options));
 
@@ -574,19 +831,19 @@ $(function () {
 
                 function addYMaxController(options) {
                     function createYMaxSlider(options) {
-                        var slider = getInputElement('mandelbrotYMax', '0', '3', 'YMax for mandelbrot fractal generation.')
+                        let slider = getInputElement('mandelbrotYMax', '0', '3', 'YMax for mandelbrot fractal generation.')
                             .attr('value', '1')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                MandelbrotFractal.VARIABLES.yMax = $(this).val();
+                                MandelbrotFractal.VARIABLES.yMax = $(this).val().toString();
                             });
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.yMaxLabel)
                         .append(createYMaxSlider(options));
 
@@ -595,19 +852,19 @@ $(function () {
 
                 function addXMinController(options) {
                     function createXMinSlider(options) {
-                        var slider = getInputElement('mandelbrotXMin', '-3', '1', 'XMin for mandelbrot fractal generation.')
+                        let slider = getInputElement('mandelbrotXMin', '-3', '1', 'XMin for mandelbrot fractal generation.')
                             .attr('value', '-2')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                MandelbrotFractal.VARIABLES.xMin = $(this).val();
+                                MandelbrotFractal.VARIABLES.xMin = $(this).val().toString();
                             });
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.xMinLabel)
                         .append(createXMinSlider(options));
 
@@ -616,19 +873,19 @@ $(function () {
 
                 function addYMinController(options) {
                     function createYMinSlider(options) {
-                        var slider = getInputElement('mandelbrotYMin', '-2', '1', 'YMin for mandelbrot fractal generation.')
+                        let slider = getInputElement('mandelbrotYMin', '-2', '1', 'YMin for mandelbrot fractal generation.')
                             .attr('value', '-1')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                MandelbrotFractal.VARIABLES.yMin = $(this).val();
+                                MandelbrotFractal.VARIABLES.yMin = $(this).val().toString();
                             });
                         return slider;
                     }
 
-                    var sliderTool = COMMON.genericLabel()
+                    let sliderTool = COMMON.genericLabel()
                         .append(options.yMinLabel)
                         .append(createYMinSlider(options));
 
@@ -672,7 +929,7 @@ $(function () {
         },
         Events: {
             register: function (options) {
-                var toolId = options.toolId,
+                let toolId = options.toolId,
                     tool = $(toolId),
                     contextMenu = MandelbrotFractal.ContextMenu;
 
@@ -694,9 +951,9 @@ $(function () {
         }
     };
 
-    var PencilFunctionality = {
+    let PencilFunctionality = {
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
@@ -722,7 +979,7 @@ $(function () {
                     relativeTo: $(this)
                 };
 
-                var drawLines = function () {
+                let drawLines = function () {
                     X = Actions.Mouse.getX(mouseOptions);
                     Y = Actions.Mouse.getY(mouseOptions);
                     width = Pencil.VARIABLES.width;
@@ -752,7 +1009,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mousemove,
+            let event = options.event || CONSTANTS.Events.mousemove,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
@@ -770,14 +1027,14 @@ $(function () {
                 }
 
                 function addSliderForLineWidth(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    let div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
                         slider = initialSlider()
                             .attr('value', Pencil.VARIABLES.width)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('input', function () {
-                                Pencil.VARIABLES.width = $(this).val();
+                                Pencil.VARIABLES.width = $(this).val().toString();
                             })
                             .appendTo(div);
 
@@ -803,7 +1060,7 @@ $(function () {
         }
     };
 
-    var PickColorFunctionality = {
+    let PickColorFunctionality = {
         ContextMenu: {
             activate: function () {
             },
@@ -813,7 +1070,7 @@ $(function () {
             }
         },
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
@@ -839,16 +1096,16 @@ $(function () {
             });
         },
         stop: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId;
 
             $(canvasId).off(event);
         }
     };
 
-    var PivotedLinePatternFunctionality = {
+    let PivotedLinePatternFunctionality = {
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mousemove,
+            let event = options.event || CONSTANTS.Events.mousemove,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
                 mouseOptions = null,
                 X = null,
@@ -870,7 +1127,7 @@ $(function () {
                 action = null;
 
             function drawLineSegmentFromLastPoint(options) {
-                var
+                let
                     context = options.context,
                     last = options.last,
                     current = options.current,
@@ -893,7 +1150,7 @@ $(function () {
                 Y = Actions.Mouse.getY(mouseOptions);
                 action = $('[name=tool-options]:checked').val();
 
-                var drawLines = function () {
+                let drawLines = function () {
                     width = PivotedLinePattern.VARIABLES.width;
                     last = LastPoint.get();
                     if (last.X != -1) {
@@ -932,7 +1189,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var
+            let
                 event = options.event || CONSTANTS.Events.mousemove,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
@@ -940,10 +1197,10 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                let container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
-                var createToolOptions = function () {
-                    var createBasicOption = function (id, name, value) {
+                let createToolOptions = function () {
+                    let createBasicOption = function (id, name, value) {
                         return COMMON.genericLabel().append(value).append(' <input id="' + id + '" name="' + name + '" type="radio" value="' + value + '" /></label>');
                     };
 
@@ -965,14 +1222,14 @@ $(function () {
                 }
 
                 function addSliderForLineWidth(options) {
-                    var
+                    let
                         slider = initialSlider()
                             .attr('value', PivotedLinePattern.VARIABLES.width)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('input', function () {
-                                PivotedLinePattern.VARIABLES.width = $(this).val();
+                                PivotedLinePattern.VARIABLES.width = $(this).val().toString();
                             })
                             .appendTo(container);
 
@@ -1000,9 +1257,9 @@ $(function () {
         }
     };
 
-    var RectangleFunctionality = {
+    let RectangleFunctionality = {
         start: function (options) {
-            var
+            let
                 event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
@@ -1020,7 +1277,7 @@ $(function () {
                 xyPlaneRotationAngle = null;
 
             function generatePreview(options) {
-                var
+                let
                     div = $('<div></div>')
                         .attr('id', Rectangle.CONSTANTS.previewId)
                         .css({
@@ -1029,7 +1286,7 @@ $(function () {
                         })
                         .appendTo('.utilities')
                         .on('click', function (eClick) {
-                            var
+                            let
                                 mouseOptions = {
                                     event: eClick,
                                     relativeTo: $(canvasId)
@@ -1075,7 +1332,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var
+            let
                 event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
@@ -1085,7 +1342,7 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                let container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function initialSlider(id, title, max, min) {
                     return COMMON.generateSlider({
@@ -1101,31 +1358,31 @@ $(function () {
                     return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360, 0)
                         .attr('value', Rectangle.VARIABLES.xyPlaneRotationAngle)
                         .on('mouseover', function () {
-                            $(this).attr('title', $(this).val() + ' deg');
+                            $(this).attr('title', $(this).val().toString() + ' deg');
                         })
                         .on('input', function () {
-                            Rectangle.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                            Rectangle.VARIABLES.xyPlaneRotationAngle = $(this).val().toString();
                         });
                 }
 
                 function addSliderForLength(options) {
-                    var lengthSlider = initialSlider(options.lengthId, options.lengthTitle, 400, 10)
+                    let lengthSlider = initialSlider(options.lengthId, options.lengthTitle, 400, 10)
                         .attr('value', Rectangle.VARIABLES.length)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
                         })
                         .on('input', function () {
-                            Rectangle.VARIABLES.length = $(this).val();
+                            Rectangle.VARIABLES.length = $(this).val().toString();
                         })
                         .appendTo(container);
 
-                    var breadthSlider = initialSlider(options.breadthId, options.breadthTitle, 400, 10)
+                    let breadthSlider = initialSlider(options.breadthId, options.breadthTitle, 400, 10)
                         .attr('value', Rectangle.VARIABLES.breadth)
                         .on('mouseover', function () {
                             $(this).attr('title', $(this).val());
                         })
                         .on('input', function () {
-                            Rectangle.VARIABLES.breadth = $(this).val();
+                            Rectangle.VARIABLES.breadth = $(this).val().toString();
                         })
                         .appendTo(container);
                 }
@@ -1159,9 +1416,10 @@ $(function () {
         }
     };
 
-    var RingFunctionality = {
+    Ring = {
+        ...Ring,
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
+            let event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
                 mouseOptions = null,
                 X = null,
@@ -1179,7 +1437,7 @@ $(function () {
                 outer = null;
 
             function generatePreview(options) {
-                var outerDiv = $('<div></div>').attr('id', Ring.CONSTANTS.previewOuterId)
+                let outerDiv = $('<div></div>').attr('id', Ring.CONSTANTS.previewOuterId)
                     .css({
                         'position': 'fixed',
                         'z-index': '2',
@@ -1189,7 +1447,7 @@ $(function () {
                         'backgruond-color': selectedPrimaryColor,
                     })
                     .appendTo('.utilities');
-                var
+                let
                     div = $('<div></div>')
                         .attr('id', Ring.CONSTANTS.previewId)
                         .css({
@@ -1217,8 +1475,8 @@ $(function () {
                             });
                         })
                         .on('mousemove', function (ev) {
-                            $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
-                                .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
+                            $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius.toString()) - parseInt(window.scrollY.toString()))
+                                .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius.toString()) - parseInt(window.scrollX.toString()))
                                 .css('background-color', selectedAlternativeColor)
                                 .css('border', 'thin dashed ' + selectedPrimaryColor)
                                 .css('height', Ring.VARIABLES.innerRadius * 2)
@@ -1226,8 +1484,8 @@ $(function () {
 
                             outer.css({
                                 'position': 'fixed',
-                                'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
-                                'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
+                                'top': ev.pageY - parseInt(Ring.VARIABLES.outerRadius.toString()) - parseInt(window.scrollY.toString()),
+                                'left': ev.pageX - parseInt(Ring.VARIABLES.outerRadius.toString()) - parseInt(window.scrollX.toString()),
                                 'z-index': '2',
                                 'border-radius': '50%',
                                 'height': Ring.VARIABLES.outerRadius * 2,
@@ -1235,13 +1493,13 @@ $(function () {
                                 'background-color': selectedPrimaryColor,
                             });
 
-                            previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius);
-                            previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius);
+                            previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius.toString());
+                            previewOffsetTop = $(this).offset().top + parseInt(Ring.VARIABLES.innerRadius.toString());
                             canvasOffsetLeft = $(canvasId).offset().left;
                             canvasOffsetTop = $(canvasId).offset().top;
 
-                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth.toString()) < previewOffsetLeft ||
+                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight.toString()) < previewOffsetTop) {
                                 $(this).hide();
                                 outer.hide();
                             }
@@ -1273,7 +1531,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var
+            let
                 event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
@@ -1295,14 +1553,14 @@ $(function () {
                 }
 
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    let div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
                         innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
                             .attr('value', Ring.VARIABLES.innerRadius)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('input', function () {
-                                Ring.VARIABLES.innerRadius = $(this).val();
+                                Ring.VARIABLES.innerRadius = $(this).val().toString();
                             })
                             .appendTo(div),
 
@@ -1312,7 +1570,7 @@ $(function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('input', function () {
-                                Ring.VARIABLES.outerRadius = $(this).val();
+                                Ring.VARIABLES.outerRadius = $(this).val().toString();
                             })
                             .appendTo(div);
 
@@ -1338,9 +1596,9 @@ $(function () {
         }
     };
 
-    var DiscFunctionality = {
+    let DiscFunctionality = {
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
@@ -1355,7 +1613,7 @@ $(function () {
                 previewOffsetTop = null;
 
             function generatePreview(options) {
-                var
+                let
                     div = $('<div></div>')
                         .attr('id', Disc.CONSTANTS.previewId)
                         .css({
@@ -1407,7 +1665,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId;
 
             $(canvasId).off(event);
@@ -1427,14 +1685,14 @@ $(function () {
                 }
 
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    let div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
                         slider = initialSlider()
                             .attr('value', Disc.VARIABLES.radius)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('input', function () {
-                                Disc.VARIABLES.radius = $(this).val();
+                                Disc.VARIABLES.radius = $(this).val().toString();
                             })
                             .appendTo(div);
 
@@ -1460,9 +1718,9 @@ $(function () {
         }
     };
 
-    var SquareFunctionality = {
+    let SquareFunctionality = {
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
+            let event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
                 mouseOptions = null,
                 X = null,
@@ -1478,7 +1736,7 @@ $(function () {
                 previewOffsetTop = null;
 
             function generatePreview(options) {
-                var div = $('<div></div>')
+                let div = $('<div></div>')
                     .attr('id', Square.CONSTANTS.previewId)
                     .css({
                         'position': 'fixed',
@@ -1486,7 +1744,7 @@ $(function () {
                     })
                     .appendTo('.utilities')
                     .on('click', function (eClick) {
-                        var mouseOptions = {
+                        let mouseOptions = {
                                 event: eClick,
                                 relativeTo: $(canvasId)
                             },
@@ -1531,7 +1789,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var
+            let
                 event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
@@ -1550,7 +1808,7 @@ $(function () {
                 }
 
                 function getContextMenuContainer(options) {
-                    var container = $('#' + options.id);
+                    let container = $('#' + options.id);
                     if (container.length === 0)
                         return $('<div></div>').attr('id', options.id).addClass('menu-item');
                     else
@@ -1564,7 +1822,7 @@ $(function () {
                             $(this).attr('title', $(this).val());
                         })
                         .on('input', function () {
-                            Square.VARIABLES.side = $(this).val();
+                            Square.VARIABLES.side = $(this).val().toString();
                         });
                 }
 
@@ -1572,14 +1830,14 @@ $(function () {
                     return initialSlider('xyPlaneRotationAngle', 'rotation angle for XY plane rotation.', 360, 0)
                         .attr('value', Square.VARIABLES.xyPlaneRotationAngle)
                         .on('mouseover', function () {
-                            $(this).attr('title', $(this).val() + ' deg');
+                            $(this).attr('title', $(this).val().toString() + ' deg');
                         })
                         .on('input', function () {
-                            Square.VARIABLES.xyPlaneRotationAngle = $(this).val();
+                            Square.VARIABLES.xyPlaneRotationAngle = $(this).val().toString();
                         });
                 }
 
-                var contextMenuContainer = getContextMenuContainer(options);
+                let contextMenuContainer = getContextMenuContainer(options);
                 getSliderForSide(options).appendTo(contextMenuContainer);
                 getSliderForXYPlaneRotationAngle(options).appendTo(contextMenuContainer);
                 contextMenuContainer.appendTo($(options.containerSelectionCriterion));
@@ -1603,9 +1861,9 @@ $(function () {
         }
     };
 
-    var CircleFunctionality = {
+    let CircleFunctionality = {
         start: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
+            let event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
                 mouseOptions = null,
                 X = null,
@@ -1621,7 +1879,7 @@ $(function () {
                 previewOffsetTop = null;
 
             function generatePreview(options) {
-                var div = $('<div></div>')
+                let div = $('<div></div>')
                     .attr('id', Circle.CONSTANTS.previewId)
                     .css({
                         'position': 'fixed',
@@ -1678,7 +1936,7 @@ $(function () {
             });
         },
         stop: function (options) {
-            var event = options.event || CONSTANTS.Events.mouseclick,
+            let event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
@@ -1698,14 +1956,14 @@ $(function () {
                 }
 
                 function addSliderForRadius(options) {
-                    var div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
+                    let div = $('<div></div>').attr('id', options.id).addClass('menu-item'),
                         radiusSlider = initialSlider("radiusCircle", "innerRadius for circle tool.")
                             .attr('value', Circle.VARIABLES.innerRadius)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('input', function () {
-                                Circle.VARIABLES.innerRadius = $(this).val();
+                                Circle.VARIABLES.innerRadius = $(this).val().toString();
                             });
                     radiusSlider.appendTo(div);
                     div.appendTo($(options.containerSelectionCriterion));
@@ -1730,9 +1988,9 @@ $(function () {
         }
     };
 
-    var PointWalkerFunctionality = {
+    let PointWalkerFunctionality = {
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
@@ -1758,7 +2016,7 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                let container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function getInputElement(id, min, max, title) {
                     return COMMON.generateSlider({
@@ -1772,13 +2030,13 @@ $(function () {
 
                 function addStepController(options) {
                     function createStepSlider(options) {
-                        var slider = getInputElement('pointWalkerSptes', '500', options.maxStepsAllowed, 'Steps for random point walk generation.')
+                        let slider = getInputElement('pointWalkerSptes', '500', options.maxStepsAllowed, 'Steps for random point walk generation.')
                             .attr('value', PointWalker.VARIABLES.steps)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                PointWalker.VARIABLES.steps = $(this).val();
+                                PointWalker.VARIABLES.steps = $(this).val().toString();
                             });
                         return slider;
                     }
@@ -1804,9 +2062,9 @@ $(function () {
         }
     };
 
-    var FamilyPointWalkerFunctionality = {
+    let FamilyPointWalkerFunctionality = {
         start: function (options) {
-            var
+            let
                 event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
@@ -1864,7 +2122,7 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                let container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function getInputElement(id, min, max, title) {
                     return COMMON.generateSlider({
@@ -1878,14 +2136,14 @@ $(function () {
 
                 function addStepController(options) {
                     function createStepSlider(options) {
-                        var
+                        let
                             slider = getInputElement('familyPointWalkerSptes', FamilyPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for family random point walk generation.')
                                 .attr('value', FamilyPointWalker.VARIABLES.steps)
                                 .on('mouseover', function () {
                                     $(this).attr('title', $(this).val());
                                 })
                                 .on('change', function () {
-                                    FamilyPointWalker.VARIABLES.steps = $(this).val();
+                                    FamilyPointWalker.VARIABLES.steps = $(this).val().toString();
                                 });
                         return slider;
                     }
@@ -1911,9 +2169,9 @@ $(function () {
         }
     };
 
-    var OrganismPointWalkerFunctionality = {
+    let OrganismPointWalkerFunctionality = {
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
@@ -1972,7 +2230,7 @@ $(function () {
         },
         ContextMenu: {
             activate: function (options) {
-                var container = $('<div></div>').attr('id', options.id).addClass('menu-item');
+                let container = $('<div></div>').attr('id', options.id).addClass('menu-item');
 
                 function getInputElement(id, min, max, title) {
                     return COMMON.generateSlider({
@@ -1986,13 +2244,13 @@ $(function () {
 
                 function addStepController(options) {
                     function createStepSlider(options) {
-                        var slider = getInputElement('organismPointWalkerSptes', OrganismPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for organism random point walk generation.')
+                        let slider = getInputElement('organismPointWalkerSptes', OrganismPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for organism random point walk generation.')
                             .attr('value', OrganismPointWalker.VARIABLES.steps)
                             .on('mouseover', function () {
                                 $(this).attr('title', $(this).val());
                             })
                             .on('change', function () {
-                                OrganismPointWalker.VARIABLES.steps = $(this).val();
+                                OrganismPointWalker.VARIABLES.steps = $(this).val().toString();
                             });
                         return slider;
                     }
@@ -2018,9 +2276,9 @@ $(function () {
         }
     };
 
-    var UniCellularParasiteToolFunctionality = {
+    let UniCellularParasiteToolFunctionality = {
         start: function (options) {
-            var event = options.event,
+            let event = options.event,
                 canvasId = '#' + options.canvasId,
                 mouseOptions = null,
                 X = null,
@@ -2090,7 +2348,7 @@ $(function () {
     Object.assign(PickColor, PickColorFunctionality);
     Object.assign(PivotedLinePattern, PivotedLinePatternFunctionality);
     Object.assign(Rectangle, RectangleFunctionality);
-    Object.assign(Ring, RingFunctionality);
+    // Object.assign(Ring, {...RingFunctionality});
     Object.assign(Disc, DiscFunctionality);
     Object.assign(Square, SquareFunctionality);
     Object.assign(Circle, CircleFunctionality);
@@ -2102,7 +2360,7 @@ $(function () {
 
     /* Actions */
     function onSaturateRedColorToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2113,14 +2371,14 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             image.data[i] = 255;
         }
         context.putImageData(image, 0, 0);
     }
 
     function onSaturateGreenColorToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2131,14 +2389,14 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 1; i < image.data.length; i += 4) {
+        for (let i = 1; i < image.data.length; i += 4) {
             image.data[i] = 255;
         }
         context.putImageData(image, 0, 0);
     }
 
     function onSaturateBlueColorToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2149,14 +2407,14 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 2; i < image.data.length; i += 4) {
+        for (let i = 2; i < image.data.length; i += 4) {
             image.data[i] = 255;
         }
         context.putImageData(image, 0, 0);
     }
 
     function onInvertColorsToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2167,7 +2425,7 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             image.data[i] = 255 - image.data[i];
             image.data[i + 1] = 255 - image.data[i + 1];
             image.data[i + 2] = 255 - image.data[i + 2];
@@ -2176,7 +2434,7 @@ $(function () {
     }
 
     function onDesaturateRedColorToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2187,14 +2445,14 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             image.data[i] = 0;
         }
         context.putImageData(image, 0, 0);
     }
 
     function onDesaturateGreenColorToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2205,14 +2463,14 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 1; i < image.data.length; i += 4) {
+        for (let i = 1; i < image.data.length; i += 4) {
             image.data[i] = 0;
         }
         context.putImageData(image, 0, 0);
     }
 
     function onDesaturateBlueColorToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2223,14 +2481,14 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 2; i < image.data.length; i += 4) {
+        for (let i = 2; i < image.data.length; i += 4) {
             image.data[i] = 0;
         }
         context.putImageData(image, 0, 0);
     }
 
     function onAddGrayToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2241,7 +2499,7 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             image.data[i] += 112;
             image.data[i + 1] += 112;
             image.data[i + 2] += 112;
@@ -2250,7 +2508,7 @@ $(function () {
     }
 
     function onRemoveGrayToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2261,7 +2519,7 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             image.data[i] -= 112;
             image.data[i + 1] -= 112;
             image.data[i + 2] -= 112;
@@ -2270,7 +2528,7 @@ $(function () {
     }
 
     function onAddNoiseToolClick() {
-        var canvasId = '#' + CONSTANTS.canvasId,
+        let canvasId = '#' + CONSTANTS.canvasId,
             height = $(canvasId).height(),
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
@@ -2281,7 +2539,7 @@ $(function () {
             width: width,
             height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             image.data[i] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
             image.data[i + 1] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
             image.data[i + 2] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
@@ -2290,7 +2548,7 @@ $(function () {
     }
 
     function onRandomColorToolClick() {
-        var canvas = getCanvasDetails(),
+        let canvas = getCanvasDetails(),
             image = canvas.image,
             sampleX = Math.floor(Math.random() * canvas.width),
             sampleY = Math.floor(Math.random() * canvas.height),
@@ -2302,7 +2560,7 @@ $(function () {
             blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
 
         saveCanvasState(canvas);
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
                 image.data[i] += red;
                 image.data[i + 1] += green;
@@ -2313,23 +2571,23 @@ $(function () {
     }
 
     function onFuzzyColorToolClick() {
-        var canvas = getCanvasDetails();
+        let canvas = getCanvasDetails();
 
         saveCanvasState(canvas);
-        for (var i = 0; i < 255; i++) {
+        for (let i = 0; i < 255; i++) {
             $('#RandomColorTool').click();
         }
     }
 
     function onBlackAndWhiteColorToolClick() {
-        var canvas = getCanvasDetails(),
+        let canvas = getCanvasDetails(),
             image = canvas.image,
             average = 0,
             newValue = 0;
 
         saveCanvasState(canvas);
 
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             if (average < 112) {
                 newValue = 0;
@@ -2344,13 +2602,13 @@ $(function () {
     }
 
     function onGrayColorToolClick() {
-        var canvas = getCanvasDetails(),
+        let canvas = getCanvasDetails(),
             image = canvas.image,
             average = 0,
             newValue = 0;
 
         saveCanvasState(canvas);
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             newValue = Math.floor(average / 16) * 16;
             image.data[i + 2] = image.data[i + 1] = image.data[i] = newValue;
@@ -2359,12 +2617,12 @@ $(function () {
     }
 
     function onRandomDisksColorToolClick() {
-        var canvas = getCanvasDetails(),
+        let canvas = getCanvasDetails(),
             savedStrokeStyle = canvas.strokeStyle;
         saveCanvasState(canvas);
 
         function discDrawOperation(x, y, indexI, indexJ) {
-            var radius = Math.floor(Math.random() * 10);
+            let radius = Math.floor(Math.random() * 10);
             context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
             CANVASAPI.fillCirc(x, y, radius);
         }
@@ -2374,13 +2632,13 @@ $(function () {
     }
 
     function onRandomCirclesColorToolClick() {
-        var canvas = getCanvasDetails(),
+        let canvas = getCanvasDetails(),
             savedStrokeStyle = canvas.strokeStyle;
 
         saveCanvasState(canvas);
 
         function circleDrawOperation(x, y, indexI, indexJ) {
-            var innerRadius = Math.floor(Math.random() * 10),
+            let innerRadius = Math.floor(Math.random() * 10),
                 strokeStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
 
             CANVASAPI.drawCircle({
@@ -2549,3 +2807,173 @@ $(function () {
     $('#RandomCirclesColorTool').on('click', onRandomCirclesColorToolClick);
 
 });
+
+
+(function ($) {
+    "use strict";
+    $(function () {
+        let
+            initializeCanvas = function (options) {
+                let
+                    canvas = $('<canvas/>', {
+                        id: options.canvasId
+                    })
+                        .prop({
+                            'width': options.width,
+                            'height': options.height
+                        })
+                        .appendTo('#' + options.canvasContainerId);
+
+                return canvas[0];
+            },
+
+            initializeContext = function (options) {
+                let
+                    sizeX = options.sizeX || 600,
+                    sizeY = options.sizeY || 400;
+
+                options.width = sizeX - 2;
+                options.height = sizeY - 2;
+                let canvas: HTMLCanvasElement = initializeCanvas(options) as HTMLCanvasElement;
+                return canvas.getContext('2d');
+            },
+
+            generateHexColorStringFromThisElementsId = function (element) {
+                return '#' + element.attr('id').split('#')[1];
+            },
+
+
+            registerColorEvents = function () {
+                function updatePrimaryColor(selectedPrimaryColor) {
+                    $('label#primary-color-name').css('color', selectedPrimaryColor).html(selectedPrimaryColor);
+                }
+
+                function updataAlternativeColorLabel(selectedAlternativeColor) {
+                    $('label#alternative-color-name').css('color', selectedAlternativeColor).html(selectedAlternativeColor);
+                }
+
+                $('.color')
+                    .attr('title', 'Left click for primary color, Right click for alternative color.')
+                    .attr('data-toggle', 'tooltip')
+                    .attr('data-placement', 'bottom')
+                    .on('click', function () {
+                        selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
+                        $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
+                        updatePrimaryColor(selectedPrimaryColor);
+                    })
+                    .on('contextmenu', function (e) {
+                        e.preventDefault();
+                        selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
+                        $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
+                        updataAlternativeColorLabel(selectedAlternativeColor);
+                    });
+                updatePrimaryColor(selectedPrimaryColor);
+                updataAlternativeColorLabel(selectedAlternativeColor);
+            },
+
+            registerAllColorsPickerEvents = function (options) {
+                $('#' + options.toolId)
+                    .on('input', function () {
+                        selectedPrimaryColor = context.fillStyle = $(this).val().toString();
+                    });
+            },
+
+            registerSaveImageEvents = function (options) {
+                $('#' + options.toolId)
+                    .on('click', function () {
+                        window.open(($('#' + CONSTANTS.canvasId)[0] as HTMLCanvasElement).toDataURL("image/png"), "_blank");
+                    });
+            },
+
+            registerResetCanvasEvents = function (options) {
+                $('#' + options.toolId)
+                    .on('click', function () {
+                        let
+                            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
+                            canvas = $(canvasId)[0] as HTMLCanvasElement,
+                            canvasHeight = canvas.height,
+                            canvasWidth = canvas.width,
+                            context = canvas.getContext('2d');
+
+                        context.clearRect(0, 0, canvasWidth, canvasHeight);
+                        CanvasState = [];
+                    });
+            },
+
+            registerUndoEvents = function (options) {
+                $(options.toolSelection)
+                    .on('click', function () {
+                        let state = CanvasState.pop();
+                        if (state !== undefined) {
+                            context.putImageData(state, 0, 0);
+                        }
+                    });
+                $(options.canvasId)
+                    .on('mousedown', function () {
+                        saveCanvasState({
+                            startX: 0,
+                            startY: 0,
+                            width: $(this).width(),
+                            height: $(this).height()
+                        });
+                    });
+            },
+
+            registerEvents = function () {
+                registerColorEvents();
+                registerAllColorsPickerEvents({
+                    toolId: 'allColorsPicker',
+                    containerId: 'HTML5ColorPicker'
+                });
+                registerSaveImageEvents({
+                    toolId: 'save-as-image',
+                    containerId: 'SaveImageButton'
+                });
+                registerResetCanvasEvents({
+                    toolId: 'reset-canvas',
+                    containerId: 'ResetCanvas'
+                });
+                registerUndoEvents({
+                    toolSelection: '#undo-button',
+                    canvasId: '#' + CONSTANTS.canvasId
+                });
+            },
+
+            mustAssignDimensionsToCanvasContainer = function () {
+                if (sizeX > 2500) {
+                    sizeX = 2500;
+                } else if (sizeX < 320) {
+                    sizeX = 320;
+                }
+                if (sizeY > 2500) {
+                    sizeY = 2500;
+                } else if (sizeY < 320) {
+                    sizeY = 320;
+                }
+                $('#jspaint-paint-area').css({
+                    width: sizeX,
+                    height: sizeY
+                });
+            },
+
+            init = function () {
+                mustAssignDimensionsToCanvasContainer();
+                context = initializeContext({
+                    sizeX: sizeX,
+                    sizeY: sizeY,
+                    canvasId: CONSTANTS.canvasId,
+                    canvasContainerId: CONSTANTS.canvasContainerId
+                });
+                Color.generateBasicColorPalette({
+                    appendHere: '.BasicColorPalette',
+                    basicColors: CONSTANTS.basicColors
+                });
+                registerEvents();
+                $('#PencilTool').trigger('click');
+                $('[data-toggle="tooltip"]').tooltip();
+                $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
+                $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
+            };
+        init();
+    });
+})(jQuery);

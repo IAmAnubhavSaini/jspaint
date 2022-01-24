@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "0.3.0",
+  "version": "0.3.0-1",
   "description": "jspaint - Paint app in the browser.",
   "main": "index.js",
   "directories": {

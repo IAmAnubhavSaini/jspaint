@@ -1,10 +1,6 @@
 # jspaint
 
-Paint application in your browser.
-
-This will make a `build/` directory.
-
-This project was started in 2015.
+Paint application in your browser. version: 0.3.0
 
 ## License
 

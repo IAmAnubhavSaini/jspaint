@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "grunt release-the-hounds"
+    "test": ""
   },
   "repository": {
     "type": "git",
@@ -27,26 +27,5 @@
   "bugs": {
     "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"
   },
-  "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
-  "dependencies": {
-    "blanket": "*",
-    "bootstrap": "*",
-    "chai": "*",
-    "jquery": "*",
-    "mocha": "*"
-  },
-  "devDependencies": {
-    "grunt": "*",
-    "grunt-autoprefixer": "*",
-    "grunt-bootlint": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-cssmin": "*",
-    "grunt-contrib-imagemin": "*",
-    "grunt-contrib-jasmine": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-nodeunit": "*",
-    "grunt-contrib-sass": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-text-replace": "*"
-  }
+  "homepage": "https://github.com/IAmAnubhavSaini/jspaint"
 }

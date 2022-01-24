@@ -1,32 +1,13 @@
-[![Build Status](https://travis-ci.org/IAmAnubhavSaini/jspaint.svg)](https://travis-ci.org/IAmAnubhavSaini/jspaint)
+# jspaint
 
-[![Coverage Status](https://coveralls.io/repos/github/IAmAnubhavSaini/jspaint/badge.svg?branch=master)](https://coveralls.io/github/IAmAnubhavSaini/jspaint?branch=master)
+Paint application in your browser.
 
-<hr />
+This will make a `build/` directory.
 
-<h1>jspaint: Paint application in your browser.</h1>
+This project was started in 2015.
 
-Online application URLs : [jspaint](http://jspaint.github.io)  
-
-
-<h1>How to build the repo</h1>
-1. Clone repository (or download zip)  
-2. `npm install`  
-3. `grunt`  
-4. or you can test via `npm test`
-
-
-This will make a `build/` directory.    
-
-
-
-License
----
+## License
 
 GPL v3.0
 
-JSPAINT  Copyright (C) 2015-2016  Anubhav Saini
-
-
-
-
+jspaint Copyright (C) 2022 Anubhav Saini

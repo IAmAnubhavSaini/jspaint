@@ -1,19 +1,52 @@
-@import 'base';
+:root {
 
-@mixin selection() {
-    -webkit-user-select: none;
-     -khtml-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-  -webkit-touch-callout: none;
+    --white: #FFFFFF;
+    --black: #000000;
+    --whiteborder: thin solid var(--white);
+    --blackborder: thin solid var(--black);
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.no-show {
+    visibility: hidden;
+}
+
+.no-exist {
+    display: none;
+}
+
+.no-border {
+    border: none;
+}
+
+.no-outline {
+    outline: none;
+}
+
+@media print {
+    .Menu, .utilities {
+        display: none;
+    }
+
+    #jspaint-paint-area {
+        border: none;
+    }
 }
 
 html,
 body {
-  min-height: 400px;
-  min-width: 600px;
-  @include selection();
+    min-height: 400px;
+    min-width: 600px;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
 }
 
 body {
@@ -21,13 +54,13 @@ body {
     padding-bottom: 20px;
 }
 
-header.page-header{
+header.page-header {
     margin: auto;
     border-bottom: thick solid #2a1d2d;
     text-align: center;
 }
 
-header.page-header a{
+header.page-header a {
     font-size: 2em;
     padding: 10px;
 }
@@ -52,7 +85,6 @@ header.page-header a{
 }
 
 .main-tool {
-    border-bottom: thin solid rgba(0, 0, 0, .5);
     display: inline-block;
     margin: 0 5px;
     cursor: pointer;
@@ -69,7 +101,7 @@ header.page-header a{
 .main-tool-menu button {
     background-color: transparent;
     padding: 0;
-  @extend .no-border;
+    @extend .no-border;
 }
 
 .main-tool-menu button:hover,
@@ -90,19 +122,19 @@ header.page-header a{
 
 .common-menu-bar a {
     display: inline-block;
-    color: $Black;
+    color: var(--black);
     background-color: #DDddDD;
     text-align: center;
     text-decoration: none;
     font-weight: bold;
-    border: thin solid $White;
-    outline: thin solid $Black;
+    border: thin solid var(--white);
+    outline: thin solid var(--black);
     padding: 0 2px;
 }
 
 .common-menu-bar a:hover {
-    border: thin solid $Black;
-    outline: thin solid $White;
+    border: thin solid var(--black);
+    outline: thin solid var(--white);
 }
 
 .common-menu-bar .menu-item {
@@ -130,6 +162,6 @@ i.glyphicon:active {
     cursor: not-allowed;
 }
 
-header.Menu{
+header.Menu {
     margin: 20px;
 }

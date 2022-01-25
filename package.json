@@ -31,6 +31,7 @@
   "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
   "devDependencies": {
     "@types/jquery": "^3.5.13",
+    "@types/jqueryui": "^1.12.16",
     "@types/node": "^17.0.10"
   }
 }

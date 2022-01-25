@@ -90,8 +90,8 @@ let size = function () {
     return LocalStorageAvailable() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL();
 };
 
-let sizeX: string = size().split('x')[0];
-let sizeY: string = size().split('x')[1];
+let sizeX: number = parseInt(size().split('x')[0]);
+let sizeY: number = parseInt(size().split('x')[1]);
 
 let selectedAlternativeColor: string = '#FF0000';
 let selectedPrimaryColor: string = '#000000';
@@ -469,6 +469,7 @@ interface ToolType {
     start?: Function,
     stop?: Function,
     ContextMenu?: any
+    Events?: any;
 }
 
 let MandelbrotFractal: ToolType = {
@@ -566,6 +567,7 @@ $(function () {
             setupToolTips(tool, title);
             options.tool = tool;
 
+            // @ts-ignore
             tool.funcToggle('click',
                 function () {
                     activateTool(options);
@@ -739,7 +741,7 @@ $(function () {
                         let slider = getInputElement('mandelbrotIterations', '10', options.maxIterationsAllowed, 'Iterations for mandelbrot fractal generation. Beware! If higher values are used, it might crash your browser.')
                             .attr('value', MandelbrotFractal.VARIABLES.iterations)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 let val = parseInt($(this).val().toString().toString());
@@ -789,7 +791,7 @@ $(function () {
                         let slider = getInputElement('mandelbrotWidth', '100', MandelbrotFractal.CONSTANTS.maxWidth, 'Width for mandelbrot fractal generation.')
                             .attr('value', MandelbrotFractal.CONSTANTS.maxWidth)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 let val = $(this).val().toString();
@@ -814,7 +816,7 @@ $(function () {
                             .attr('value', '1')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 MandelbrotFractal.VARIABLES.xMax = $(this).val().toString();
@@ -835,7 +837,7 @@ $(function () {
                             .attr('value', '1')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 MandelbrotFractal.VARIABLES.yMax = $(this).val().toString();
@@ -856,7 +858,7 @@ $(function () {
                             .attr('value', '-2')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 MandelbrotFractal.VARIABLES.xMin = $(this).val().toString();
@@ -877,7 +879,7 @@ $(function () {
                             .attr('value', '-1')
                             .attr('disabled', 'disabled')
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 MandelbrotFractal.VARIABLES.yMin = $(this).val().toString();
@@ -936,6 +938,7 @@ $(function () {
                 setupToolTips(tool, MandelbrotFractal.CONSTANTS.title);
                 options.tool = tool;
 
+                // @ts-ignore
                 tool.funcToggle('click',
                     function () {
                         activateTool(options);
@@ -1031,7 +1034,7 @@ $(function () {
                         slider = initialSlider()
                             .attr('value', Pencil.VARIABLES.width)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('input', function () {
                                 Pencil.VARIABLES.width = $(this).val().toString();
@@ -1226,7 +1229,7 @@ $(function () {
                         slider = initialSlider()
                             .attr('value', PivotedLinePattern.VARIABLES.width)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('input', function () {
                                 PivotedLinePattern.VARIABLES.width = $(this).val().toString();
@@ -1276,7 +1279,7 @@ $(function () {
                 previewOffsetTop = null,
                 xyPlaneRotationAngle = null;
 
-            function generatePreview(options) {
+            function generatePreview() {
                 let
                     div = $('<div></div>')
                         .attr('id', Rectangle.CONSTANTS.previewId)
@@ -1327,7 +1330,7 @@ $(function () {
                     .css('background-color', selectedPrimaryColor)
                     .css('height', Rectangle.VARIABLES.breadth)
                     .css('width', Rectangle.VARIABLES.length)
-                    .css('transform', 'rotate(' + parseInt((Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
+                    .css('transform', 'rotate(' + parseInt((Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI).toString()) / 180 + 'rad)')
                     .show();
             });
         },
@@ -1369,7 +1372,7 @@ $(function () {
                     let lengthSlider = initialSlider(options.lengthId, options.lengthTitle, 400, 10)
                         .attr('value', Rectangle.VARIABLES.length)
                         .on('mouseover', function () {
-                            $(this).attr('title', $(this).val());
+                            $(this).attr('title', $(this).val().toString());
                         })
                         .on('input', function () {
                             Rectangle.VARIABLES.length = $(this).val().toString();
@@ -1379,7 +1382,7 @@ $(function () {
                     let breadthSlider = initialSlider(options.breadthId, options.breadthTitle, 400, 10)
                         .attr('value', Rectangle.VARIABLES.breadth)
                         .on('mouseover', function () {
-                            $(this).attr('title', $(this).val());
+                            $(this).attr('title', $(this).val().toString());
                         })
                         .on('input', function () {
                             Rectangle.VARIABLES.breadth = $(this).val().toString();
@@ -1436,7 +1439,7 @@ $(function () {
                 previewOffsetTop = null,
                 outer = null;
 
-            function generatePreview(options) {
+            function generatePreview() {
                 let outerDiv = $('<div></div>').attr('id', Ring.CONSTANTS.previewOuterId)
                     .css({
                         'position': 'fixed',
@@ -1511,8 +1514,8 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Ring.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
-                    .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
+                previewer.css('top', e.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY.toString()))
+                    .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX.toString()))
                     .css('background-color', selectedAlternativeColor)
                     .css('height', Ring.VARIABLES.innerRadius * 2)
                     .css('width', Ring.VARIABLES.innerRadius * 2)
@@ -1520,8 +1523,8 @@ $(function () {
                 outer = outer || $('#' + Ring.CONSTANTS.previewOuterId);
                 outer.css({
                     'position': 'fixed',
-                    'top': e.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY),
-                    'left': e.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX),
+                    'top': e.pageY - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollY.toString()),
+                    'left': e.pageX - parseInt(Ring.VARIABLES.outerRadius) - parseInt(window.scrollX.toString()),
                     'z-index': '2',
                     'border-radius': '50%',
                     'height': Ring.VARIABLES.outerRadius * 2,
@@ -1557,7 +1560,7 @@ $(function () {
                         innerSlider = initialSlider("innerRadiusRing", "inner radius for ring tool.")
                             .attr('value', Ring.VARIABLES.innerRadius)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('input', function () {
                                 Ring.VARIABLES.innerRadius = $(this).val().toString();
@@ -1567,7 +1570,7 @@ $(function () {
                         outerSlider = initialSlider("outerRadiusRing", "outer radius for ring tool.")
                             .attr('value', Ring.VARIABLES.outerRadius)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('input', function () {
                                 Ring.VARIABLES.outerRadius = $(this).val().toString();
@@ -1612,7 +1615,7 @@ $(function () {
                 previewOffsetLeft = null,
                 previewOffsetTop = null;
 
-            function generatePreview(options) {
+            function generatePreview() {
                 let
                     div = $('<div></div>')
                         .attr('id', Disc.CONSTANTS.previewId)
@@ -1640,13 +1643,13 @@ $(function () {
                                 .css('height', Disc.VARIABLES.radius * 2)
                                 .css('width', Disc.VARIABLES.radius * 2);
 
-                            previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Disc.VARIABLES.radius);
-                            previewOffsetTop = parseInt($(this).offset().top) + parseInt(Disc.VARIABLES.radius);
+                            previewOffsetLeft = parseInt($(this).offset().left.toString()) + parseInt(Disc.VARIABLES.radius);
+                            previewOffsetTop = parseInt($(this).offset().top.toString()) + parseInt(Disc.VARIABLES.radius);
                             canvasOffsetLeft = $(canvasId).offset().left;
                             canvasOffsetTop = $(canvasId).offset().top;
 
-                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
-                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                            if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft.toString()) + parseInt(canvasWidth.toString()) < previewOffsetLeft ||
+                                canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop.toString()) + parseInt(canvasHeight.toString()) < previewOffsetTop) {
                                 $(this).hide();
                             }
                         });
@@ -1689,7 +1692,7 @@ $(function () {
                         slider = initialSlider()
                             .attr('value', Disc.VARIABLES.radius)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('input', function () {
                                 Disc.VARIABLES.radius = $(this).val().toString();
@@ -1735,7 +1738,7 @@ $(function () {
                 previewOffsetLeft = null,
                 previewOffsetTop = null;
 
-            function generatePreview(options) {
+            function generatePreview() {
                 let div = $('<div></div>')
                     .attr('id', Square.CONSTANTS.previewId)
                     .css({
@@ -1756,20 +1759,20 @@ $(function () {
                         CANVASAPI.fillRoatedSquare(X - side / 2, Y - side / 2, side, xyPlaneRotationAngle);
                     })
                     .on('mousemove', function (ev) {
-                        $(this).css('top', parseInt(ev.pageY) - parseInt(Square.VARIABLES.side / 2) - parseInt(window.scrollY))
-                            .css('left', parseInt(ev.pageX) - parseInt(parseInt(Square.VARIABLES.side / 2)) - parseInt(window.scrollX))
+                        $(this).css('top', parseInt(ev.pageY.toString()) - parseInt((Square.VARIABLES.side / 2).toString()) - parseInt(window.scrollY.toString()))
+                            .css('left', parseInt(ev.pageX.toString()) - parseInt((Square.VARIABLES.side / 2).toString()) - parseInt(window.scrollX.toString()))
                             .css('background-color', selectedPrimaryColor)
                             .css('border', 'thin dashed ' + selectedAlternativeColor)
                             .css('height', Square.VARIABLES.side)
                             .css('width', Square.VARIABLES.side);
 
-                        previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Square.VARIABLES.side / 2);
-                        previewOffsetTop = parseInt($(this).offset().top) + parseInt(Square.VARIABLES.side / 2);
+                        previewOffsetLeft = parseInt($(this).offset().left.toString()) + parseInt((Square.VARIABLES.side / 2).toString());
+                        previewOffsetTop = parseInt($(this).offset().top.toString()) + parseInt((Square.VARIABLES.side / 2).toString());
                         canvasOffsetLeft = $(canvasId).offset().left;
                         canvasOffsetTop = $(canvasId).offset().top;
 
-                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft + canvasWidth) < previewOffsetLeft ||
-                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop + canvasHeight) < previewOffsetTop) {
+                        if (canvasOffsetLeft > previewOffsetLeft || parseInt((canvasOffsetLeft + canvasWidth).toString()) < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || parseInt((canvasOffsetTop + canvasHeight).toString()) < previewOffsetTop) {
                             $(this).hide();
                         }
                     });
@@ -1779,12 +1782,12 @@ $(function () {
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Square.CONSTANTS.previewId);
-                previewer.css('top', e.pageY - parseInt(Square.VARIABLES.side / 2) - window.scrollY)
-                    .css('left', e.pageX - parseInt(Square.VARIABLES.side / 2) - window.scrollX)
+                previewer.css('top', e.pageY - parseInt((Square.VARIABLES.side / 2).toString()) - window.scrollY)
+                    .css('left', e.pageX - parseInt((Square.VARIABLES.side / 2).toString()) - window.scrollX)
                     .css('background-color', selectedPrimaryColor)
                     .css('height', Square.VARIABLES.side)
                     .css('width', Square.VARIABLES.side)
-                    .css('transform', 'rotate(' + parseInt((Square.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
+                    .css('transform', 'rotate(' + parseInt((Square.VARIABLES.xyPlaneRotationAngle * Math.PI).toString()) / 180 + 'rad)')
                     .show();
             });
         },
@@ -1819,7 +1822,7 @@ $(function () {
                     return initialSlider('sideSquare', 'side length for square tool', 200, 10)
                         .attr('value', Square.VARIABLES.side)
                         .on('mouseover', function () {
-                            $(this).attr('title', $(this).val());
+                            $(this).attr('title', $(this).val().toString());
                         })
                         .on('input', function () {
                             Square.VARIABLES.side = $(this).val().toString();
@@ -1878,7 +1881,7 @@ $(function () {
                 previewOffsetLeft = null,
                 previewOffsetTop = null;
 
-            function generatePreview(options) {
+            function generatePreview() {
                 let div = $('<div></div>')
                     .attr('id', Circle.CONSTANTS.previewId)
                     .css({
@@ -1911,13 +1914,13 @@ $(function () {
                             .css('height', Circle.VARIABLES.innerRadius * 2)
                             .css('width', Circle.VARIABLES.innerRadius * 2);
 
-                        previewOffsetLeft = parseInt($(this).offset().left) + parseInt(Circle.VARIABLES.innerRadius);
-                        previewOffsetTop = parseInt($(this).offset().top) + parseInt(Circle.VARIABLES.innerRadius);
+                        previewOffsetLeft = parseInt($(this).offset().left.toString()) + parseInt(Circle.VARIABLES.innerRadius);
+                        previewOffsetTop = parseInt($(this).offset().top.toString()) + parseInt(Circle.VARIABLES.innerRadius);
                         canvasOffsetLeft = $(canvasId).offset().left;
                         canvasOffsetTop = $(canvasId).offset().top;
 
-                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth) < previewOffsetLeft ||
-                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight) < previewOffsetTop) {
+                        if (canvasOffsetLeft > previewOffsetLeft || parseInt(canvasOffsetLeft) + parseInt(canvasWidth.toString()) < previewOffsetLeft ||
+                            canvasOffsetTop > previewOffsetTop || parseInt(canvasOffsetTop) + parseInt(canvasHeight.toString()) < previewOffsetTop) {
                             $(this).hide();
                         }
                     });
@@ -1960,7 +1963,7 @@ $(function () {
                         radiusSlider = initialSlider("radiusCircle", "innerRadius for circle tool.")
                             .attr('value', Circle.VARIABLES.innerRadius)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('input', function () {
                                 Circle.VARIABLES.innerRadius = $(this).val().toString();
@@ -2033,7 +2036,7 @@ $(function () {
                         let slider = getInputElement('pointWalkerSptes', '500', options.maxStepsAllowed, 'Steps for random point walk generation.')
                             .attr('value', PointWalker.VARIABLES.steps)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 PointWalker.VARIABLES.steps = $(this).val().toString();
@@ -2140,7 +2143,7 @@ $(function () {
                             slider = getInputElement('familyPointWalkerSptes', FamilyPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for family random point walk generation.')
                                 .attr('value', FamilyPointWalker.VARIABLES.steps)
                                 .on('mouseover', function () {
-                                    $(this).attr('title', $(this).val());
+                                    $(this).attr('title', $(this).val().toString());
                                 })
                                 .on('change', function () {
                                     FamilyPointWalker.VARIABLES.steps = $(this).val().toString();
@@ -2247,7 +2250,7 @@ $(function () {
                         let slider = getInputElement('organismPointWalkerSptes', OrganismPointWalker.VARIABLES.steps, options.maxStepsAllowed, 'Steps for organism random point walk generation.')
                             .attr('value', OrganismPointWalker.VARIABLES.steps)
                             .on('mouseover', function () {
-                                $(this).attr('title', $(this).val());
+                                $(this).attr('title', $(this).val().toString());
                             })
                             .on('change', function () {
                                 OrganismPointWalker.VARIABLES.steps = $(this).val().toString();

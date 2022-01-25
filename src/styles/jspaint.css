@@ -6,6 +6,10 @@
     --blackborder: thin solid var(--black);
 }
 
+* {
+    box-sizing: content-box;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -70,14 +74,17 @@ header.page-header a {
 }
 
 #jspaint-tools {
-    margin-bottom: .5em;
+    padding: 1rem;
+    margin-bottom: 1rem;
+
 }
 
 #jspaint-paint-area {
     min-height: 320px;
     min-width: 400px;
-    border: thin solid #333;
-    margin: 5px auto;
+    border: thin dotted #333;
+    margin: 1rem auto;
+    box-shadow: 0 0 2px black;
 }
 
 #jspaint-canvas.working-with-tools {
@@ -86,22 +93,27 @@ header.page-header a {
 
 .main-tool {
     display: inline-block;
-    margin: 0 5px;
     cursor: pointer;
-    padding: 2px;
+    margin: 1rem;
+    padding: 1rem;
     border: thin solid rgba(0, 0, 0, 0.3);
+
 }
 
 .main-tool-menu {
+
     display: inline-block;
-    padding: 2px;
     border: thin solid rgba(0, 0, 0, 0.3);
 }
 
 .main-tool-menu button {
     background-color: transparent;
-    padding: 0;
-    @extend .no-border;
+    border: none;
+    padding: 1rem;
+}
+
+.main-tool-menu button:active {
+    background-color: darkred;
 }
 
 .main-tool-menu button:hover,
@@ -117,7 +129,7 @@ header.page-header a {
     min-width: 600px;
     width: 100%;
     overflow: auto;
-    background-color: #666;
+
 }
 
 .common-menu-bar a {
@@ -129,7 +141,7 @@ header.page-header a {
     font-weight: bold;
     border: thin solid var(--white);
     outline: thin solid var(--black);
-    padding: 0 2px;
+    padding: 1rem;
 }
 
 .common-menu-bar a:hover {
@@ -139,15 +151,15 @@ header.page-header a {
 
 .common-menu-bar .menu-item {
     float: left;
-    margin: 5px;
+    margin: 1rem;
 }
 
 .menu-item .menu-item {
-    margin: 0 5px;
+    margin: 1rem;
 }
 
 .menu-item label {
-    margin: 0 5px;
+    margin: 1rem;
 }
 
 i.glyphicon:active {
@@ -155,7 +167,7 @@ i.glyphicon:active {
 }
 
 #status-bar {
-    font-size: .8em;
+
 }
 
 .contextual-tool-bar input[disabled="disabled"] {
@@ -163,5 +175,18 @@ i.glyphicon:active {
 }
 
 header.Menu {
-    margin: 20px;
+    padding: 1rem;
+    border-bottom: thick solid black;
+}
+
+.page-header {
+
+    color: black;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+}
+
+button.btn.btn-lg {
+    padding: 2rem 3rem;
+    margin: 1rem;
 }

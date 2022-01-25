@@ -53,10 +53,6 @@ body {
     -webkit-touch-callout: none;
 }
 
-body {
-    margin-bottom: 50px;
-    padding-bottom: 20px;
-}
 
 header.page-header {
     margin: auto;
@@ -92,10 +88,9 @@ header.page-header a {
 }
 
 .main-tool {
-    display: inline-block;
-    cursor: pointer;
-    margin: 1rem;
     padding: 1rem;
+    text-align: center;
+    cursor: pointer;
     border: thin solid rgba(0, 0, 0, 0.3);
 
 }
@@ -125,13 +120,6 @@ header.page-header a {
     margin-top: 5px;
 }
 
-.common-menu-bar {
-    min-width: 600px;
-    width: 100%;
-    overflow: auto;
-
-}
-
 .common-menu-bar a {
     display: inline-block;
     color: var(--black);
@@ -150,7 +138,6 @@ header.page-header a {
 }
 
 .common-menu-bar .menu-item {
-    float: left;
     margin: 1rem;
 }
 
@@ -175,8 +162,8 @@ i.glyphicon:active {
 }
 
 header.Menu {
-    padding: 1rem;
-    border-bottom: thick solid black;
+    height: 100vh;
+    border-right: thick solid black;
 }
 
 .page-header {
@@ -189,4 +176,20 @@ header.Menu {
 button.btn.btn-lg {
     padding: 2rem 3rem;
     margin: 1rem;
+}
+
+.grid {
+    display: grid;
+    grid-gap: .5rem;
+}
+.grid-1-9 {
+    grid-template-columns: minmax(300px, 1fr) 9fr;
+}
+
+.grid-1-1 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.grid-item{
+
 }

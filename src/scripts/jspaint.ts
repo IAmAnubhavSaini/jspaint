@@ -465,28 +465,28 @@ let TOOLS = {
 
 interface ToolType {
     CONSTANTS: any,
-    VARIABLES: any,
-    start: Function,
-    stop: Function,
-    contextMenu: any
+    VARIABLES?: any,
+    start?: Function,
+    stop?: Function,
+    ContextMenu?: any
 }
 
-let MandelbrotFractal = {
+let MandelbrotFractal: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.MandelbrotFractal,
     VARIABLES: TOOLS.VARIABLES.MandelbrotFractal,
 };
-let Pencil = {
+let Pencil: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Pencil,
     VARIABLES: TOOLS.VARIABLES.Pencil
 };
-let PickColor = {
+let PickColor: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.PickColor
 };
-let PivotedLinePattern = {
+let PivotedLinePattern: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.PivotedLinePattern,
     VARIABLES: TOOLS.VARIABLES.PivotedLinePattern
 };
-let Rectangle = {
+let Rectangle: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Rectangle,
     VARIABLES: TOOLS.CONSTANTS.Rectangle
 };
@@ -494,31 +494,31 @@ let Ring: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Ring,
     VARIABLES: TOOLS.VARIABLES.Ring,
 };
-let Disc = {
+let Disc: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Disc,
     VARIABLES: TOOLS.VARIABLES.Disc
 };
-let Square = {
+let Square: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Square,
     VARIABLES: TOOLS.VARIABLES.Square
 };
-let Circle = {
+let Circle: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.Circle,
     VARIABLES: TOOLS.VARIABLES.Circle
 };
-let PointWalker = {
+let PointWalker: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.PointWalker,
     VARIABLES: TOOLS.VARIABLES.PointWalker
 };
-let FamilyPointWalker = {
+let FamilyPointWalker: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.FamilyPointWalker,
     VARIABLES: TOOLS.VARIABLES.FamilyPointWalker
 };
-let OrganismPointWalker = {
+let OrganismPointWalker: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.OrganismPointWalker,
     VARIABLES: TOOLS.VARIABLES.OrganismPointWalker
 };
-let UniCellularParasiteTool = {
+let UniCellularParasiteTool: ToolType = {
     CONSTANTS: TOOLS.CONSTANTS.UniCellularParasiteTool,
     VARIABLES: TOOLS.VARIABLES.UniCellularParasiteTool
 };

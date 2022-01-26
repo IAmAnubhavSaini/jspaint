@@ -179,3 +179,25 @@ button.btn.btn-lg {
 .grid-1-1 {
     grid-template-columns: 1fr 1fr;
 }
+
+#activated-tool-name {
+    font-weight: bold;
+    background-color: black;
+    color: white;
+    padding: .4rem 1rem;
+}
+
+.color {
+    height: 2vh;
+    min-height: 10px;
+    width: 2vw;
+    min-width: 10px;
+    border: thin solid white;
+    outline: thin solid black;
+    display: inline-block;
+    margin: .2vh .2vw;
+}
+
+.BasicColorPalette {
+
+}

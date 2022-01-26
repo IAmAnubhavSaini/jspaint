@@ -1,11 +1,11 @@
-let RGBToHex = function (r, g, b) {
+let rgbToHex = function (r, g, b) {
     function componentToHex(c) {
         let hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 };
-let HexToRGB = function (hex) {
+let hexToRgb = function (hex) {
     let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, function (m, r, g, b) {
         return r + r + g + g + b + b;
@@ -17,7 +17,7 @@ let HexToRGB = function (hex) {
         b: parseInt(result[3], 16)
     } : null;
 };
-let CONSTANTS = {
+const CONSTANTS = {
     canvasId: "jspaint-canvas",
     canvasContainerId: "jspaint-paint-area",
     basicColors: [{
@@ -88,7 +88,27 @@ let sizeY = parseInt(size().split('x')[1]);
 let selectedAlternativeColor = '#FF0000';
 let selectedPrimaryColor = '#000000';
 let context = null;
-let CanvasState = [];
+class CanvasStateComponent {
+    constructor() {
+        this.store = [];
+    }
+    push(x) {
+        this.store.push(x);
+    }
+    clear() {
+        this.store = [];
+    }
+    pop() {
+        return this.store.pop();
+    }
+    save(context, options) {
+        const { startX, startY, width, height } = options;
+        let image = context.getImageData(startX, startY, width, height);
+        this.store.push(image);
+        // #TODO: Figure out a way to persist image data. #210
+    }
+}
+const canvasState = new CanvasStateComponent();
 let Actions = {
     Mouse: {
         getX: function (options) {
@@ -153,34 +173,28 @@ let CANVASAPI = {
         CANVASAPI.fillCirc(current.X, current.Y, width / 2);
     }
 };
-let saveCanvasState = function (options) {
-    let image = context.getImageData(options.startX, options.startY, options.width, options.height);
-    CanvasState.push(image);
-    // #TODO: Figure out a way to persist image data. #210
+function generateBasicColorPalette(options) {
+    let IContainBasicColors = $(".BasicColorPalette"), hex = null, color = null, colors = options.basicColors || CONSTANTS.basicColors, len = colors.length || 16;
+    for (let i = 0; i < len; i++) {
+        hex = '#' + colors[i].hex;
+        color = $('<span></span>')
+            .addClass('color')
+            .addClass("grid-item")
+            .attr('id', 'Color-Hex-' + hex)
+            .css('background-color', hex)
+            .appendTo(IContainBasicColors);
+    }
+}
+const Color = {
+    generateBasicColorPalette,
+    hexToRgb,
+    rgbToHex
 };
-let Color = {
-    generateBasicColorPalette: function (options) {
-        let IContainBasicColors = options.appendHere || '.BasicColorPalette', div1 = $('<div></div>'), div2 = $('<div></div>'), row = div1, hex = null, color = null, colors = options.basicColors || CONSTANTS.basicColors, len = colors.length, i = 0;
-        for (i = 0; i < len; i++) {
-            row = i < len / 2 ? div1 : div2;
-            hex = '#' + colors[i].hex;
-            color = $('<div></div>')
-                .addClass('color')
-                .attr('id', 'Color-Hex-' + hex)
-                .css('background-color', hex)
-                .appendTo(row);
-        }
-        div1.appendTo(IContainBasicColors);
-        div2.appendTo(IContainBasicColors);
-    },
-    hexToRgb: HexToRGB,
-    rgbToHex: RGBToHex
-};
-let setupToolTips = function (tool, title) {
+function setupToolTips(tool, title) {
     tool.attr('title', title)
         .attr('data-toggle', 'tooltip')
         .attr('data-placement', 'bottom');
-};
+}
 let activeTool = null;
 let activateTool = function (options) {
     if (activeTool !== null) {
@@ -1094,8 +1108,9 @@ $(function () {
         stop: function (options) {
             let event = options.event || CONSTANTS.Events.mouseclick, canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
             $(canvasId).off(event);
-            $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');
-            $('#' + Rectangle.CONSTANTS.previewId).remove();
+            const previewId = $('#' + Rectangle.CONSTANTS.previewId);
+            previewId.off('mousemove');
+            previewId.remove();
         },
         ContextMenu: {
             activate: function (options) {
@@ -1517,7 +1532,7 @@ $(function () {
     let CircleFunctionality = {
         start: function (options) {
             let event = options.event || CONSTANTS.Events.mouseclick, canvasId = '#' + (options.canvasId || CONSTANTS.canvasId), mouseOptions = null, X = null, Y = null, innerRadius = null, outerRadius = null, previewer = null, canvasOffsetLeft = null, canvasOffsetTop = null, canvasHeight = $(canvasId).height(), canvasWidth = $(canvasId).width(), previewOffsetLeft = null, previewOffsetTop = null;
-            function generatePreview() {
+            function generateCirclePreview() {
                 let div = $('<div></div>')
                     .attr('id', Circle.CONSTANTS.previewId)
                     .css({
@@ -1559,7 +1574,7 @@ $(function () {
                     }
                 });
             }
-            generatePreview();
+            generateCirclePreview();
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Circle.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
@@ -1573,8 +1588,9 @@ $(function () {
         stop: function (options) {
             let event = options.event || CONSTANTS.Events.mouseclick, canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
             $(canvasId).off(event);
-            $('#' + Circle.CONSTANTS.previewId).off('mousemove');
-            $('#' + Circle.CONSTANTS.previewId).remove();
+            const circlePreview = $('#' + Circle.CONSTANTS.previewId);
+            circlePreview.off('mousemove');
+            circlePreview.remove();
         },
         ContextMenu: {
             activate: function (options) {
@@ -1923,7 +1939,7 @@ $(function () {
     /* Actions */
     function onSaturateRedColorToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -1936,7 +1952,7 @@ $(function () {
     }
     function onSaturateGreenColorToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -1949,7 +1965,7 @@ $(function () {
     }
     function onSaturateBlueColorToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -1962,7 +1978,7 @@ $(function () {
     }
     function onInvertColorsToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -1977,7 +1993,7 @@ $(function () {
     }
     function onDesaturateRedColorToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -1990,7 +2006,7 @@ $(function () {
     }
     function onDesaturateGreenColorToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2003,7 +2019,7 @@ $(function () {
     }
     function onDesaturateBlueColorToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2016,7 +2032,7 @@ $(function () {
     }
     function onAddGrayToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2031,7 +2047,7 @@ $(function () {
     }
     function onRemoveGrayToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2046,7 +2062,7 @@ $(function () {
     }
     function onAddNoiseToolClick() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(), image = context.getImageData(0, 0, width, height);
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2061,7 +2077,7 @@ $(function () {
     }
     function onRandomColorToolClick() {
         let canvas = getCanvasDetails(), image = canvas.image, sampleX = Math.floor(Math.random() * canvas.width), sampleY = Math.floor(Math.random() * canvas.height), sampleRed = image.data[sampleX * canvas.width + sampleY], sampleGreen = image.data[sampleX * canvas.width + sampleY + 1], sampleBlue = image.data[sampleX * canvas.width + sampleY + 2], red = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255, green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255, blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < image.data.length; i += 4) {
             if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
                 image.data[i] += red;
@@ -2073,14 +2089,14 @@ $(function () {
     }
     function onFuzzyColorToolClick() {
         let canvas = getCanvasDetails();
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < 255; i++) {
             $('#RandomColorTool').click();
         }
     }
     function onBlackAndWhiteColorToolClick() {
         let canvas = getCanvasDetails(), image = canvas.image, average = 0, newValue = 0;
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < image.data.length; i += 4) {
             average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             if (average < 112) {
@@ -2097,7 +2113,7 @@ $(function () {
     }
     function onGrayColorToolClick() {
         let canvas = getCanvasDetails(), image = canvas.image, average = 0, newValue = 0;
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < image.data.length; i += 4) {
             average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             newValue = Math.floor(average / 16) * 16;
@@ -2107,7 +2123,7 @@ $(function () {
     }
     function onRandomDisksColorToolClick() {
         let canvas = getCanvasDetails(), savedStrokeStyle = canvas.strokeStyle;
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         function discDrawOperation(x, y, indexI, indexJ) {
             let radius = Math.floor(Math.random() * 10);
             context.fillStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
@@ -2118,7 +2134,7 @@ $(function () {
     }
     function onRandomCirclesColorToolClick() {
         let canvas = getCanvasDetails(), savedStrokeStyle = canvas.strokeStyle;
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         function circleDrawOperation(x, y, indexI, indexJ) {
             let innerRadius = Math.floor(Math.random() * 10), strokeStyle = "#" + CONSTANTS.basicColors[Math.floor(Math.random() * 16)].hex;
             CANVASAPI.drawCircle({
@@ -2341,19 +2357,19 @@ $(function () {
                 .on('click', function () {
                 let canvasId = '#' + (options.canvasId || CONSTANTS.canvasId), canvas = $(canvasId)[0], canvasHeight = canvas.height, canvasWidth = canvas.width, context = canvas.getContext('2d');
                 context.clearRect(0, 0, canvasWidth, canvasHeight);
-                CanvasState = [];
+                canvasState.clear();
             });
         }, registerUndoEvents = function (options) {
             $(options.toolSelection)
                 .on('click', function () {
-                let state = CanvasState.pop();
+                let state = canvasState.pop();
                 if (state !== undefined) {
                     context.putImageData(state, 0, 0);
                 }
             });
             $(options.canvasId)
                 .on('mousedown', function () {
-                saveCanvasState({
+                canvasState.save(context, {
                     startX: 0,
                     startY: 0,
                     width: $(this).width(),

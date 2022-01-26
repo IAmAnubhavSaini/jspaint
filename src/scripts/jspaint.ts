@@ -1,12 +1,13 @@
-let RGBToHex = function (r: number, g: number, b: number): string {
+let rgbToHex = function (r: number, g: number, b: number): string {
     function componentToHex(c: number) {
         let hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
+
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 };
 
-let HexToRGB = function (hex: string) {
+let hexToRgb = function (hex: string) {
     let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, function (m, r, g, b) {
         return r + r + g + g + b + b;
@@ -20,7 +21,7 @@ let HexToRGB = function (hex: string) {
     } : null;
 };
 
-let CONSTANTS = {
+const CONSTANTS = {
     canvasId: "jspaint-canvas",
     canvasContainerId: "jspaint-paint-area",
     basicColors: [{
@@ -95,7 +96,31 @@ let sizeY: number = parseInt(size().split('x')[1]);
 let selectedAlternativeColor: string = '#FF0000';
 let selectedPrimaryColor: string = '#000000';
 let context = null;
-let CanvasState = [];
+
+class CanvasStateComponent {
+    private store = [];
+
+    push(x: any) {
+        this.store.push(x);
+    }
+
+    clear() {
+        this.store = [];
+    }
+
+    pop() {
+        return this.store.pop();
+    }
+
+    save(context, options: SaveCanvasStateOptionsInterface) {
+        const {startX, startY, width, height} = options;
+        let image = context.getImageData(startX, startY, width, height);
+        this.store.push(image);
+        // #TODO: Figure out a way to persist image data. #210
+    }
+}
+
+const canvasState = new CanvasStateComponent();
 
 let Actions = {
     Mouse: {
@@ -175,46 +200,46 @@ let CANVASAPI = {
     }
 };
 
-let saveCanvasState = function (options) {
-    let image = context.getImageData(options.startX, options.startY, options.width, options.height);
-    CanvasState.push(image);
-    // #TODO: Figure out a way to persist image data. #210
+interface SaveCanvasStateOptionsInterface {
+    startX: number;
+    startY: number;
+    width: number;
+    height: number;
+    canvasId?: string;
+    image?: any;
+    strokeStyle?: any;
+}
+
+function generateBasicColorPalette(options: { appendHere: string; basicColors: { hex: string; name: string; }[]; }) {
+    let
+        IContainBasicColors = $(".BasicColorPalette"),
+        hex = null,
+        color = null,
+        colors = options.basicColors || CONSTANTS.basicColors,
+        len = colors.length || 16;
+
+    for (let i = 0; i < len; i++) {
+        hex = '#' + colors[i].hex;
+        color = $('<span></span>')
+            .addClass('color')
+            .addClass("grid-item")
+            .attr('id', 'Color-Hex-' + hex)
+            .css('background-color', hex)
+            .appendTo(IContainBasicColors);
+    }
+}
+
+const Color = {
+    generateBasicColorPalette,
+    hexToRgb,
+    rgbToHex
 };
 
-let Color = {
-    generateBasicColorPalette: function (options) {
-        let
-            IContainBasicColors = options.appendHere || '.BasicColorPalette',
-            div1 = $('<div></div>'),
-            div2 = $('<div></div>'),
-            row = div1,
-            hex = null,
-            color = null,
-            colors = options.basicColors || CONSTANTS.basicColors,
-            len = colors.length,
-            i = 0;
-
-        for (i = 0; i < len; i++) {
-            row = i < len / 2 ? div1 : div2;
-            hex = '#' + colors[i].hex;
-            color = $('<div></div>')
-                .addClass('color')
-                .attr('id', 'Color-Hex-' + hex)
-                .css('background-color', hex)
-                .appendTo(row);
-        }
-        div1.appendTo(IContainBasicColors);
-        div2.appendTo(IContainBasicColors);
-    },
-    hexToRgb: HexToRGB,
-    rgbToHex: RGBToHex
-};
-
-let setupToolTips = function (tool, title) {
+function setupToolTips(tool: JQuery<any>, title: string) {
     tool.attr('title', title)
         .attr('data-toggle', 'tooltip')
         .attr('data-placement', 'bottom');
-};
+}
 
 let activeTool = null;
 
@@ -1339,8 +1364,9 @@ $(function () {
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
-            $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');
-            $('#' + Rectangle.CONSTANTS.previewId).remove();
+            const previewId = $('#' + Rectangle.CONSTANTS.previewId);
+            previewId.off('mousemove');
+            previewId.remove();
         },
         ContextMenu: {
             activate: function (options) {
@@ -1880,7 +1906,7 @@ $(function () {
                 previewOffsetLeft = null,
                 previewOffsetTop = null;
 
-            function generatePreview() {
+            function generateCirclePreview() {
                 let div = $('<div></div>')
                     .attr('id', Circle.CONSTANTS.previewId)
                     .css({
@@ -1925,7 +1951,7 @@ $(function () {
                     });
             }
 
-            generatePreview();
+            generateCirclePreview();
 
             $(canvasId).on('mousemove', function (e) {
                 previewer = previewer || $('#' + Circle.CONSTANTS.previewId);
@@ -1942,8 +1968,9 @@ $(function () {
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
-            $('#' + Circle.CONSTANTS.previewId).off('mousemove');
-            $('#' + Circle.CONSTANTS.previewId).remove();
+            const circlePreview = $('#' + Circle.CONSTANTS.previewId);
+            circlePreview.off('mousemove');
+            circlePreview.remove();
         },
         ContextMenu: {
             activate: function (options) {
@@ -2367,7 +2394,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2385,7 +2412,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2403,7 +2430,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2421,7 +2448,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2441,7 +2468,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2459,7 +2486,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2477,7 +2504,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2495,7 +2522,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2515,7 +2542,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2535,7 +2562,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        canvasState.save(context, {
             startX: 0,
             startY: 0,
             width: width,
@@ -2561,7 +2588,7 @@ $(function () {
             green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
             blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
 
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < image.data.length; i += 4) {
             if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
                 image.data[i] += red;
@@ -2575,7 +2602,7 @@ $(function () {
     function onFuzzyColorToolClick() {
         let canvas = getCanvasDetails();
 
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < 255; i++) {
             $('#RandomColorTool').click();
         }
@@ -2587,7 +2614,7 @@ $(function () {
             average = 0,
             newValue = 0;
 
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
 
         for (let i = 0; i < image.data.length; i += 4) {
             average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
@@ -2609,7 +2636,7 @@ $(function () {
             average = 0,
             newValue = 0;
 
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
         for (let i = 0; i < image.data.length; i += 4) {
             average = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             newValue = Math.floor(average / 16) * 16;
@@ -2621,7 +2648,7 @@ $(function () {
     function onRandomDisksColorToolClick() {
         let canvas = getCanvasDetails(),
             savedStrokeStyle = canvas.strokeStyle;
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
 
         function discDrawOperation(x, y, indexI, indexJ) {
             let radius = Math.floor(Math.random() * 10);
@@ -2637,7 +2664,7 @@ $(function () {
         let canvas = getCanvasDetails(),
             savedStrokeStyle = canvas.strokeStyle;
 
-        saveCanvasState(canvas);
+        canvasState.save(context, canvas);
 
         function circleDrawOperation(x, y, indexI, indexJ) {
             let innerRadius = Math.floor(Math.random() * 10),
@@ -2898,21 +2925,21 @@ $(function () {
                             context = canvas.getContext('2d');
 
                         context.clearRect(0, 0, canvasWidth, canvasHeight);
-                        CanvasState = [];
+                        canvasState.clear();
                     });
             },
 
             registerUndoEvents = function (options) {
                 $(options.toolSelection)
                     .on('click', function () {
-                        let state = CanvasState.pop();
+                        let state = canvasState.pop();
                         if (state !== undefined) {
                             context.putImageData(state, 0, 0);
                         }
                     });
                 $(options.canvasId)
                     .on('mousedown', function () {
-                        saveCanvasState({
+                        canvasState.save(context, {
                             startX: 0,
                             startY: 0,
                             width: $(this).width(),

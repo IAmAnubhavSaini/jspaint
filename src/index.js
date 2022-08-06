@@ -80,12 +80,6 @@
                     });
             },
 
-            initTopTakerWidget = function () {
-                $('.top-taker').TopTaker({
-                    'theme': 'dark'
-                });
-            },
-
             initOrientationAndDimension = function () {
                 var defaultOrientationButton = $('#landscape'), defaultDimensionButton = $('#Max');
 
@@ -95,7 +89,6 @@
 
             init = function () {
                 initOrientationAndDimension();
-                initTopTakerWidget();
             },
 
             mustRunInSequence = function () {

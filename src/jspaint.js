@@ -68,7 +68,10 @@
             registerSaveImageEvents = function (options) {
                 $('#' + options.toolId)
                     .on('click', function () {
-                        window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
+                        const canvasElement = $('#' + CONSTANTS.canvasId)[0];
+                        const base64ImageUrl = canvasElement.toDataURL();
+                        const newWindow = window.open("_blank");
+                        newWindow.document.write("Right click and open in a new tab.<br/><iframe src='" + base64ImageUrl + "' style='border:0; top:0; left:0; bottom:0; right:0; width:100%; height:100%;' allowfullscreen></iframe>");
                     });
             },
 
@@ -130,12 +133,6 @@
                 });
             },
 
-            initializeTopTakerWidget = function () {
-                $('.top-taker').TopTaker({
-                    'theme': 'dark'
-                });
-            },
-
             init = function () {
                 mustAssignDimensionsToCanvasContainer();
                 context = initializeContext({
@@ -144,7 +141,6 @@
                     canvasId: CONSTANTS.canvasId,
                     canvasContainerId: CONSTANTS.canvasContainerId
                 });
-                initializeTopTakerWidget();
                 Color.generateBasicColorPalette({
                     appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors
                 });

@@ -6,7 +6,7 @@
     }
 
     function appHomePage() {
-        return 'http://IAmAnubhavSaini.github.io/jspaint';
+        return 'https://iamanubhavsaini.github.io/jspaint/index.html';
     }
 
     function setBlockerStyle(blocker) {

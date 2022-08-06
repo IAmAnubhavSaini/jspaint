@@ -2379,7 +2379,7 @@ $(function() {
             height: height
         });
 
-        for (var i = 0; i < image.data.length; i += 4) {
+        for (let i = 0; i < image.data.length; i += 4) {
             averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
             newValue = Math.floor(averageValue / 16) * 16;
             image.data[i] = newValue;

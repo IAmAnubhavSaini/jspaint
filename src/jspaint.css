@@ -37,7 +37,9 @@ header.page-header a {
 }
 
 #jspaint-paint-area {
-    border: thin dashed #333;
+    box-sizing: border-box;
+    height: 100vh;
+    border-left: thin dashed #333;
     box-shadow: 0 0 4px black;
 }
 
@@ -53,6 +55,7 @@ header.page-header a {
 
 .main-tool:hover {
     background-color: #eeeeee;
+    border-left: thin solid rebeccapurple;
 }
 
 .main-tool-menu {
@@ -111,12 +114,18 @@ h1#brand a {
 
 #main-grid {
     display: grid;
-    grid-template-columns: minmax(15vw, 1fr) minmax(80vw, 9fr);
+    grid-template-columns: minmax(15vw, 2fr) minmax(80vw, 8fr);
     gap: 2vw;
 }
 
 #main-grid .Menu {
     padding-left: 1vw;
+    overflow: hidden;
+    height: 100vh;
+}
+
+#main-grid .Menu:hover {
+    overflow-y: scroll;
 }
 
 #main-grid .Menu.flex {

@@ -30,94 +30,32 @@
                 <label id="alternative-color-name"></label>
             </div>
         </div>
-        <div id="jspaint-tools">
-            <div class="main-tool" id="PencilTool">Pencil</div>
-            <div class="main-tool-menu dropdown" id="ShapeTool">
-                <button aria-expanded="true" aria-haspopup="true" class="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown"
-                        id="ShapeToolsMenu" type="button">
-                    Shapes
-                    <span class="caret"></span>
-                </button>
-                <ul aria-labelledby="ShapeToolsMenu" class="dropdown-menu">
-                    <li>
-                        <div class="main-tool" id="DiscTool">Disc</div>
-                        <div class="main-tool" id="SquareTool">Square</div>
-                        <div class="main-tool" id="RingTool">Ring</div>
-                        <div class="main-tool" id="CircleTool">Circle</div>
-                        <div class="main-tool" id="RectangleTool">Rectangle</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="main-tool-menu dropdown" id="SerendipityTool">
-                <button aria-expanded="true" aria-haspopup="true" class="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown" id="SerendipityToolsMenu" type="button">
-                    Serendipity
-                    <span class="caret"></span>
-                </button>
-                <ul aria-labelledby="SerendipityToolsMenu" class="dropdown-menu">
-                    <li>
-                        <div class="main-tool" id="PivotedLinePatternTool">Pivoted line pattern</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="main-tool-menu dropdown" id="FractalTool">
-                <button aria-expanded="true" aria-haspopup="true" class="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown"
-                        id="FractalToolsMenu" type="button">
-                    Fractals
-                    <span class="caret"></span>
-                </button>
-                <ul aria-labelledby="FractalToolsMenu" class="dropdown-menu">
-                    <li>
-                        <div class="main-tool" id="MandelbrotFractalTool">Mandelbrot</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="main-tool-menu dropdown" id="RandomTool">
-                <button aria-expanded="true" aria-haspopup="true" class="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown"
-                        id="RandomToolsMenu" type="button">
-                    Random
-                    <span class="caret"></span>
-                </button>
-                <ul aria-labelledby="RandomToolsMenu" class="dropdown-menu">
-                    <li>
-                        <div class="main-tool" id="PointWalkerTool">Point Walker</div>
-                        <div class="main-tool" id="FamilyPointWalkerTool">Family Point Walker</div>
-                        <div class="main-tool" id="OrganismPointWalkerTool">Organism Point Walker</div>
-                        <div class="main-tool" id="UniCellularParasiteTool">UniCellular Parasite</div>
-                    </li>
-                </ul>
-            </div>
-            <div class="main-tool-menu dropdown" id="ColorTool">
-                <button aria-expanded="true" aria-haspopup="true" class="btn btn-default dropdown-toggle"
-                        data-toggle="dropdown"
-                        id="ColorToolsMenu" type="button">
-                    Color
-                    <span class="caret"></span>
-                </button>
-                <ul aria-labelledby="ColorToolsMenu" class="dropdown-menu">
-                    <li>
-                        <div class="main-tool" id="DesaturateRedColorTool">Desaturate Red</div>
-                        <div class="main-tool" id="SaturateRedColorTool">Saturate Red</div>
-                        <div class="main-tool" id="DesaturateGreenColorTool">Desaturate Green</div>
-                        <div class="main-tool" id="SaturateGreenColorTool">Saturate Green</div>
-                        <div class="main-tool" id="DesaturateBlueColorTool">Desaturate Blue</div>
-                        <div class="main-tool" id="SaturateBlueColorTool">Saturate Blue</div>
-                        <div class="main-tool" id="InvertColorsTool">Invert colors</div>
-                        <div class="main-tool" id="AddGrayTool">Add gray</div>
-                        <div class="main-tool" id="RemoveGrayTool">Remove gray</div>
-                        <div class="main-tool" id="AddNoiseTool">Add noise</div>
-                        <div class="main-tool" id="RandomColorTool">Random color</div>
-                        <div class="main-tool" id="FuzzyColorTool">Fuzzy color</div>
-                        <div class="main-tool" id="BlackAndWhiteColorTool">B&amp;W color</div>
-                        <div class="main-tool" id="GrayColorTool">Gray color</div>
-                    </li>
-                </ul>
-            </div>
-        </div>
         <div class="common-menu-bar">
+            <div class="menu-item">
+                <div id="PickColorTool">
+                    <a id="pick-color">
+                        pick a color
+                    </a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div data-placement="bottom" data-toggle="tooltip" id="SaveImageButton"
+                     title="Save the image as seen on data area.">
+                    <a class="string-menu-item" id="save-as-image">generate image</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div id="ResetCanvas">
+                    <a data-placement="bottom" data-toggle="tooltip" id="reset-canvas"
+                       title="Click to clear the draw area.">reset</a>
+                </div>
+            </div>
+            <div class="menu-item">
+                <div data-placement="bottom" data-toggle="tooltip" id="UndoButton" title="Undo.">
+                    <a class="string-menu-item" id="undo-button">undo</a>
+                </div>
+            </div>
+
             <div class="menu-item">
                 <div data-placement="bottom" data-toggle="tooltip" id="SelectedPrimaryColor"
                      title="Primary/Draw color."></div>
@@ -132,30 +70,7 @@
                     <input id="allColorsPicker" type="color"/>
                 </div>
             </div>
-            <div class="menu-item">
-                <div id="PickColorTool">
-                    <a id="pick-color">
-                        <i class="glyphicon glyphicon-screenshot"></i>
-                    </a>
-                </div>
-        </div>
-        <div class="menu-item">
-            <div data-placement="bottom" data-toggle="tooltip" id="SaveImageButton"
-                 title="Save the image as seen on data area.">
-                <a class="string-menu-item" id="save-as-image">imagify</a>
-            </div>
-        </div>
-        <div class="menu-item">
-            <div id="ResetCanvas">
-                <a data-placement="bottom" data-toggle="tooltip" id="reset-canvas"
-                   title="Click to clear the draw area.">reset</a>
-            </div>
-        </div>
-            <div class="menu-item">
-                <div data-placement="bottom" data-toggle="tooltip" id="UndoButton" title="Undo.">
-                    <a class="string-menu-item" id="undo-button">undo</a>
-                </div>
-            </div>
+
             <div class="menu-item">
                 <div data-placement="bottom" data-toggle="tooltip" id="ImageButton" title="Image.">
                     <input class="string-menu-item" id="image-button" name="image-button" type="file"/>
@@ -164,6 +79,54 @@
             <div class="contextual-tool-bar">
             </div>
         </div>
+        <div id="jspaint-tools">
+            <div class="main-tool" id="PencilTool">Pencil</div>
+            <div class="main-tool-menu dropdown" id="ShapeTool">
+                Shapes
+                <div class="main-tool" id="DiscTool">Disc</div>
+                <div class="main-tool" id="SquareTool">Square</div>
+                <div class="main-tool" id="RingTool">Ring</div>
+                <div class="main-tool" id="CircleTool">Circle</div>
+                <div class="main-tool" id="RectangleTool">Rectangle</div>
+            </div>
+            <div class="main-tool-menu dropdown" id="SerendipityTool">
+                Serendipity
+                <div class="main-tool" id="PivotedLinePatternTool">Pivoted line pattern</div>
+            </div>
+            <div class="main-tool-menu dropdown" id="FractalTool">
+                Fractals
+                <div class="main-tool" id="MandelbrotFractalTool">Mandelbrot</div>
+            </div>
+            <div class="main-tool-menu dropdown" id="RandomTool">
+
+                Random
+                <div class="main-tool" id="PointWalkerTool">Point Walker</div>
+                <div class="main-tool" id="FamilyPointWalkerTool">Family Point Walker</div>
+                <div class="main-tool" id="OrganismPointWalkerTool">Organism Point Walker</div>
+                <div class="main-tool" id="UniCellularParasiteTool">UniCellular Parasite</div>
+
+            </div>
+            <div class="main-tool-menu dropdown" id="ColorTool">
+                Color
+
+                <div class="main-tool" id="DesaturateRedColorTool">Desaturate Red</div>
+                <div class="main-tool" id="SaturateRedColorTool">Saturate Red</div>
+                <div class="main-tool" id="DesaturateGreenColorTool">Desaturate Green</div>
+                <div class="main-tool" id="SaturateGreenColorTool">Saturate Green</div>
+                <div class="main-tool" id="DesaturateBlueColorTool">Desaturate Blue</div>
+                <div class="main-tool" id="SaturateBlueColorTool">Saturate Blue</div>
+                <div class="main-tool" id="InvertColorsTool">Invert colors</div>
+                <div class="main-tool" id="AddGrayTool">Add gray</div>
+                <div class="main-tool" id="RemoveGrayTool">Remove gray</div>
+                <div class="main-tool" id="AddNoiseTool">Add noise</div>
+                <div class="main-tool" id="RandomColorTool">Random color</div>
+                <div class="main-tool" id="FuzzyColorTool">Fuzzy color</div>
+                <div class="main-tool" id="BlackAndWhiteColorTool">B&amp;W color</div>
+                <div class="main-tool" id="GrayColorTool">Gray color</div>
+
+            </div>
+        </div>
+
     </div>
     <div id="jspaint-paint-area"></div>
 </div>

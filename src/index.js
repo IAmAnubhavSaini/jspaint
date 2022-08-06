@@ -29,11 +29,11 @@
             },
 
             getWidth = function (dimensions) {
-                return dimensions.localeCompare('Max') === 0 ? document.documentElement.clientWidth - 21 : dimensions.split('x')[0];
+                return dimensions.localeCompare('Max') === 0 ? document.documentElement.clientWidth * 0.8 : dimensions.split('x')[0];
             },
 
             getHeight = function (dimensions) {
-                return dimensions.localeCompare('Max') === 0 ? document.documentElement.clientHeight : dimensions.split('x')[1];
+                return dimensions.localeCompare('Max') === 0 ? document.documentElement.clientHeight - 4 : dimensions.split('x')[1];
             },
 
             getQueryValue = function (orientation, width, height) {

@@ -16,13 +16,13 @@ body {
     padding-bottom: 20px;
 }
 
-header.page-header{
+header.page-header {
     margin: auto;
     border-bottom: thick solid #2a1d2d;
     text-align: center;
 }
 
-header.page-header a{
+header.page-header a {
     font-size: 2em;
     padding: 10px;
 }
@@ -125,6 +125,6 @@ i.glyphicon:active {
     cursor: not-allowed;
 }
 
-header.Menu{
+header.Menu {
     margin: 20px;
 }

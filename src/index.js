@@ -1,53 +1,46 @@
-(function($) {
+(function ($) {
     "use strict";
 
-    $(function() {
+    $(function () {
         var DimensionOptionsButtons = $('.dimension-options button'),
-            OrientationOptionsButtons = $('.orientation-options button'),
-            LocalStorageAvailable = function() {
+            OrientationOptionsButtons = $('.orientation-options button'), LocalStorageAvailable = function () {
                 return localStorage !== undefined && localStorage !== null;
             },
 
-            dimensionEvents = function() {
+            dimensionEvents = function () {
                 DimensionOptionsButtons
-                    .on('click', function() {
+                    .on('click', function () {
                         DimensionOptionsButtons.removeClass('btn-success');
                         $(this).addClass('btn-success');
                     });
             },
 
-            orientationEvents = function() {
+            orientationEvents = function () {
                 OrientationOptionsButtons
-                    .on('click', function() {
+                    .on('click', function () {
                         OrientationOptionsButtons.removeClass('btn-success');
                         $(this).addClass('btn-success');
                     });
             },
 
-            setupEvents = function() {
+            setupEvents = function () {
                 dimensionEvents();
                 orientationEvents();
             },
 
-            getWidth = function(dimensions) {
-                return dimensions.localeCompare('Max') === 0 ?
-                    document.documentElement.clientWidth - 21 :
-                    dimensions.split('x')[0];
+            getWidth = function (dimensions) {
+                return dimensions.localeCompare('Max') === 0 ? document.documentElement.clientWidth - 21 : dimensions.split('x')[0];
             },
 
-            getHeight = function(dimensions) {
-                return dimensions.localeCompare('Max') === 0 ?
-                    document.documentElement.clientHeight :
-                    dimensions.split('x')[1];
+            getHeight = function (dimensions) {
+                return dimensions.localeCompare('Max') === 0 ? document.documentElement.clientHeight : dimensions.split('x')[1];
             },
 
-            getQueryValue = function(orientation, width, height) {
-                return orientation.localeCompare('landscape') === 0 ?
-                    width + 'x' + height :
-                    height + 'x' + width;
+            getQueryValue = function (orientation, width, height) {
+                return orientation.localeCompare('landscape') === 0 ? width + 'x' + height : height + 'x' + width;
             },
 
-            conditionalURI = function(originalUri, queryPrfix, queryValue) {
+            conditionalURI = function (originalUri, queryPrfix, queryValue) {
                 var uri = '';
                 if (LocalStorageAvailable) {
                     localStorage.setItem('dimensionsWxH', queryValue);
@@ -58,62 +51,58 @@
                 return uri;
             },
 
-            newUri = function(receiver) {
-                var originalUri = receiver.attr('href'),
-                    queryPrfix = '?dimension=',
+            newUri = function (receiver) {
+                var originalUri = receiver.attr('href'), queryPrfix = '?dimension=',
                     SelectedDimensionsButton = $('.dimension-options button.btn-success'),
                     SelectedOrientationsButton = $('.orientation-options button.btn-success'),
-                    dimensions = SelectedDimensionsButton.attr('id'),
-                    width = getWidth(dimensions),
-                    height = getHeight(dimensions),
-                    orientation = SelectedOrientationsButton.attr('id'),
+                    dimensions = SelectedDimensionsButton.attr('id'), width = getWidth(dimensions),
+                    height = getHeight(dimensions), orientation = SelectedOrientationsButton.attr('id'),
                     queryValue = getQueryValue(orientation, width, height),
                     uri = conditionalURI(originalUri, queryPrfix, queryValue);
 
                 return uri;
             },
 
-            goToPaint = function(uri) {
+            goToPaint = function (uri) {
                 window.location = uri;
             },
 
-            deferAction = function(e) {
+            deferAction = function (e) {
                 e.preventDefault();
             },
 
-            setup = function() {
+            setup = function () {
                 setupEvents();
                 $('#jspaint-action')
-                    .on('click', function(e) {
+                    .on('click', function (e) {
                         deferAction(e);
                         goToPaint(newUri($(this)));
                     });
             },
 
-            initTopTakerWidget = function() {
+            initTopTakerWidget = function () {
                 $('.top-taker').TopTaker({
                     'theme': 'dark'
                 });
             },
 
-            initOrientationAndDimension = function() {
-                var defaultOrientationButton = $('#landscape'),
-                    defaultDimensionButton = $('#600x400');
+            initOrientationAndDimension = function () {
+                var defaultOrientationButton = $('#landscape'), defaultDimensionButton = $('#600x400');
 
                 defaultDimensionButton.trigger('click');
                 defaultOrientationButton.trigger('click');
             },
 
-            init = function() {
+            init = function () {
                 initOrientationAndDimension();
                 initTopTakerWidget();
             },
 
-            mustRunInSequence = function() {
+            mustRunInSequence = function () {
                 setup();
                 init();
             };
-            
+
         mustRunInSequence();
     });
 })(jQuery);

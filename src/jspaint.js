@@ -1,29 +1,22 @@
-(function($) {
+(function ($) {
     "use strict";
 
 
-    $(function() {
-        var
-            initializeCanvas = function(options) {
-                var
-                    canvas = $('<canvas/>', {
-                        id: options.canvasId
-                    })
+    $(function () {
+        var initializeCanvas = function (options) {
+                var canvas = $('<canvas/>', {
+                    id: options.canvasId
+                })
                     .prop({
-                        'width': options.width,
-                        'height': options.height
+                        'width': options.width, 'height': options.height
                     })
                     .appendTo('#' + options.canvasContainerId);
 
                 return canvas[0];
             },
 
-            initializeContext = function(options) {
-                var
-                    sizeX = options.sizeX || 600,
-                    sizeY = options.sizeY || 400,
-                    width = sizeX - 2,
-                    height = sizeY - 2,
+            initializeContext = function (options) {
+                var sizeX = options.sizeX || 600, sizeY = options.sizeY || 400, width = sizeX - 2, height = sizeY - 2,
                     canvas = null;
 
                 options.width = width;
@@ -32,12 +25,12 @@
                 return canvas.getContext('2d');
             },
 
-            generateHexColorStringFromThisElementsId = function(element) {
+            generateHexColorStringFromThisElementsId = function (element) {
                 return '#' + element.attr('id').split('#')[1];
             },
 
 
-            registerColorEvents = function() {
+            registerColorEvents = function () {
                 function updatePrimaryColor(selectedPrimaryColor) {
                     $('label#primary-color-name').css('color', selectedPrimaryColor).html(selectedPrimaryColor);
                 }
@@ -45,16 +38,17 @@
                 function updataAlternativeColorLabel(selectedAlternativeColor) {
                     $('label#alternative-color-name').css('color', selectedAlternativeColor).html(selectedAlternativeColor);
                 }
+
                 $('.color')
                     .attr('title', 'Left click for primary color, Right click for alternative color.')
                     .attr('data-toggle', 'tooltip')
                     .attr('data-placement', 'bottom')
-                    .on('click', function() {
+                    .on('click', function () {
                         selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
                         $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
                         updatePrimaryColor(selectedPrimaryColor);
                     })
-                    .on('contextmenu', function(e) {
+                    .on('contextmenu', function (e) {
                         e.preventDefault();
                         selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
                         $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
@@ -64,74 +58,63 @@
                 updataAlternativeColorLabel(selectedAlternativeColor);
             },
 
-            registerAllColorsPickerEvents = function(options) {
+            registerAllColorsPickerEvents = function (options) {
                 $('#' + options.toolId)
-                    .on('input', function() {
+                    .on('input', function () {
                         selectedPrimaryColor = context.fillStyle = $(this).val();
                     });
             },
 
-            registerSaveImageEvents = function(options) {
+            registerSaveImageEvents = function (options) {
                 $('#' + options.toolId)
-                    .on('click', function() {
+                    .on('click', function () {
                         window.open($('#' + CONSTANTS.canvasId)[0].toDataURL("image/png"), "_blank");
                     });
             },
 
-            registerResetCanvasEvents = function(options) {
+            registerResetCanvasEvents = function (options) {
                 $('#' + options.toolId)
-                    .on('click', function() {
-                        var
-                            canvasId = '#' + (options.canvasId || CONSTANTS.canvasId),
-                            canvas = $(canvasId)[0],
-                            canvasHeight = canvas.height,
-                            canvasWidth = canvas.width,
-                            context = canvas.getContext('2d');
+                    .on('click', function () {
+                        var canvasId = '#' + (options.canvasId || CONSTANTS.canvasId), canvas = $(canvasId)[0],
+                            canvasHeight = canvas.height, canvasWidth = canvas.width, context = canvas.getContext('2d');
 
                         context.clearRect(0, 0, canvasWidth, canvasHeight);
                         CanvasState = [];
                     });
             },
 
-            registerUndoEvents = function(options) {
+            registerUndoEvents = function (options) {
                 $(options.toolSelection)
-                    .on('click', function() {
+                    .on('click', function () {
                         var state = CanvasState.pop();
                         if (state !== undefined) {
                             context.putImageData(state, 0, 0);
                         }
                     });
-                $(options.canvasId).on('mousedown', function() {
+                $(options.canvasId).on('mousedown', function () {
                     saveCanvasState({
-                        startX: 0,
-                        startY: 0,
-                        width: $(this).width(),
-                        height: $(this).height()
+                        startX: 0, startY: 0, width: $(this).width(), height: $(this).height()
                     });
                 });
             },
 
-            registerEvents = function() {
+            registerEvents = function () {
                 registerColorEvents();
                 registerAllColorsPickerEvents({
-                    toolId: 'allColorsPicker',
-                    containerId: 'HTML5ColorPicker'
+                    toolId: 'allColorsPicker', containerId: 'HTML5ColorPicker'
                 });
                 registerSaveImageEvents({
-                    toolId: 'save-as-image',
-                    containerId: 'SaveImageButton'
+                    toolId: 'save-as-image', containerId: 'SaveImageButton'
                 });
                 registerResetCanvasEvents({
-                    toolId: 'reset-canvas',
-                    containerId: 'ResetCanvas'
+                    toolId: 'reset-canvas', containerId: 'ResetCanvas'
                 });
                 registerUndoEvents({
-                    toolSelection: '#undo-button',
-                    canvasId: '#' + CONSTANTS.canvasId
+                    toolSelection: '#undo-button', canvasId: '#' + CONSTANTS.canvasId
                 });
             },
 
-            mustAssignDimensionsToCanvasContainer = function() {
+            mustAssignDimensionsToCanvasContainer = function () {
                 if (sizeX > 2500) {
                     sizeX = 2500;
                 } else if (sizeX < 320) {
@@ -143,18 +126,17 @@
                     sizeY = 320;
                 }
                 $('#jspaint-paint-area').css({
-                    width: sizeX,
-                    height: sizeY
+                    width: sizeX, height: sizeY
                 });
             },
 
-            initializeTopTakerWidget = function() {
+            initializeTopTakerWidget = function () {
                 $('.top-taker').TopTaker({
                     'theme': 'dark'
                 });
             },
 
-            init = function() {
+            init = function () {
                 mustAssignDimensionsToCanvasContainer();
                 context = initializeContext({
                     sizeX: sizeX,
@@ -164,8 +146,7 @@
                 });
                 initializeTopTakerWidget();
                 Color.generateBasicColorPalette({
-                    appendHere: '.BasicColorPalette',
-                    basicColors: CONSTANTS.basicColors
+                    appendHere: '.BasicColorPalette', basicColors: CONSTANTS.basicColors
                 });
                 registerEvents();
                 $('#PencilTool').trigger('click');

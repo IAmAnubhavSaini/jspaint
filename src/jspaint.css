@@ -1,5 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
 html,
 body {
+    background-color: #FAFAFA;
     margin: 0;
     min-height: 400px;
     min-width: 600px;
@@ -9,11 +14,6 @@ body {
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-}
-
-body {
-    margin-bottom: 50px;
-    padding-bottom: 20px;
 }
 
 header.page-header {
@@ -31,15 +31,14 @@ header.page-header a {
     margin: 0 0 20px;
 }
 
-#jspaint-tools {
-    margin-bottom: .5em;
+#jspaint-tools > div {
+    margin: .1vh 0;
+    padding: .2vh .2vw;
 }
 
 #jspaint-paint-area {
-    min-height: 320px;
-    min-width: 400px;
-    border: thin solid #333;
-    margin: 5px auto;
+    border: thin dashed #333;
+    box-shadow: 0 0 4px black;
 }
 
 #jspaint-canvas.working-with-tools {
@@ -47,18 +46,18 @@ header.page-header a {
 }
 
 .main-tool {
-    border-bottom: thin solid rgba(0, 0, 0, .5);
-    display: inline-block;
-    margin: 0 5px;
+    margin: .1vh .1vw;
     cursor: pointer;
-    padding: 2px;
-    border: thin solid rgba(0, 0, 0, 0.3);
+    padding: .2vh .2vw;
+}
+
+.main-tool:hover {
+    background-color: #eeeeee;
 }
 
 .main-tool-menu {
-    display: inline-block;
-    padding: 2px;
-    border: thin solid rgba(0, 0, 0, 0.3);
+    padding: .2vh .2vw;
+    /*border: thin solid rgba(0, 0, 0, 0.3);*/
 }
 
 .main-tool-menu button {
@@ -76,32 +75,13 @@ header.page-header a {
     margin-top: 5px;
 }
 
-.common-menu-bar {
-    min-width: 600px;
-    width: 100%;
-    overflow: auto;
-    background-color: #666;
-}
-
 .common-menu-bar a {
-    display: inline-block;
     color: #000000;
-    background-color: #DDddDD;
-    text-align: center;
-    text-decoration: none;
-    font-weight: bold;
-    border: thin solid #FFFFFF;
-    outline: thin solid #000000;
-    padding: 0 2px;
-}
-
-.common-menu-bar a:hover {
-    border: thin solid #000000;
-    outline: thin solid #FFFFFF;
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .common-menu-bar .menu-item {
-    float: left;
     margin: 5px;
 }
 
@@ -117,14 +97,30 @@ i.glyphicon:active {
     color: #FF0000;
 }
 
-#status-bar {
-    font-size: .8em;
-}
-
 .contextual-tool-bar input[disabled="disabled"] {
     cursor: not-allowed;
 }
 
-header.Menu {
-    margin: 20px;
+h1#brand {
+    margin: 0;
+}
+
+h1#brand a {
+    color: #333333;
+}
+
+#main-grid {
+    display: grid;
+    grid-template-columns: minmax(15vw, 1fr) minmax(80vw, 9fr);
+    gap: 2vw;
+}
+
+#main-grid .Menu {
+    padding-left: 1vw;
+}
+
+#main-grid .Menu.flex {
+    display: flex;
+    flex-direction: column;
+    gap: 1vh;
 }

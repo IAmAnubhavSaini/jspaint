@@ -87,7 +87,7 @@
             },
 
             initOrientationAndDimension = function () {
-                var defaultOrientationButton = $('#landscape'), defaultDimensionButton = $('#600x400');
+                var defaultOrientationButton = $('#landscape'), defaultDimensionButton = $('#Max');
 
                 defaultDimensionButton.trigger('click');
                 defaultOrientationButton.trigger('click');

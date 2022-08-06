@@ -1,13 +1,13 @@
 {
   "name": "jspaint",
-  "version": "0.1.15",
-  "description": "Paint without delay, online, from any device, at any time. Say Hello to jspaint! Online - Offline - Quick - Social Friendly.",
+  "version": "2022.0.0-alpha1",
+  "description": "Online paint application in JavaScript",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "grunt release-the-hounds"
+    "test": "echo 'no tests';"
   },
   "repository": {
     "type": "git",
@@ -25,22 +25,12 @@
   },
   "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
   "dependencies": {
-    "blanket": "^1.1.7",
-    "bootstrap": "^3.3.5",
-    "chai": "^3.0.0",
-    "jquery": "^2.1.4",
-    "mocha": "^2.2.5"
+    "blanket": "^1.2.3",
+    "bootstrap": "^5.2.0",
+    "jquery": "^3.6.0"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-autoprefixer": "^3.0.3",
-    "grunt-bootlint": "^0.9.1",
-    "grunt-contrib-copy": "^0.8.0",
-    "grunt-contrib-cssmin": "^0.12.3",
-    "grunt-contrib-imagemin": "^0.9.4",
-    "grunt-contrib-jshint": "^0.11.2",
-    "grunt-contrib-nodeunit": "^0.4.1",
-    "grunt-contrib-uglify": "^0.9.1",
-    "grunt-text-replace": "^0.4.0"
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
   }
 }

@@ -1,5 +1,6 @@
 (function ($) {
     $(function () {
+        const saveCanvasState = window.JSPAINT.saveCanvasState;
         var initializeCanvas = function (options) {
                 var canvas = $("<canvas/>", {
                     id: options.canvasId,
@@ -115,7 +116,7 @@
                     }
                 });
                 $(options.canvasId).on("mousedown", function () {
-                    window.JSPAINT.saveCanvasState({
+                    saveCanvasState({
                         startX: 0,
                         startY: 0,
                         width: $(this).width(),
@@ -166,7 +167,7 @@
                     canvasId: CONSTANTS.canvasId,
                     canvasContainerId: CONSTANTS.canvasContainerId,
                 });
-                Color.generateBasicColorPalette({
+                window.JSPAINT.Color.generateBasicColorPalette({
                     appendHere: ".BasicColorPalette",
                     basicColors: CONSTANTS.basicColors,
                 });

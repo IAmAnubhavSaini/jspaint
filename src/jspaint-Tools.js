@@ -1,6 +1,7 @@
 $(function () {
-    "use strict";
     const saveCanvasState = window.JSPAINT.saveCanvasState;
+    const hex2RGB = window.JSPAINT.Color.hexToRgb;
+    const { setupToolTips, activateTool, deactivateTool } = window.JSPAINT;
 
     const COMMON = {
         generateSlider: function (options) {
@@ -88,7 +89,7 @@ $(function () {
             maxWidth: -1,
         },
         VARIABLES: {
-            iterations: 1000,
+            iterations: 10000,
             xMax: 1,
             yMax: 1,
             xMin: -2,
@@ -128,9 +129,7 @@ $(function () {
                         iterations = options.iterations,
                         width = MandelbrotFractal.VARIABLES.width,
                         height = MandelbrotFractal.VARIABLES.height,
-                        img = ctx.getImageData(0, 0, width, height),
-                        pix = img.data,
-                        innerColor = Color.hexToRgb(
+                        innerColor = hex2RGB(
                             window.JSPAINT.selectedPrimaryColor,
                         ),
                         ix,
@@ -141,40 +140,71 @@ $(function () {
                         c,
                         ppos;
 
-                    for (ix = 0; ix < width; ++ix) {
-                        for (iy = 0; iy < height; ++iy) {
-                            x = xmin + ((xmax - xmin) * ix) / (width - 1);
-                            y = ymin + ((ymax - ymin) * iy) / (height - 1);
-                            i = mandelIter(x, y, iterations);
-                            ppos = 4 * (width * iy + ix);
+                    for (
+                        let loopedIterations = 10;
+                        loopedIterations < iterations;
+                        loopedIterations *= 2
+                    ) {
+                        let img = ctx.getImageData(0, 0, width, height);
+                        let pix = img.data;
+                        for (ix = 0; ix < width; ++ix) {
+                            for (iy = 0; iy < height; ++iy) {
+                                x = xmin + ((xmax - xmin) * ix) / (width - 1);
+                                y = ymin + ((ymax - ymin) * iy) / (height - 1);
+                                i = mandelIter(x, y, loopedIterations);
+                                ppos = 4 * (width * iy + ix);
 
-                            if (i > iterations) {
-                                pix[ppos] = innerColor.r;
-                                pix[ppos + 1] = innerColor.g;
-                                pix[ppos + 2] = innerColor.b;
-                            } else {
-                                c =
-                                    (3 * Math.log(i)) /
-                                    Math.log(iterations - 1.0);
-
-                                if (c < 1) {
-                                    pix[ppos] = 255 * c;
-                                    pix[ppos + 1] = 0;
-                                    pix[ppos + 2] = 0;
-                                } else if (c < 2) {
-                                    pix[ppos] = 255;
-                                    pix[ppos + 1] = 255 * (c - 1);
-                                    pix[ppos + 2] = 0;
+                                if (i > loopedIterations) {
+                                    pix[ppos] = innerColor.r;
+                                    pix[ppos + 1] = innerColor.g;
+                                    pix[ppos + 2] = innerColor.b;
                                 } else {
-                                    pix[ppos] = 255;
-                                    pix[ppos + 1] = 255;
-                                    pix[ppos + 2] = 255 * (c - 2);
+                                    c =
+                                        (3 * Math.log(i)) /
+                                        Math.log(loopedIterations - 1.0);
+
+                                    if (c < 1) {
+                                        pix[ppos] =
+                                            hex2RGB(
+                                                window.JSPAINT
+                                                    .selectedAlternativeColor,
+                                            ).r * c;
+                                        pix[ppos + 1] = 0;
+                                        pix[ppos + 2] = 0;
+                                    } else if (c < 2) {
+                                        pix[ppos] = hex2RGB(
+                                            window.JSPAINT
+                                                .selectedAlternativeColor,
+                                        ).r;
+                                        pix[ppos + 1] =
+                                            hex2RGB(
+                                                window.JSPAINT
+                                                    .selectedAlternativeColor,
+                                            ).g *
+                                            (c - 1);
+                                        pix[ppos + 2] = 0;
+                                    } else {
+                                        pix[ppos] = hex2RGB(
+                                            window.JSPAINT
+                                                .selectedAlternativeColor,
+                                        ).r;
+                                        pix[ppos + 1] = hex2RGB(
+                                            window.JSPAINT
+                                                .selectedAlternativeColor,
+                                        ).g;
+                                        pix[ppos + 2] =
+                                            hex2RGB(
+                                                window.JSPAINT
+                                                    .selectedAlternativeColor,
+                                            ).b *
+                                            (c - 2);
+                                    }
                                 }
+                                pix[ppos + 3] = 255;
                             }
-                            pix[ppos + 3] = 255;
                         }
+                        ctx.putImageData(img, options.startX, options.startY);
                     }
-                    ctx.putImageData(img, options.startX, options.startY);
                 }
 
                 mandelbrot(options);
@@ -2568,7 +2598,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2586,7 +2616,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2604,7 +2634,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2622,7 +2652,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2642,7 +2672,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2660,7 +2690,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2678,7 +2708,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2696,7 +2726,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2716,7 +2746,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2736,7 +2766,7 @@ $(function () {
             width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2776,7 +2806,7 @@ $(function () {
                     ? Math.random() * 255 * -1
                     : Math.random() * 255;
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2801,13 +2831,13 @@ $(function () {
             height = $(canvasId).height(),
             width = $(canvasId).width();
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
             height: height,
         });
-        for (var i = 0; i < 255; i++) {
+        for (let i = 0; i < 255; i++) {
             $("#RandomColorTool").click();
         }
     });
@@ -2820,7 +2850,7 @@ $(function () {
             averageValue = 0,
             newValue = 0;
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,
@@ -2849,7 +2879,7 @@ $(function () {
             averageValue = 0,
             newValue = 0;
 
-        window.JSPAINT.saveCanvasState({
+        saveCanvasState({
             startX: 0,
             startY: 0,
             width: width,

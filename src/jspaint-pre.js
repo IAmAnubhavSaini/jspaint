@@ -184,7 +184,7 @@ $(function () {
 
     window.JSPAINT.saveCanvasState = saveCanvasState;
 
-    Color = {
+    const Color = {
         generateBasicColorPalette: function (options) {
             var IContainBasicColors =
                     options.appendHere || ".BasicColorPalette",
@@ -237,26 +237,34 @@ $(function () {
         },
     };
 
-    setupToolTips = function (tool, title) {
+    window.JSPAINT.Color = Color;
+
+    function setupToolTips(tool, title) {
         tool.attr("title", title)
             .attr("data-toggle", "tooltip")
             .attr("data-placement", "bottom");
-    };
+    }
 
-    activateTool = function (options) {
+    window.JSPAINT.setupToolTips = setupToolTips;
+
+    function activateTool(options) {
         if (activeTool !== null) {
             activeTool.trigger("click");
         }
         activeTool = options.tool;
         $("label#activated-tool-name").html(options.toolName);
         options.start(options);
-    };
+    }
 
-    deactivateTool = function (options) {
+    window.JSPAINT.activateTool = activateTool;
+
+    function deactivateTool(options) {
         activeTool = null;
         $("label#activated-tool-name").html("no active tool");
         options.stop(options);
-    };
+    }
+
+    window.JSPAINT.deactivateTool = deactivateTool;
 
     activeTool = null;
 });

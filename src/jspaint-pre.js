@@ -46,14 +46,16 @@ $(function () {
 
     Actions = {
         Mouse: {
-            getX: function (options) {
-                const {pageX} = options.event;
-                const {offset} = options.relativeTo;
-                return pageX - offset().left;
-            }, getY: function (options) {
-                const {pageY} = options.event;
-                const {offset} = options.relativeTo;
-                return pageY - offset().top;
+            getX: function ({event, relativeTo}) {
+                /**
+                 * const {offset} = relativeTo; doesn't work because of `this`?
+                 * const offset = relativeTo.offset.bind(relativeTo); works.
+                 */
+                const {pageX} = event;
+                return pageX - relativeTo.offset().left;
+            }, getY: function ({event, relativeTo}) {
+                const {pageY} = event;
+                return pageY - relativeTo.offset().top;
             }
         }
     };
@@ -93,9 +95,7 @@ $(function () {
             context.fillStyle = options.fillColor;
             CANVASAPI.fillCirc(options.X, options.Y, options.innerRadius);
             context.restore();
-        }, drawLineSegmentFromLastPoint: function (options) {
-            var context = options.context, last = options.last, current = options.current, width = options.width;
-
+        }, drawLineSegmentFromLastPoint: function ({context, last, current, width}) {
             context.beginPath();
             context.moveTo(last.X, last.Y);
             context.lineTo(current.X, current.Y);
@@ -110,7 +110,10 @@ $(function () {
     function saveCanvasState(options) {
         const data = context.getImageData(options.startX, options.startY, options.width, options.height);
         CanvasState.push(data);
-        localStorage.setItem("canvasState", JSON.stringify(data));
+        /** Have to comment this out.
+         * Uncaught DOMException: Failed to execute 'setItem' on 'Storage': Setting the value of 'canvasState' exceeded the quota.
+         * // localStorage.setItem("canvasState", JSON.stringify(data));
+         */
     }
 
     window.JSPAINT.saveCanvasState = saveCanvasState;

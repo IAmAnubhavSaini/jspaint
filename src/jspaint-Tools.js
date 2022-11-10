@@ -164,13 +164,14 @@ $(function() {
             };
 
             $(canvasId).on(event, function(e) {
-                var
-                    mouseOptions = {
-                        event: e,
-                        relativeTo: $(canvasId)
-                    },
-                    startX = getStartingXCoordinate(mouseOptions),
-                    startY = getStartingYCoordinate(mouseOptions);
+                const mouseOptions = {
+                    event: e, relativeTo: $(canvasId)
+                };
+                if (window.JSPAINT.__DEBUGGING__) {
+                    console.log({mouseOptions});
+                }
+                const startX = getStartingXCoordinate(mouseOptions);
+                const startY = getStartingYCoordinate(mouseOptions);
 
                 drawMandelbrotFractal({
                     context: context,
@@ -472,6 +473,9 @@ $(function() {
                 };
 
                 var drawLines = function() {
+                    if (window.JSPAINT.__DEBUGGING__) {
+                        console.log({mouseOptions});
+                    }
                     X = Actions.Mouse.getX(mouseOptions);
                     Y = Actions.Mouse.getY(mouseOptions);
                     width = Pencil.VARIABLES.width;
@@ -1256,8 +1260,7 @@ $(function() {
                 canvasId = '#' + options.canvasId;
 
             $(canvasId).off(event);
-            $('#' + Disc.CONSTANTS.previewId).off('mousemove');
-            $('#' + Disc.CONSTANTS.previewId).remove();
+            $('#' + Disc.CONSTANTS.previewId).off('mousemove').remove();
         },
         ContextMenu: {
             activate: function(options) {
@@ -2059,16 +2062,11 @@ $(function() {
     });
 
     $('#SaturateRedColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] = 255;
@@ -2077,16 +2075,11 @@ $(function() {
     });
 
     $('#SaturateGreenColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 1; i < image.data.length; i += 4) {
             image.data[i] = 255;
@@ -2095,16 +2088,11 @@ $(function() {
     });
 
     $('#SaturateBlueColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 2; i < image.data.length; i += 4) {
             image.data[i] = 255;
@@ -2113,16 +2101,11 @@ $(function() {
     });
 
     $('#InvertColorsTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] = 255 - image.data[i];
@@ -2133,16 +2116,11 @@ $(function() {
     });
 
     $('#DesaturateRedColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] = 0;
@@ -2151,16 +2129,11 @@ $(function() {
     });
 
     $('#DesaturateGreenColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 1; i < image.data.length; i += 4) {
             image.data[i] = 0;
@@ -2169,16 +2142,11 @@ $(function() {
     });
 
     $('#DesaturateBlueColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 2; i < image.data.length; i += 4) {
             image.data[i] = 0;
@@ -2187,16 +2155,11 @@ $(function() {
     });
 
     $('#AddGrayTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] += 112;
@@ -2207,16 +2170,11 @@ $(function() {
     });
 
     $('#RemoveGrayTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             image.data[i] -= 112;
@@ -2230,7 +2188,7 @@ $(function() {
         let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
-        saveCanvasState({
+        window.JSPAINT.saveCanvasState({
             startX: 0, startY: 0, width: width, height: height
         });
         for (let i = 0; i < image.data.length; i += 4) {
@@ -2243,24 +2201,17 @@ $(function() {
     });
 
     $('#RandomColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
-            image = context.getImageData(0, 0, width, height),
-            sampleX = Math.floor(Math.random() * width),
-            sampleY = Math.floor(Math.random() * height),
-            sampleRed = image.data[sampleX * width + sampleY],
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height), sampleX = Math.floor(Math.random() * width),
+            sampleY = Math.floor(Math.random() * height), sampleRed = image.data[sampleX * width + sampleY],
             sampleGreen = image.data[sampleX * width + sampleY + 1],
             sampleBlue = image.data[sampleX * width + sampleY + 2],
             red = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
             green = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255,
             blue = Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             if (image.data[i] === sampleRed && image.data[i + 1] === sampleGreen && image.data[i + 2] === sampleBlue) {
@@ -2273,15 +2224,10 @@ $(function() {
     });
 
     $('#FuzzyColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width();
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width();
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < 255; i++) {
             $('#RandomColorTool').click();
@@ -2289,18 +2235,11 @@ $(function() {
     });
 
     $('#BlackAndWhiteColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
-            image = context.getImageData(0, 0, width, height),
-            averageValue = 0,
-            newValue = 0;
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height), averageValue = 0, newValue = 0;
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
         for (var i = 0; i < image.data.length; i += 4) {
             averageValue = (image.data[i] + image.data[i + 1] + image.data[i + 2]) / 3;
@@ -2317,18 +2256,11 @@ $(function() {
     });
 
     $('#GrayColorTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
-            image = context.getImageData(0, 0, width, height),
-            averageValue = 0,
-            newValue = 0;
+        var canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
+            image = context.getImageData(0, 0, width, height), averageValue = 0, newValue = 0;
 
-        saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+        window.JSPAINT.saveCanvasState({
+            startX: 0, startY: 0, width: width, height: height
         });
 
         for (let i = 0; i < image.data.length; i += 4) {

@@ -95,7 +95,7 @@
                         }
                     });
                 $(options.canvasId).on('mousedown', function () {
-                    saveCanvasState({
+                    window.JSPAINT.saveCanvasState({
                         startX: 0, startY: 0, width: $(this).width(), height: $(this).height()
                     });
                 });

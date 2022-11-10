@@ -85,8 +85,8 @@ $(function () {
             selectionId: "#MandelbrotFractalTool",
             class: "main-tool",
             title: "Click to draw Mandelbrot Fractal. Click again to disable.",
-            maxHeight: -1,
-            maxWidth: -1,
+            maxHeight: 3200,
+            maxWidth: 3200,
         },
         VARIABLES: {
             iterations: 10000,
@@ -97,10 +97,7 @@ $(function () {
             height: -1,
             width: -1,
         },
-        start: function (options) {
-            var event = options.event,
-                canvasId = options.canvasId;
-
+        start: function ({ event, canvasId }) {
             function drawMandelbrotFractal(options) {
                 function mandelIter(cx, cy, maxIter) {
                     var x = 0.0,
@@ -140,71 +137,62 @@ $(function () {
                         c,
                         ppos;
 
-                    for (
-                        let loopedIterations = 10;
-                        loopedIterations < iterations;
-                        loopedIterations *= 2
-                    ) {
-                        let img = ctx.getImageData(0, 0, width, height);
-                        let pix = img.data;
-                        for (ix = 0; ix < width; ++ix) {
-                            for (iy = 0; iy < height; ++iy) {
-                                x = xmin + ((xmax - xmin) * ix) / (width - 1);
-                                y = ymin + ((ymax - ymin) * iy) / (height - 1);
-                                i = mandelIter(x, y, loopedIterations);
-                                ppos = 4 * (width * iy + ix);
+                    let img = ctx.getImageData(0, 0, width, height);
+                    let pix = img.data;
+                    for (ix = 0; ix < width; ++ix) {
+                        for (iy = 0; iy < height; ++iy) {
+                            x = xmin + ((xmax - xmin) * ix) / (width - 1);
+                            y = ymin + ((ymax - ymin) * iy) / (height - 1);
+                            i = mandelIter(x, y, iterations);
+                            ppos = 4 * (width * iy + ix);
 
-                                if (i > loopedIterations) {
-                                    pix[ppos] = innerColor.r;
-                                    pix[ppos + 1] = innerColor.g;
-                                    pix[ppos + 2] = innerColor.b;
+                            if (i > iterations) {
+                                pix[ppos] = innerColor.r;
+                                pix[ppos + 1] = innerColor.g;
+                                pix[ppos + 2] = innerColor.b;
+                            } else {
+                                c =
+                                    (3 * Math.log(i)) /
+                                    Math.log(iterations - 1.0);
+
+                                if (c < 1) {
+                                    pix[ppos] =
+                                        hex2RGB(
+                                            window.JSPAINT
+                                                .selectedAlternativeColor,
+                                        ).r * c;
+                                    pix[ppos + 1] = 0;
+                                    pix[ppos + 2] = 0;
+                                } else if (c < 2) {
+                                    pix[ppos] = hex2RGB(
+                                        window.JSPAINT.selectedAlternativeColor,
+                                    ).r;
+                                    pix[ppos + 1] =
+                                        hex2RGB(
+                                            window.JSPAINT
+                                                .selectedAlternativeColor,
+                                        ).g *
+                                        (c - 1);
+                                    pix[ppos + 2] = 0;
                                 } else {
-                                    c =
-                                        (3 * Math.log(i)) /
-                                        Math.log(loopedIterations - 1.0);
-
-                                    if (c < 1) {
-                                        pix[ppos] =
-                                            hex2RGB(
-                                                window.JSPAINT
-                                                    .selectedAlternativeColor,
-                                            ).r * c;
-                                        pix[ppos + 1] = 0;
-                                        pix[ppos + 2] = 0;
-                                    } else if (c < 2) {
-                                        pix[ppos] = hex2RGB(
+                                    pix[ppos] = hex2RGB(
+                                        window.JSPAINT.selectedAlternativeColor,
+                                    ).r;
+                                    pix[ppos + 1] = hex2RGB(
+                                        window.JSPAINT.selectedAlternativeColor,
+                                    ).g;
+                                    pix[ppos + 2] =
+                                        hex2RGB(
                                             window.JSPAINT
                                                 .selectedAlternativeColor,
-                                        ).r;
-                                        pix[ppos + 1] =
-                                            hex2RGB(
-                                                window.JSPAINT
-                                                    .selectedAlternativeColor,
-                                            ).g *
-                                            (c - 1);
-                                        pix[ppos + 2] = 0;
-                                    } else {
-                                        pix[ppos] = hex2RGB(
-                                            window.JSPAINT
-                                                .selectedAlternativeColor,
-                                        ).r;
-                                        pix[ppos + 1] = hex2RGB(
-                                            window.JSPAINT
-                                                .selectedAlternativeColor,
-                                        ).g;
-                                        pix[ppos + 2] =
-                                            hex2RGB(
-                                                window.JSPAINT
-                                                    .selectedAlternativeColor,
-                                            ).b *
-                                            (c - 2);
-                                    }
+                                        ).b *
+                                        (c - 2);
                                 }
-                                pix[ppos + 3] = 255;
                             }
+                            pix[ppos + 3] = 255;
                         }
-                        ctx.putImageData(img, options.startX, options.startY);
                     }
+                    ctx.putImageData(img, options.startX, options.startY);
                 }
 
                 mandelbrot(options);
@@ -265,14 +253,14 @@ $(function () {
                 const startY = getStartingYCoordinate(mouseOptions);
 
                 drawMandelbrotFractal({
-                    context: context,
+                    context,
                     XMin: MandelbrotFractal.VARIABLES.xMin,
                     XMax: MandelbrotFractal.VARIABLES.xMax,
                     YMin: MandelbrotFractal.VARIABLES.yMin,
                     YMax: MandelbrotFractal.VARIABLES.yMax,
                     iterations: MandelbrotFractal.VARIABLES.iterations,
-                    startX: startX,
-                    startY: startY,
+                    startX,
+                    startY,
                 });
             });
         },
@@ -283,10 +271,6 @@ $(function () {
 
         ContextMenu: {
             activate: function (options) {
-                var container = $("<div></div>")
-                    .attr("id", options.id)
-                    .addClass("menu-item");
-
                 function getInputElement(id, min, max, title) {
                     return COMMON.generateSlider({
                         id: id,
@@ -313,17 +297,9 @@ $(function () {
                                 $(this).attr("title", $(this).val());
                             })
                             .on("change", function () {
-                                var val = $(this).val();
+                                let val = $(this).val();
                                 if (val > options.maxIterationsAllowed) {
-                                    if (
-                                        confirm(
-                                            "Beware! It might crash your browser. Go back?",
-                                            "back",
-                                            "No, I want these many iterations. I know what I am doing!",
-                                        )
-                                    ) {
-                                        val = options.maxIterationsAllowed;
-                                    }
+                                    val = options.maxIterationsAllowed;
                                 }
                                 MandelbrotFractal.VARIABLES.iterations = val;
                             });
@@ -353,7 +329,7 @@ $(function () {
                                 $(this).attr("title", $(this).val());
                             })
                             .on("change", function () {
-                                var val = $(this).val();
+                                let val = $(this).val();
                                 if (
                                     val > MandelbrotFractal.CONSTANTS.maxHeight
                                 ) {
@@ -510,6 +486,9 @@ $(function () {
                     return sliderTool;
                 }
 
+                const container = $("<div></div>")
+                    .attr("id", options.id)
+                    .addClass("menu-item");
                 container.append(addIterationController(options));
                 container.append(addHeightController(options));
                 container.append(addWidthController(options));
@@ -531,7 +510,7 @@ $(function () {
                     tool: this,
                     id: "MandelbrotFractalContextMenu",
                     containerSelectionCriterion: ".contextual-tool-bar",
-                    maxIterationsAllowed: 2000,
+                    maxIterationsAllowed: 10000,
                     minIterationsAllowed: 10,
                     iterationLabel: "Iterations: ",
                     maxHeightAllowed: MandelbrotFractal.VARIABLES.maxHeight,

@@ -2,6 +2,11 @@
     box-sizing: border-box;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    padding: 0;
+}
+
 html,
 body {
     background-color: #FAFAFA;
@@ -126,10 +131,44 @@ h1#brand a {
 
 #main-grid .Menu:hover {
     overflow-y: scroll;
+    scroll-margin: -12vw;
 }
 
 #main-grid .Menu.flex {
     display: flex;
     flex-direction: column;
     gap: 1vh;
+}
+
+.flex {
+    display: flex;
+    gap: 1vh 1vw;
+}
+
+.flex.x {
+    flex-direction: row;
+}
+
+.flex.y {
+    flex-direction: column;
+}
+
+.grid {
+    display: grid;
+}
+
+.grid .full {
+    grid-column: 1/3;
+}
+
+.grid.x {
+    grid-template-columns: 1fr;
+}
+
+.grid.x-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.lite-heading {
+    font-weight: bold;
 }

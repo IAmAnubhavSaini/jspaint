@@ -12,10 +12,10 @@
     outline: thin solid #000000;
 }
 
-    #HTML5ColorPicker #allColorsPicker:hover {
-        border: thin solid #000000;
-        outline: thin solid #FFFFFF;
-    }
+#HTML5ColorPicker #allColorsPicker:hover {
+    border: thin solid #000000;
+    outline: thin solid #FFFFFF;
+}
 
 .BasicColorPalette .color {
     width: 20px;
@@ -29,7 +29,7 @@
     outline: thin solid #000000;
 }
 
-    .BasicColorPalette .color:hover {
-        border: thin solid #000000;
-        outline: thin solid #FFFFFF;
-    }
+.BasicColorPalette .color:hover {
+    border: thin solid #000000;
+    outline: thin solid #FFFFFF;
+}

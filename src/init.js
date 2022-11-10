@@ -1,3 +1,5 @@
 window.JSPAINT = window.JSPAINT || {
-    selectedAlternativeColor: '#FF0000', selectedPrimaryColor: '#000000'
+    __DEBUGGING__: false,
+    selectedAlternativeColor: "#FF0000",
+    selectedPrimaryColor: "#000000",
 };

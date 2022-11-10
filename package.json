@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"
   },
-  "homepage": "https://github.com/IAmAnubhavSaini/jspaint"
+  "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
+  "devDependencies": {
+    "eslint": "^8.27.0",
+    "prettier": "^2.7.1"
+  }
 }

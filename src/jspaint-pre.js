@@ -37,35 +37,23 @@ CONSTANTS = {
 };
 
 $(function () {
-    LocalStorageAvailable = function () {
-        return localStorage !== undefined && localStorage !== null;
-    };
-    var getSizeFromURL = function () {
-        return window.location.toString().split('?')[1].split('=')[1];
-    };
 
-    size = function () {
-        return LocalStorageAvailable() ? localStorage.getItem('dimensionsWxH') : getSizeFromURL();
-    };
+    sizeX = localStorage.getItem('dimensionsWxH').split('x')[0];
+    sizeY = localStorage.getItem('dimensionsWxH').split('x')[1];
 
-    sizeX = size().split('x')[0];
-    sizeY = size().split('x')[1];
-
-    selectedAlternativeColor = '#FF0000';
-    selectedPrimaryColor = '#000000';
     context = null;
     CanvasState = [];
 
     Actions = {
         Mouse: {
             getX: function (options) {
-                var event = options.event, relativeTo = options.relativeTo, X = event.pageX - relativeTo.offset().left;
-
-                return X;
+                const {pageX} = options.event;
+                const {offset} = options.relativeTo;
+                return pageX - offset().left;
             }, getY: function (options) {
-                var event = options.event, relativeTo = options.relativeTo, Y = event.pageY - relativeTo.offset().top;
-
-                return Y;
+                const {pageY} = options.event;
+                const {offset} = options.relativeTo;
+                return pageY - offset().top;
             }
         }
     };
@@ -112,16 +100,20 @@ $(function () {
             context.moveTo(last.X, last.Y);
             context.lineTo(current.X, current.Y);
             context.lineWidth = width;
-            context.strokeStyle = selectedPrimaryColor;
+            context.strokeStyle = window.JSPAINT.selectedPrimaryColor;
             context.stroke();
 
             CANVASAPI.fillCirc(current.X, current.Y, width / 2);
         }
     };
 
-    saveCanvasState = function (options) {
-        CanvasState.push(context.getImageData(options.startX, options.startY, options.width, options.height));
-    };
+    function saveCanvasState(options) {
+        const data = context.getImageData(options.startX, options.startY, options.width, options.height);
+        CanvasState.push(data);
+        localStorage.setItem("canvasState", JSON.stringify(data));
+    }
+
+    window.JSPAINT.saveCanvasState = saveCanvasState;
 
     Color = {
         generateBasicColorPalette: function (options) {

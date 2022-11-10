@@ -36,7 +36,7 @@
                 }
 
                 function updataAlternativeColorLabel(selectedAlternativeColor) {
-                    $('label#alternative-color-name').css('color', selectedAlternativeColor).html(selectedAlternativeColor);
+                    $('label#alternative-color-name').css('color', window.JSPAINT.selectedAlternativeColor).html(window.JSPAINT.selectedAlternativeColor);
                 }
 
                 $('.color')
@@ -44,24 +44,24 @@
                     .attr('data-toggle', 'tooltip')
                     .attr('data-placement', 'bottom')
                     .on('click', function () {
-                        selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
-                        $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
-                        updatePrimaryColor(selectedPrimaryColor);
+                        window.JSPAINT.selectedPrimaryColor = context.fillStyle = generateHexColorStringFromThisElementsId($(this));
+                        $('#SelectedPrimaryColor').css('background-color', window.JSPAINT.selectedPrimaryColor);
+                        updatePrimaryColor(window.JSPAINT.selectedPrimaryColor);
                     })
                     .on('contextmenu', function (e) {
                         e.preventDefault();
-                        selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
-                        $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
-                        updataAlternativeColorLabel(selectedAlternativeColor);
+                        window.JSPAINT.selectedAlternativeColor = generateHexColorStringFromThisElementsId($(this));
+                        $('#SelectedAlternativeColor').css('background-color', window.JSPAINT.selectedAlternativeColor);
+                        updataAlternativeColorLabel(window.JSPAINT.selectedAlternativeColor);
                     });
-                updatePrimaryColor(selectedPrimaryColor);
-                updataAlternativeColorLabel(selectedAlternativeColor);
+                updatePrimaryColor(window.JSPAINT.selectedPrimaryColor);
+                updataAlternativeColorLabel(window.JSPAINT.selectedAlternativeColor);
             },
 
             registerAllColorsPickerEvents = function (options) {
                 $('#' + options.toolId)
                     .on('input', function () {
-                        selectedPrimaryColor = context.fillStyle = $(this).val();
+                        window.JSPAINT.selectedPrimaryColor = context.fillStyle = $(this).val();
                     });
             },
 
@@ -147,8 +147,8 @@
                 registerEvents();
                 $('#PencilTool').trigger('click');
                 $('[data-toggle="tooltip"]').tooltip();
-                $('#SelectedPrimaryColor').css('background-color', selectedPrimaryColor);
-                $('#SelectedAlternativeColor').css('background-color', selectedAlternativeColor);
+                $('#SelectedPrimaryColor').css('background-color', window.JSPAINT.selectedPrimaryColor);
+                $('#SelectedAlternativeColor').css('background-color', window.JSPAINT.selectedAlternativeColor);
             };
         init();
     });

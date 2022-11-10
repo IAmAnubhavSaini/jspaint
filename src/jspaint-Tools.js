@@ -1,34 +1,22 @@
 $(function() {
     "use strict";
+    const saveCanvasState = window.JSPAINT.saveCanvasState;
 
-    var COMMON = {
-        generateSlider: function(options) {
-            var min = options.min,
-                max = options.max,
-                title = options.title,
-                id = options.id,
-                step = options.step;
+    const COMMON = {
+        generateSlider: function (options) {
+            var min = options.min, max = options.max, title = options.title, id = options.id, step = options.step;
 
             return $('<input id="' + id + '" type="range" min="' + min + '" max="' + max + '" step="' + step + '" title="' + title + '" />');
-        },
-        generateLabel: function(options) {
-            var hexColor = options.hexColor,
-                fontSize = options.fontSize;
+        }, generateLabel: function (options) {
+            var hexColor = options.hexColor, fontSize = options.fontSize;
 
             return $('<label style="color: #' + hexColor + '; font-size: ' + fontSize + ';"></label>');
-        },
-        genericLabel: function() {
+        }, genericLabel: function () {
             return COMMON.generateLabel({
-                hexColor: 'FFFFFF',
-                fontSize: '10px'
+                hexColor: 'FFFFFF', fontSize: '10px'
             });
-        },
-
-        registerEventForTool: function(options) {
-            var
-                toolId = options.toolId,
-                tool = $(toolId),
-                contextMenu = options.contextMenu,
+        }, registerEventForTool: function (options) {
+            var toolId = options.toolId, tool = $(toolId), contextMenu = options.contextMenu,
                 title = options.constantTitle;
 
             setupToolTips(tool, title);
@@ -44,7 +32,6 @@ $(function() {
                     deactivateTool(options);
                 });
         }
-
     };
 
     $('#image-button').on('change', function(e) {
@@ -105,19 +92,11 @@ $(function() {
                 }
 
                 function mandelbrot(options) {
-                    var
-                        ctx = options.context,
-                        xmin = options.XMin,
-                        ymin = options.YMin,
-                        xmax = options.XMax,
-                        ymax = options.YMax,
-                        iterations = options.iterations,
-                        width = MandelbrotFractal.VARIABLES.width,
-                        height = MandelbrotFractal.VARIABLES.height,
-                        img = ctx.getImageData(0, 0, width, height),
-                        pix = img.data,
-                        innerColor = Color.hexToRgb(selectedPrimaryColor),
-                        ix, iy, x, y, i, c, ppos;
+                    let ctx = options.context, xmin = options.XMin, ymin = options.YMin, xmax = options.XMax,
+                        ymax = options.YMax, iterations = options.iterations, width = MandelbrotFractal.VARIABLES.width,
+                        height = MandelbrotFractal.VARIABLES.height, img = ctx.getImageData(0, 0, width, height),
+                        pix = img.data, innerColor = Color.hexToRgb(window.JSPAINT.selectedPrimaryColor), ix, iy, x, y,
+                        i, c, ppos;
 
                     for (ix = 0; ix < width; ++ix) {
                         for (iy = 0; iy < height; ++iy) {
@@ -497,15 +476,11 @@ $(function() {
                     Y = Actions.Mouse.getY(mouseOptions);
                     width = Pencil.VARIABLES.width;
                     last = LastPoint.get();
-                    if (last.X != -1) {
+                    if (last.X !== -1) {
                         CANVASAPI.drawLineSegmentFromLastPoint({
-                            context: context,
-                            last: last,
-                            current: {
-                                X: X,
-                                Y: Y
-                            },
-                            width: width
+                            context: context, last: last, current: {
+                                X: X, Y: Y
+                            }, width: width
                         });
                     }
                     LastPoint.set(X, Y);
@@ -623,7 +598,7 @@ $(function() {
                 g = data[1];
                 b = data[2];
                 a = data[3];
-                selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+                window.JSPAINT.selectedPrimaryColor = context.fillStyle = 'rgba(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
             });
         },
         stop: function(options) {
@@ -691,21 +666,6 @@ $(function() {
                 },
                 action = null;
 
-            function drawLineSegmentFromLastPoint(options) {
-                var
-                    context = options.context,
-                    last = options.last,
-                    current = options.current,
-                    width = options.width;
-
-                context.beginPath();
-                context.moveTo(last.X, last.Y);
-                context.lineTo(current.X, current.Y);
-                context.lineWidth = width;
-                context.strokeStyle = selectedPrimaryColor;
-                context.stroke();
-            }
-
             $(canvasId).on(event, function(e) {
                 mouseOptions = {
                     event: e,
@@ -718,7 +678,7 @@ $(function() {
                 var drawLines = function() {
                     width = PivotedLinePattern.VARIABLES.width;
                     last = LastPoint.get();
-                    if (last.X != -1) {
+                    if (last.X !== -1) {
                         CANVASAPI.drawLineSegmentFromLastPoint({
                             context: context,
                             last: last,
@@ -887,8 +847,8 @@ $(function() {
                     .on('mousemove', function(ev) {
                         $(this).css('top', ev.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
                             .css('left', ev.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
-                            .css('background-color', selectedPrimaryColor)
-                            .css('border', 'thin dashed ' + selectedAlternativeColor)
+                            .css('background-color', window.JSPAINT.selectedPrimaryColor)
+                            .css('border', 'thin dashed ' + window.JSPAINT.selectedAlternativeColor)
                             .css('height', Rectangle.VARIABLES.breadth)
                             .css('width', Rectangle.VARIABLES.length);
 
@@ -909,7 +869,7 @@ $(function() {
                 previewer = previewer || $('#' + Rectangle.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - Rectangle.VARIABLES.breadth / 2 - window.scrollY)
                     .css('left', e.pageX - Rectangle.VARIABLES.length / 2 - window.scrollX)
-                    .css('background-color', selectedPrimaryColor)
+                    .css('background-color', window.JSPAINT.selectedPrimaryColor)
                     .css('height', Rectangle.VARIABLES.breadth)
                     .css('width', Rectangle.VARIABLES.length)
                     .css('transform', 'rotate(' + parseInt((Rectangle.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
@@ -917,13 +877,12 @@ $(function() {
             });
         },
         stop: function(options) {
-            var
+            const
                 event = options.event || CONSTANTS.Events.mouseclick,
                 canvasId = '#' + (options.canvasId || CONSTANTS.canvasId);
 
             $(canvasId).off(event);
-            $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');
-            $('#' + Rectangle.CONSTANTS.previewId).remove();
+            $('#' + Rectangle.CONSTANTS.previewId).off('mousemove').remove();
         },
         ContextMenu: {
             activate: function(options) {
@@ -982,9 +941,9 @@ $(function() {
                     $('#' + options.breadthId).remove();
                     $('#xyPlaneRotationAngle').remove();
                 }
+
                 removeSliderForSide(options);
-                $('#' + Rectangle.CONSTANTS.previewId).off('mousemove');
-                $('#' + Rectangle.CONSTANTS.previewId).remove();
+                $('#' + Rectangle.CONSTANTS.previewId).off('mousemove').remove();
             },
             getOptions: function() {
                 return {
@@ -1052,7 +1011,7 @@ $(function() {
                         'border-radius': '50%',
                         'height': Ring.VARIABLES.outerRadius * 2,
                         'width': Ring.VARIABLES.outerRadius * 2,
-                        'backgruond-color': selectedPrimaryColor,
+                        'backgruond-color': window.JSPAINT.selectedPrimaryColor,
                     })
                     .appendTo('.utilities');
                 var
@@ -1078,15 +1037,15 @@ $(function() {
                             Y: Y,
                             innerRadius: innerRadius,
                             outerRadius: outerRadius,
-                            strokeColor: selectedPrimaryColor,
-                            fillColor: selectedAlternativeColor
+                            strokeColor: window.JSPAINT.selectedPrimaryColor,
+                            fillColor: window.JSPAINT.selectedAlternativeColor
                         });
                     })
                     .on('mousemove', function(ev) {
                         $(this).css('top', ev.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
                             .css('left', ev.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
-                            .css('background-color', selectedAlternativeColor)
-                            .css('border', 'thin dashed ' + selectedPrimaryColor)
+                            .css('background-color', window.JSPAINT.selectedAlternativeColor)
+                            .css('border', 'thin dashed ' + window.JSPAINT.selectedPrimaryColor)
                             .css('height', Ring.VARIABLES.innerRadius * 2)
                             .css('width', Ring.VARIABLES.innerRadius * 2);
 
@@ -1098,7 +1057,7 @@ $(function() {
                             'border-radius': '50%',
                             'height': Ring.VARIABLES.outerRadius * 2,
                             'width': Ring.VARIABLES.outerRadius * 2,
-                            'background-color': selectedPrimaryColor,
+                            'background-color': window.JSPAINT.selectedPrimaryColor,
                         });
 
                         previewOffsetLeft = $(this).offset().left + parseInt(Ring.VARIABLES.innerRadius);
@@ -1120,7 +1079,7 @@ $(function() {
                 previewer = previewer || $('#' + Ring.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollY))
                     .css('left', e.pageX - parseInt(Ring.VARIABLES.innerRadius) - parseInt(window.scrollX))
-                    .css('background-color', selectedAlternativeColor)
+                    .css('background-color', window.JSPAINT.selectedAlternativeColor)
                     .css('height', Ring.VARIABLES.innerRadius * 2)
                     .css('width', Ring.VARIABLES.innerRadius * 2)
                     .show();
@@ -1133,7 +1092,7 @@ $(function() {
                     'border-radius': '50%',
                     'height': Ring.VARIABLES.outerRadius * 2,
                     'width': Ring.VARIABLES.outerRadius * 2,
-                    'background-color': selectedPrimaryColor,
+                    'background-color': window.JSPAINT.selectedPrimaryColor,
                 }).show();
             });
         },
@@ -1263,8 +1222,8 @@ $(function() {
                     .on('mousemove', function(ev) {
                         $(this).css('top', ev.pageY - Disc.VARIABLES.radius - window.scrollY)
                             .css('left', ev.pageX - Disc.VARIABLES.radius - window.scrollX)
-                            .css('background-color', selectedPrimaryColor)
-                            .css('border', 'thin dashed ' + selectedAlternativeColor)
+                            .css('background-color', window.JSPAINT.selectedPrimaryColor)
+                            .css('border', 'thin dashed ' + window.JSPAINT.selectedAlternativeColor)
                             .css('height', Disc.VARIABLES.radius * 2)
                             .css('width', Disc.VARIABLES.radius * 2);
 
@@ -1285,7 +1244,7 @@ $(function() {
                 previewer = previewer || $('#' + Disc.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - Disc.VARIABLES.radius - window.scrollY)
                     .css('left', e.pageX - Disc.VARIABLES.radius - window.scrollX)
-                    .css('background-color', selectedPrimaryColor)
+                    .css('background-color', window.JSPAINT.selectedPrimaryColor)
                     .css('height', Disc.VARIABLES.radius * 2)
                     .css('width', Disc.VARIABLES.radius * 2)
                     .show();
@@ -1410,8 +1369,8 @@ $(function() {
                     .on('mousemove', function(ev) {
                         $(this).css('top', parseInt(ev.pageY) - parseInt(Square.VARIABLES.side / 2) - parseInt(window.scrollY))
                             .css('left', parseInt(ev.pageX) - parseInt(parseInt(Square.VARIABLES.side / 2)) - parseInt(window.scrollX))
-                            .css('background-color', selectedPrimaryColor)
-                            .css('border', 'thin dashed ' + selectedAlternativeColor)
+                            .css('background-color', window.JSPAINT.selectedPrimaryColor)
+                            .css('border', 'thin dashed ' + window.JSPAINT.selectedAlternativeColor)
                             .css('height', Square.VARIABLES.side)
                             .css('width', Square.VARIABLES.side);
 
@@ -1432,7 +1391,7 @@ $(function() {
                 previewer = previewer || $('#' + Square.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - parseInt(Square.VARIABLES.side / 2) - window.scrollY)
                     .css('left', e.pageX - parseInt(Square.VARIABLES.side / 2) - window.scrollX)
-                    .css('background-color', selectedPrimaryColor)
+                    .css('background-color', window.JSPAINT.selectedPrimaryColor)
                     .css('height', Square.VARIABLES.side)
                     .css('width', Square.VARIABLES.side)
                     .css('transform', 'rotate(' + parseInt((Square.VARIABLES.xyPlaneRotationAngle * Math.PI)) / 180 + 'rad)')
@@ -1496,9 +1455,9 @@ $(function() {
                 function removeSliderForSide(options) {
                     $('#' + options.id).remove();
                 }
+
                 removeSliderForSide(options);
-                $('#' + Square.CONSTANTS.previewId).off('mousemove');
-                $('#' + Square.CONSTANTS.previewId).remove();
+                $('#' + Square.CONSTANTS.previewId).off('mousemove').remove();
             },
             getOptions: function() {
                 return {
@@ -1572,14 +1531,13 @@ $(function() {
                             X: X,
                             Y: Y,
                             innerRadius: innerRadius,
-                            outerRadius: outerRadius,
-                            strokeColor: selectedPrimaryColor
+                            outerRadius: outerRadius, strokeColor: window.JSPAINT.selectedPrimaryColor
                         });
                     })
                     .on('mousemove', function(ev) {
                         $(this).css('top', ev.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
                             .css('left', ev.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
-                            .css('border', 'thin solid ' + selectedPrimaryColor)
+                            .css('border', 'thin solid ' + window.JSPAINT.selectedPrimaryColor)
                             .css('height', Circle.VARIABLES.innerRadius * 2)
                             .css('width', Circle.VARIABLES.innerRadius * 2);
 
@@ -1600,7 +1558,7 @@ $(function() {
                 previewer = previewer || $('#' + Circle.CONSTANTS.previewId);
                 previewer.css('top', e.pageY - Circle.VARIABLES.innerRadius - window.scrollY)
                     .css('left', e.pageX - Circle.VARIABLES.innerRadius - window.scrollX)
-                    .css('border', 'thin solid ' + selectedPrimaryColor)
+                    .css('border', 'thin solid ' + window.JSPAINT.selectedPrimaryColor)
                     .css('height', Circle.VARIABLES.innerRadius * 2)
                     .css('width', Circle.VARIABLES.innerRadius * 2)
                     .show();
@@ -1796,8 +1754,7 @@ $(function() {
                 origin = {
                     X: X,
                     Y: Y,
-                    steps: FamilyPointWalker.VARIABLES.steps,
-                    fillColor: selectedPrimaryColor
+                    steps: FamilyPointWalker.VARIABLES.steps, fillColor: window.JSPAINT.selectedPrimaryColor
                 };
 
                 function dance(origin) {
@@ -1922,8 +1879,7 @@ $(function() {
                 origin = {
                     X: X,
                     Y: Y,
-                    steps: OrganismPointWalker.VARIABLES.steps,
-                    fillColor: selectedPrimaryColor
+                    steps: OrganismPointWalker.VARIABLES.steps, fillColor: window.JSPAINT.selectedPrimaryColor
                 };
 
                 function dance(origin) {
@@ -2051,7 +2007,7 @@ $(function() {
                     X: X,
                     Y: Y,
                     steps: UniCellularParasiteTool.VARIABLES.steps,
-                    fillColor: selectedPrimaryColor,
+                    fillColor: window.JSPAINT.selectedPrimaryColor,
                     i: 0
                 };
 
@@ -2271,21 +2227,17 @@ $(function() {
     });
 
     $('#AddNoiseTool').on('click', function() {
-        var canvasId = '#' + CONSTANTS.canvasId,
-            height = $(canvasId).height(),
-            width = $(canvasId).width(),
+        let canvasId = '#' + CONSTANTS.canvasId, height = $(canvasId).height(), width = $(canvasId).width(),
             image = context.getImageData(0, 0, width, height);
 
         saveCanvasState({
-            startX: 0,
-            startY: 0,
-            width: width,
-            height: height
+            startX: 0, startY: 0, width: width, height: height
         });
-        for (var i = 0; i < image.data.length; i += 4) {
-            image.data[i] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
-            image.data[i + 1] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
-            image.data[i + 2] += Math.random() < 0.5 ? Math.random() * 255 * -1 : Math.random() * 255;
+        for (let i = 0; i < image.data.length; i += 4) {
+            const random = Math.random();
+            image.data[i] += random < 0.5 ? random * 255 * -1 : random * 255;
+            image.data[i + 1] += random < 0.5 ? random * 255 * -1 : random * 255;
+            image.data[i + 2] += random < 0.5 ? random * 255 * -1 : random * 255;
         }
         context.putImageData(image, 0, 0);
     });

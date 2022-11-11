@@ -2444,11 +2444,13 @@ $(function () {
                 mouseOptions = null,
                 X = null,
                 Y = null,
-                i = 0,
-                origin = {},
-                steps,
-                fillColor;
+                tempFillColor;
 
+            /**
+             * Context for subsequent invocations
+             * @type {{X: number, Y: number, steps: number, fillColor: string | CanvasGradient | CanvasPattern, i: number}}
+             */
+            let origin = {};
             $(canvasId).on(event, function (e) {
                 mouseOptions = {
                     event: e,
@@ -2456,29 +2458,46 @@ $(function () {
                 };
                 X = Actions.Mouse.getX(mouseOptions);
                 Y = Actions.Mouse.getY(mouseOptions);
+                const fillColor = window.JSPAINT.selectedPrimaryColor;
+                const steps = UniCellularParasiteTool.VARIABLES.steps;
+
                 origin = {
-                    X: X,
-                    Y: Y,
-                    steps: UniCellularParasiteTool.VARIABLES.steps,
-                    fillColor: window.JSPAINT.selectedPrimaryColor,
+                    X,
+                    Y,
+                    steps,
+                    fillColor,
                     i: 0,
                 };
 
+                /**
+                 *
+                 * @param origin {{X: number, Y: number, steps: number, fillColor: string | CanvasGradient | CanvasPattern, i: number}}
+                 */
                 function act(origin) {
+                    /**
+                     * This stores the current fillStyle value in a temporary variable "tempFillColor"
+                     * because otherwise this function works as a singleton and
+                     * each parasite would respond to primary/draw color change.
+                     * @type {string | CanvasGradient | CanvasPattern}
+                     */
+                    tempFillColor = context.fillStyle;
+                    context.fillStyle = origin.fillColor;
                     X = Math.floor(origin.X);
                     Y = Math.floor(origin.Y);
-                    steps = origin.steps;
-                    fillColor = context.fillStyle;
-
-                    context.fillStyle = origin.fillColor;
                     CANVASAPI.fillCirc(X, Y, 1);
-                    context.fillStyle = fillColor;
+                    context.fillStyle = tempFillColor;
+
                     X += Math.random() < 0.5 ? -1 : 1;
                     Y += Math.random() < 0.5 ? -1 : 1;
 
-                    origin.X = X;
-                    origin.Y = Y;
+                    /* update the context */
+                    origin = { ...origin, X, Y };
+                    if (window.JSPAINT.__DEBUGGING__) {
+                        console.log({ fn: "act", origin });
+                    }
+
                     setTimeout(function () {
+                        /* recursion */
                         act(origin);
                     }, UniCellularParasiteTool
                         .VARIABLES.durationBetweenParasiticActsInMiliSeconds);

@@ -1,6 +1,6 @@
 $(function () {
     const saveCanvasState = window.JSPAINT.saveCanvasState;
-    const hex2RGB = window.JSPAINT.Color.hexToRgb;
+    const { rgbToHex, hexToRgb: hex2RGB } = window.JSPAINT.Color;
     const { setupToolTips, activateTool, deactivateTool } = window.JSPAINT;
 
     const COMMON = {
@@ -2196,18 +2196,22 @@ $(function () {
                     fillColor = origin.fillColor;
 
                     for (i = 0; i < steps; i++) {
-                        oldXY[i] = {
-                            X: X,
-                            Y: Y,
-                        };
+                        oldXY[i] = { X, Y };
 
                         context.fillStyle = fillColor;
                         CANVASAPI.fillCirc(X, Y, 1);
                         X += Math.random() < 0.5 ? -1 : 1;
-                        Y -= Math.random() < 0.5 ? -1 : 1;
+                        Y += Math.random() < 0.5 ? -1 : 1;
                     }
                     setTimeout(function () {
                         dance(origin);
+                        const { r, g, b } = hex2RGB(origin.fillColor);
+                        const hex = rgbToHex(
+                            (r + 5 + Math.floor(10 * Math.random())) % 256,
+                            (g + 5 + Math.floor(10 * Math.random())) % 256,
+                            (b + 5 + Math.floor(10 * Math.random())) % 256,
+                        );
+                        origin.fillColor = hex;
                     }, 1000);
                 }
 
@@ -2332,15 +2336,12 @@ $(function () {
                     fillColor = origin.fillColor;
 
                     for (i = 0; i < steps; i++) {
-                        oldXY[i] = {
-                            X: X,
-                            Y: Y,
-                        };
+                        oldXY[i] = { X, Y };
 
                         context.fillStyle = fillColor;
                         CANVASAPI.fillCirc(X, Y, 1);
                         X += Math.random() < 0.5 ? -1 : 1;
-                        Y -= Math.random() < 0.5 ? -1 : 1;
+                        Y += Math.random() < 0.5 ? -1 : 1;
                     }
                     origin.X = X;
                     origin.Y = Y;

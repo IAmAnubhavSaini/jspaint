@@ -161,8 +161,12 @@ $(function () {
                                             window.JSPAINT
                                                 .selectedAlternativeColor,
                                         ).r * c;
-                                    pix[ppos + 1] = 0;
-                                    pix[ppos + 2] = 0;
+                                    pix[ppos + 1] = hex2RGB(
+                                        window.JSPAINT.selectedAlternativeColor,
+                                    ).g;
+                                    pix[ppos + 2] = hex2RGB(
+                                        window.JSPAINT.selectedAlternativeColor,
+                                    ).b;
                                 } else if (c < 2) {
                                     pix[ppos] = hex2RGB(
                                         window.JSPAINT.selectedAlternativeColor,
@@ -173,7 +177,9 @@ $(function () {
                                                 .selectedAlternativeColor,
                                         ).g *
                                         (c - 1);
-                                    pix[ppos + 2] = 0;
+                                    pix[ppos + 2] = hex2RGB(
+                                        window.JSPAINT.selectedAlternativeColor,
+                                    ).b;
                                 } else {
                                     pix[ppos] = hex2RGB(
                                         window.JSPAINT.selectedAlternativeColor,
@@ -189,6 +195,7 @@ $(function () {
                                         (c - 2);
                                 }
                             }
+                            /* alpha channel */
                             pix[ppos + 3] = 255;
                         }
                     }

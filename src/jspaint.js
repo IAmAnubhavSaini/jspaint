@@ -30,15 +30,13 @@
             },
             registerColorEvents = function () {
                 function updatePrimaryColor(selectedPrimaryColor) {
-                    $("label#primary-color-name")
-                        .css("color", selectedPrimaryColor)
-                        .html(selectedPrimaryColor);
+                    $("label#primary-color-name").html(selectedPrimaryColor);
                 }
 
                 function updataAlternativeColorLabel(selectedAlternativeColor) {
-                    $("label#alternative-color-name")
-                        .css("color", window.JSPAINT.selectedAlternativeColor)
-                        .html(window.JSPAINT.selectedAlternativeColor);
+                    $("label#alternative-color-name").html(
+                        window.JSPAINT.selectedAlternativeColor,
+                    );
                 }
 
                 $(".color")

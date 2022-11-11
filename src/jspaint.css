@@ -83,14 +83,8 @@ header.page-header a {
     margin-top: 5px;
 }
 
-.common-menu-bar a {
-    color: #000000;
-    text-decoration: underline;
-    cursor: pointer;
-}
-
 .common-menu-bar .menu-item {
-    margin: 5px;
+    margin: 5px 0;
 }
 
 .menu-item .menu-item {
@@ -115,12 +109,6 @@ h1#brand {
 
 h1#brand a {
     color: #333333;
-}
-
-#main-grid {
-    display: grid;
-    grid-template-columns: minmax(15vw, 2fr) minmax(80vw, 8fr);
-    gap: 2vw;
 }
 
 #main-grid .Menu {
@@ -153,6 +141,11 @@ h1#brand a {
     flex-direction: column;
 }
 
+.flex.no-gap,
+.grid.no-gap {
+    gap: 0;
+}
+
 .grid {
     display: grid;
 }
@@ -172,3 +165,46 @@ h1#brand a {
 .lite-heading {
     font-weight: bold;
 }
+
+/* button starts */
+.button {
+    padding: 3px 5px;
+    border: thin solid silver;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #eee;
+}
+
+.button:active {
+    background-color: #ddd;
+    border-style: inset;
+}
+
+a.button {
+    text-decoration: none;
+}
+/* button ends */
+
+/* margins starts */
+.mb-4 {
+    margin-bottom: -4px;
+}
+.mb-6 {
+    margin-bottom: -6px;
+}
+.mb-8 {
+    margin-bottom: -8px;
+}
+.mb-10 {
+    margin-bottom: -10px;
+}
+/* margins ends */
+
+/* text starts */
+.tar {
+    text-align: right;
+}
+/* text ends */

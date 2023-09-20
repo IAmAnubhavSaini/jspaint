@@ -186,25 +186,36 @@ h1#brand a {
 a.button {
     text-decoration: none;
 }
+
 /* button ends */
 
 /* margins starts */
 .mb-4 {
     margin-bottom: -4px;
 }
+
 .mb-6 {
     margin-bottom: -6px;
 }
+
 .mb-8 {
     margin-bottom: -8px;
 }
+
 .mb-10 {
     margin-bottom: -10px;
 }
+
 /* margins ends */
 
 /* text starts */
 .tar {
     text-align: right;
 }
+
 /* text ends */
+
+/* Landing area */
+.landing-area > div {
+    margin: 10px 0;
+}

@@ -4,19 +4,21 @@
  * Dual licensed under the MIT or GPL Version 2 licenses.
  */
 
-;(function (factory) {
-    if (typeof define === 'function' && define.amd) {
+(function (factory) {
+    if (typeof define === "function" && define.amd) {
         // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
+        define(["jquery"], factory);
     } else {
         // Browser globals
         factory(jQuery);
     }
 })(function ($) {
     $.fn.funcToggle = function (type, data) {
-        var dname = "jqp_eventtoggle_" + type + (new Date()).getTime(),
-            funcs = Array.prototype.slice.call(arguments, 2), numFuncs = funcs.length, empty = function () {
-            }, false_handler = function () {
+        var dname = "jqp_eventtoggle_" + type + new Date().getTime(),
+            funcs = Array.prototype.slice.call(arguments, 2),
+            numFuncs = funcs.length,
+            empty = function () {},
+            false_handler = function () {
                 return false;
             };
 
@@ -44,7 +46,8 @@
 
         this.data(dname, 0);
         this.bind(type, data, function (event) {
-            var data = $(this).data(), index = data[dname];
+            var data = $(this).data(),
+                index = data[dname];
             funcs[index].call(this, event);
             data[dname] = (index + 1) % numFuncs;
         });

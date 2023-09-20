@@ -1,76 +1,56 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to js paint home page</title>
-    <link href="./bootstrap.css" type="text/css" rel="stylesheet" />
-    <link href="./jspaint.css" type="text/css" rel="stylesheet" />
-    <style type="text/css">
-    body {
-        margin: 0 0 50px 0;
-        padding: 0 0 20px 0;
-    }
-    </style>
+  <meta charset="utf-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>Welcome to js paint home page</title>
+  <link href="./bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="./jspaint.css" rel="stylesheet" type="text/css" />
+  <style>
+      body {
+          margin: 0 0 50px 0;
+          padding: 0 0 20px 0;
+      }
+  </style>
 </head>
 
 <body>
-    <div class="page-header">
-        <div class="container">
-            <h1>jspaint</h1>
-            <p>
-                Online paint application
-            </p>
-        </div>
-    </div>
-    <div class="container">
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>
-                            Options
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th class="text-nowrap" scope="row">Dimensions of Paint Area</th>
-                        <td class="dimension-options">
-                            <button type="button" id="480x320" class="btn btn-lg" title="Width: 480px, Height: 320px">480 X 320</button>
-                            <button type="button" id="600x400" class="btn btn-lg" title="Width: 600px, Height: 400px">600 X 400</button>
-                            <button type="button" id="800x600" class="btn btn-lg" title="Width: 800px, Height: 600px">800 X 600</button>
-                            <button type="button" id="Max" class="btn btn-lg" title="Whatever your screen supports.">Maximum</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="text-nowrap" scope="row">Orientation</th>
-                        <td class="orientation-options">
-                            <button type="button" id="landscape" class="btn btn-lg" title="Lying down. Width is greater than height.">Landscape</button>
-                            <button type="button" id="portrait" class="btn btn-lg" title="Standing up. Height is greater than width.">Portrait</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="text-nowrap" scope="row">All set!</th>
-                        <td>
-                            <a id="jspaint-action" class="btn btn-primary btn-lg" href="./jspaint.html" role="button">Let's paint</a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div>
-        <div class="top-taker"></div>
-    </div>
-    <script src="./init.js" type="text/javascript"></script>
-    <script src="./jquery.js" type="text/javascript"></script>
-    <script src="./jquery-ui.js" type="text/javascript"></script>
-    <script src="./iframe-buster.js" type="text/javascript"></script>
-    <script src="./index.js" type="text/javascript"></script>
+<div class="page-header">
+  <div class="container">
+    <h1>jspaint</h1>
+  </div>
+</div>
+<div class="container landing-area">
+
+  <div class="dimension-options">
+    <button class="btn btn-lg" id="480x320" title="Width: 480px, Height: 320px" type="button">480 X 320</button>
+    <button class="btn btn-lg" id="600x400" title="Width: 600px, Height: 400px" type="button">600 X 400</button>
+    <button class="btn btn-lg" id="800x600" title="Width: 800px, Height: 600px" type="button">800 X 600</button>
+    <button class="btn btn-lg" id="Max" title="Whatever your screen supports." type="button">Maximum</button>
+  </div>
+  <div class="orientation-options">
+    <button class="btn btn-lg" id="landscape" title="Lying down. Width is greater than height." type="button">
+      Landscape
+    </button>
+    <button class="btn btn-lg" id="portrait" title="Standing up. Height is greater than width." type="button">
+      Portrait
+    </button>
+  </div>
+  <div>
+    <a class="btn btn-primary btn-lg" href="./jspaint.html" id="jspaint-action" role="button">&#8594;</a>
+  </div>
+</div>
+
+<div>
+  <div class="top-taker"></div>
+</div>
+<script src="./init.js" type="text/javascript"></script>
+<script src="./jquery.js" type="text/javascript"></script>
+<script src="./jquery-ui.js" type="text/javascript"></script>
+<script src="./iframe-buster.js" type="text/javascript"></script>
+<script src="./index.js" type="text/javascript"></script>
 </body>
 
 </html>

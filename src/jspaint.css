@@ -115,6 +115,7 @@ h1#brand a {
     padding-left: 1vw;
     overflow: hidden;
     height: 100vh;
+    max-width: 300px;
 }
 
 #main-grid .Menu:hover {

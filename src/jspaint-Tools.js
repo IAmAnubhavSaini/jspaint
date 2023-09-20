@@ -129,6 +129,9 @@ $(function () {
                         innerColor = hex2RGB(
                             window.JSPAINT.selectedPrimaryColor,
                         ),
+                        altColor = hex2RGB(
+                            window.JSPAINT.selectedAlternativeColor,
+                        ),
                         ix,
                         iy,
                         x,
@@ -151,48 +154,20 @@ $(function () {
                                 pix[ppos + 1] = innerColor.g;
                                 pix[ppos + 2] = innerColor.b;
                             } else {
-                                c =
-                                    (3 * Math.log(i)) /
-                                    Math.log(iterations - 1.0);
+                                c = (3 * Math.log(i)) / Math.log(iterations - 1.0);
 
                                 if (c < 1) {
-                                    pix[ppos] =
-                                        hex2RGB(
-                                            window.JSPAINT
-                                                .selectedAlternativeColor,
-                                        ).r * c;
-                                    pix[ppos + 1] = hex2RGB(
-                                        window.JSPAINT.selectedAlternativeColor,
-                                    ).g;
-                                    pix[ppos + 2] = hex2RGB(
-                                        window.JSPAINT.selectedAlternativeColor,
-                                    ).b;
+                                    pix[ppos] = altColor.r * c;
+                                    pix[ppos + 1] = altColor.g;
+                                    pix[ppos + 2] = altColor.b;
                                 } else if (c < 2) {
-                                    pix[ppos] = hex2RGB(
-                                        window.JSPAINT.selectedAlternativeColor,
-                                    ).r;
-                                    pix[ppos + 1] =
-                                        hex2RGB(
-                                            window.JSPAINT
-                                                .selectedAlternativeColor,
-                                        ).g *
-                                        (c - 1);
-                                    pix[ppos + 2] = hex2RGB(
-                                        window.JSPAINT.selectedAlternativeColor,
-                                    ).b;
+                                    pix[ppos] = altColor.r;
+                                    pix[ppos + 1] = altColor.g * (c - 1);
+                                    pix[ppos + 2] = altColor.b;
                                 } else {
-                                    pix[ppos] = hex2RGB(
-                                        window.JSPAINT.selectedAlternativeColor,
-                                    ).r;
-                                    pix[ppos + 1] = hex2RGB(
-                                        window.JSPAINT.selectedAlternativeColor,
-                                    ).g;
-                                    pix[ppos + 2] =
-                                        hex2RGB(
-                                            window.JSPAINT
-                                                .selectedAlternativeColor,
-                                        ).b *
-                                        (c - 2);
+                                    pix[ppos] = altColor.r;
+                                    pix[ppos + 1] = altColor.g;
+                                    pix[ppos + 2] = altColor.b * (c - 2);
                                 }
                             }
                             /* alpha channel */

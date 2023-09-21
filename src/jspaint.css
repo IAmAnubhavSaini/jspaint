@@ -220,3 +220,13 @@ a.button {
 .landing-area > div {
     margin: 10px 0;
 }
+
+.tiny-fonts{
+    font-size: 10px;
+}
+
+.thin-color {
+    max-height: 10px;
+    border: 1px black solid;
+    outline: 1px white solid;
+}

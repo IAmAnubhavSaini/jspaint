@@ -98,7 +98,10 @@ $(function () {
     };
 
     CANVASAPI = {
-        fillCirc: function (x, y, radius) {
+        fillCirc: function (x, y, radius, color) {
+            if(color) {
+                context.fillStyle = color;
+            }
             context.beginPath();
             context.arc(x, y, radius, 0, 2 * Math.PI, false);
             context.fill();

@@ -4389,11 +4389,6 @@ tbody.collapse.in {
     border-left: 4px solid transparent;
 }
 
-.dropup,
-.dropdown {
-    position: relative;
-}
-
 .dropdown-toggle:focus {
     outline: 0;
 }
@@ -4415,7 +4410,6 @@ tbody.collapse.in {
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid #ccc;
-    border: 1px solid rgba(0, 0, 0, .15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
     box-shadow: 0 6px 12px rgba(0, 0, 0, .175);

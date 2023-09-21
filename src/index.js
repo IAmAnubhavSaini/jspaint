@@ -20,7 +20,7 @@
         };
         const getWidth = function (dimensions) {
             return dimensions.localeCompare("Max") === 0
-                ? document.documentElement.clientWidth * 0.8
+                ? document.documentElement.clientWidth * 0.75
                 : dimensions.split("x")[0];
         };
         const getHeight = function (dimensions) {

@@ -14,23 +14,18 @@
 
 <body>
 
-<div class="flex x" id="main-grid">
+<div class="flex x f-btwn" id="main-grid">
   <div class="Menu flex x">
-    <h1 id="brand">
-      <a class="string-menu-item" href="./index.html" id="jspaint-brand">&#8592;</a>
-    </h1>
     <div class="flex tiny-fonts" id="status-bar">
-      <div class="flex y">
-        <label class="mb-10">Active tool</label>
+      <div><a href="./index.html" class="back btn">BACK</a></div>
+      <div>
         <label id="activated-tool-name" title="Active tool"></label></div>
-      <div class="flex y">
-        <label class="mb-10">Draw color</label>
+      <div>
         <label class="mb-10" id="primary-color-name" title="Primary color"></label>
         <div class="thin-color" data-placement="bottom" data-toggle="tooltip" id="SelectedPrimaryColor"
              title="Primary/Draw color."></div>
       </div>
-      <div class="flex y">
-        <label class="mb-10">Background color</label>
+      <div>
         <label class="mb-10" id="alternative-color-name" title="Alternative color"></label>
         <div class="thin-color" data-placement="bottom" data-toggle="tooltip" id="SelectedAlternativeColor"
              title="Alternative/Background color."></div>
@@ -73,11 +68,11 @@
     </div>
 
     <div id="jspaint-tools">
-      <div class="main-tool-menu dropdown grid x x-2" id="Pencil">
+      <div class="main-tool-menu dropdown flex y" id="Pencil">
         <div class="full lite-heading">Pencils &amp; crayons</div>
         <div class="main-tool" id="PencilTool">Pencil</div>
       </div>
-      <div class="main-tool-menu dropdown grid x x-2" id="ShapeTool">
+      <div class="main-tool-menu dropdown flex y" id="ShapeTool">
         <div class="full lite-heading">Shapes</div>
         <div class="main-tool" id="DiscTool">Disc</div>
         <div class="main-tool" id="SquareTool">Square</div>
@@ -85,15 +80,15 @@
         <div class="main-tool" id="CircleTool">Circle</div>
         <div class="main-tool" id="RectangleTool">Rectangle</div>
       </div>
-      <div class="main-tool-menu dropdown grid x x-2" id="SerendipityTool">
+      <div class="main-tool-menu dropdown flex y" id="SerendipityTool">
         <div class="full lite-heading">Serendipity</div>
         <div class="main-tool" id="PivotedLinePatternTool">Pivoted line pattern</div>
       </div>
-      <div class="main-tool-menu dropdown grid x x-2" id="FractalTool">
+      <div class="main-tool-menu dropdown flex y" id="FractalTool">
         <div class="full lite-heading">Fractals</div>
         <div class="main-tool" id="MandelbrotFractalTool">Mandelbrot</div>
       </div>
-      <div class="main-tool-menu dropdown grid x x-2" id="RandomTool">
+      <div class="main-tool-menu dropdown flex y" id="RandomTool">
         <div class="full lite-heading">Random</div>
         <div class="main-tool" id="PointWalkerTool">Point Walker</div>
         <div class="main-tool" id="FamilyPointWalkerTool">Family Point Walker</div>
@@ -101,15 +96,25 @@
         <div class="main-tool" id="UniCellularParasiteTool">UniCellular Parasite</div>
 
       </div>
-      <div class="main-tool-menu dropdown grid x x-2" id="ColorTool">
+      <div class="main-tool-menu dropdown flex y" id="ColorTool">
         <div class="full lite-heading">Color</div>
 
-        <div class="main-tool item" id="DesaturateRedColorTool">Desaturate Red</div>
-        <div class="main-tool item" id="SaturateRedColorTool">Saturate Red</div>
-        <div class="main-tool item" id="DesaturateGreenColorTool">Desaturate Green</div>
-        <div class="main-tool item" id="SaturateGreenColorTool">Saturate Green</div>
-        <div class="main-tool item" id="DesaturateBlueColorTool">Desaturate Blue</div>
-        <div class="main-tool item" id="SaturateBlueColorTool">Saturate Blue</div>
+        <div class="combined">
+          <div>Desaturate</div>
+          <div class="flex x">
+            <div class="main-tool item bg-r" id="DesaturateRedColorTool"></div>
+            <div class="main-tool item bg-b" id="DesaturateBlueColorTool"></div>
+            <div class="main-tool item bg-g" id="DesaturateGreenColorTool"></div>
+          </div>
+        </div>
+        <div class="combined">
+          <div>Saturate</div>
+          <div class="flex x">
+            <div class="main-tool item bg-r" id="SaturateRedColorTool"></div>
+            <div class="main-tool item bg-g" id="SaturateGreenColorTool"></div>
+            <div class="main-tool item bg-b" id="SaturateBlueColorTool"></div>
+          </div>
+        </div>
         <div class="main-tool item" id="InvertColorsTool">Invert colors</div>
         <div class="main-tool item" id="AddGrayTool">Add gray</div>
         <div class="main-tool item" id="RemoveGrayTool">Remove gray</div>

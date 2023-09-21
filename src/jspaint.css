@@ -59,7 +59,7 @@ header.page-header a {
 }
 
 .main-tool:hover {
-    background-color: #eeeeee;
+    cursor: pointer;
     border-left: thin solid rebeccapurple;
 }
 
@@ -115,12 +115,10 @@ h1#brand a {
     padding-left: 1vw;
     overflow: hidden;
     height: 100vh;
-    max-width: 300px;
 }
 
 #main-grid .Menu:hover {
     overflow-y: scroll;
-    scroll-margin: -12vw;
 }
 
 #main-grid .Menu.flex {
@@ -131,7 +129,11 @@ h1#brand a {
 
 .flex {
     display: flex;
-    gap: 1vh 1vw;
+    gap: .1vh 1vw;
+}
+
+.flex.f-btwn {
+    justify-content: space-between;
 }
 
 .flex.x {
@@ -229,4 +231,29 @@ a.button {
     max-height: 10px;
     border: 1px black solid;
     outline: 1px white solid;
+}
+
+.combined .item {
+    height: 20px;
+    gap: 0 0;
+    width: 20px;
+}
+
+.bg-r {
+    background-color: red;
+}
+
+.bg-g {
+    background-color: green;
+}
+
+.bg-b {
+    background-color: blue;
+}
+
+
+.back.btn {
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none;
 }

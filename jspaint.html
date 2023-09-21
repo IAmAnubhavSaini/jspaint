@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html lang="IN-en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <title>js paint</title>
+  <link href="./bootstrap.css" rel="stylesheet" type="text/css" />
+  <link href="./jspaint.css" rel="stylesheet" type="text/css" />
+  <link href="./jspaint-color-tools.css" rel="stylesheet" type="text/css" />
+  <link href="./print.css" media="print" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div class="flex x f-btwn" id="main-grid">
+  <div class="Menu flex x">
+    <div class="flex tiny-fonts" id="status-bar">
+      <div><a href="./index.html" class="back btn">BACK</a></div>
+      <div>
+        <label id="activated-tool-name" title="Active tool"></label></div>
+      <div>
+        <label class="mb-10" id="primary-color-name" title="Primary color"></label>
+        <div class="thin-color" data-placement="bottom" data-toggle="tooltip" id="SelectedPrimaryColor"
+             title="Primary/Draw color."></div>
+      </div>
+      <div>
+        <label class="mb-10" id="alternative-color-name" title="Alternative color"></label>
+        <div class="thin-color" data-placement="bottom" data-toggle="tooltip" id="SelectedAlternativeColor"
+             title="Alternative/Background color."></div>
+      </div>
+    </div>
+    <div class="common-menu-bar flex y">
+      <div class="full lite-heading">Select colors</div>
+      <div class="flex x">
+        <div class="menu-item">
+          <div class="BasicColorPalette"></div>
+        </div>
+
+        <div class="menu-item">
+          <div id="HTML5ColorPicker"><input id="allColorsPicker" type="color" /></div>
+        </div>
+      </div>
+      <div class="full lite-heading">Load image on canvas</div>
+      <div class="menu-item">
+        <div data-placement="bottom" data-toggle="tooltip" id="ImageButton" title="Image.">
+          <input class="string-menu-item" id="image-button" name="image-button" type="file" />
+        </div>
+      </div>
+      <div class="full lite-heading">Contextual tool bar</div>
+      <div class="contextual-tool-bar">
+      </div>
+    </div>
+    <div class="flex y">
+      <div class="full lite-heading">Canvas actions</div>
+      <div class="flex x">
+        <div class="menu-item" id="SaveImageButton">
+          <a class="string-menu-item button" id="save-as-image">save</a>
+        </div>
+        <div class="menu-item" id="ResetCanvas">
+          <a class="string-menu-item button" id="reset-canvas">reset</a>
+        </div>
+        <div class="menu-item" id="UndoButton">
+          <a class="string-menu-item button" id="undo-button">undo</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="jspaint-tools">
+      <div class="main-tool-menu dropdown flex y" id="Pencil">
+        <div class="full lite-heading">Pencils &amp; crayons</div>
+        <div class="main-tool" id="PencilTool">Pencil</div>
+      </div>
+      <div class="main-tool-menu dropdown flex y" id="ShapeTool">
+        <div class="full lite-heading">Shapes</div>
+        <div class="main-tool" id="DiscTool">Disc</div>
+        <div class="main-tool" id="SquareTool">Square</div>
+        <div class="main-tool" id="RingTool">Ring</div>
+        <div class="main-tool" id="CircleTool">Circle</div>
+        <div class="main-tool" id="RectangleTool">Rectangle</div>
+      </div>
+      <div class="main-tool-menu dropdown flex y" id="SerendipityTool">
+        <div class="full lite-heading">Serendipity</div>
+        <div class="main-tool" id="PivotedLinePatternTool">Pivoted line pattern</div>
+      </div>
+      <div class="main-tool-menu dropdown flex y" id="FractalTool">
+        <div class="full lite-heading">Fractals</div>
+        <div class="main-tool" id="MandelbrotFractalTool">Mandelbrot</div>
+      </div>
+      <div class="main-tool-menu dropdown flex y" id="RandomTool">
+        <div class="full lite-heading">Random</div>
+        <div class="main-tool" id="PointWalkerTool">Point Walker</div>
+        <div class="main-tool" id="FamilyPointWalkerTool">Family Point Walker</div>
+        <div class="main-tool" id="OrganismPointWalkerTool">Organism Point Walker</div>
+        <div class="main-tool" id="UniCellularParasiteTool">UniCellular Parasite</div>
+
+      </div>
+      <div class="main-tool-menu dropdown flex y" id="ColorTool">
+        <div class="full lite-heading">Color</div>
+
+        <div class="combined">
+          <div>Desaturate</div>
+          <div class="flex x">
+            <div class="main-tool item bg-r" id="DesaturateRedColorTool"></div>
+            <div class="main-tool item bg-b" id="DesaturateBlueColorTool"></div>
+            <div class="main-tool item bg-g" id="DesaturateGreenColorTool"></div>
+          </div>
+        </div>
+        <div class="combined">
+          <div>Saturate</div>
+          <div class="flex x">
+            <div class="main-tool item bg-r" id="SaturateRedColorTool"></div>
+            <div class="main-tool item bg-g" id="SaturateGreenColorTool"></div>
+            <div class="main-tool item bg-b" id="SaturateBlueColorTool"></div>
+          </div>
+        </div>
+        <div class="main-tool item" id="InvertColorsTool">Invert colors</div>
+        <div class="main-tool item" id="AddGrayTool">Add gray</div>
+        <div class="main-tool item" id="RemoveGrayTool">Remove gray</div>
+        <div class="main-tool item" id="AddNoiseTool">Add noise</div>
+        <div class="main-tool item" id="RandomColorTool">Random color</div>
+        <div class="main-tool item" id="FuzzyColorTool">Fuzzy color</div>
+        <div class="main-tool item" id="BlackAndWhiteColorTool">B&amp;W color</div>
+        <div class="main-tool item" id="GrayColorTool">Gray color</div>
+
+      </div>
+    </div>
+
+  </div>
+  <div id="jspaint-paint-area"></div>
+</div>
+<div class="utilities">
+  <div class="top-taker"></div>
+</div>
+<script src="./init.js" type="text/javascript"></script>
+<script src="./jquery.js" type="text/javascript"></script>
+<script src="./jquery-ui.js" type="text/javascript"></script>
+<script src="./bootstrap.js" type="text/javascript"></script>
+<script src="./jquery.func_toggle.js" type="text/javascript"></script>
+<script src="./iframe-buster.js" type="text/javascript"></script>
+<script src="./jspaint-pre.js" type="text/javascript"></script>
+<script src="./jspaint-Tools.js" type="text/javascript"></script>
+<script src="./jspaint.js" type="text/javascript"></script>
+</body>
+
+</html>

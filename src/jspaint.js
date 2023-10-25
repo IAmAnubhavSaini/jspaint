@@ -171,7 +171,7 @@
                 });
                 registerEvents();
                 $("#PencilTool").trigger("click");
-                $('[data-toggle="tooltip"]').tooltip();
+                // $('[data-toggle="tooltip"]').tooltip();
                 $("#SelectedPrimaryColor").css(
                     "background-color",
                     window.JSPAINT.selectedPrimaryColor,

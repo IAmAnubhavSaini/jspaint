@@ -2,5 +2,6 @@
 
 set -euxo pipefail
 
-cp  node_modules/canvas-js/dist/*.js src/
+mkdir src/canvas-js
+cp  node_modules/canvas-js/dist/*.js src/canvas-js/
 

@@ -1,32 +1,36 @@
 {
-  "name": "jspaint",
-  "version": "2023.0.0-alpha1",
-  "description": "Online paint application in JavaScript",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo 'no tests';"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/IAmAnubhavSaini/jspaint.git"
-  },
-  "keywords": [
-    "javascript",
-    "jquery",
-    "paint"
-  ],
-  "author": "Anubhav Saini <IAmAnubhavSaini@GMail.com>",
-  "license": "GNU GPL v3",
-  "bugs": {
-    "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"
-  },
-  "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
-  "devDependencies": {
-    "eslint": "^8.52.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "prettier": "^3.0.3"
-  }
+    "name": "jspaint",
+    "version": "2023.0.0-alpha1",
+    "description": "Online paint application in JavaScript",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "scripts": {
+        "test": "echo 'no tests';",
+        "setup": "npm install && bash scripts/setup.sh"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/IAmAnubhavSaini/jspaint.git"
+    },
+    "keywords": [
+        "javascript",
+        "jquery",
+        "paint"
+    ],
+    "author": "Anubhav Saini <IAmAnubhavSaini@GMail.com>",
+    "license": "GNU GPL v3",
+    "bugs": {
+        "url": "https://github.com/IAmAnubhavSaini/jspaint/issues"
+    },
+    "homepage": "https://github.com/IAmAnubhavSaini/jspaint",
+    "devDependencies": {
+        "eslint": "^8.52.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "prettier": "^3.0.3"
+    },
+    "dependencies": {
+        "canvas-js": "^9.0.0"
+    }
 }

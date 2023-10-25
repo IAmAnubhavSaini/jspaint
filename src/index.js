@@ -1,77 +1,12 @@
-(function ($) {
-    $(() => {
-        const DimensionOptionsButtons = $(".dimension-options button");
-        const OrientationOptionsButtons = $(".orientation-options button");
-        const dimensionEvents = function dimensionEvents() {
-            DimensionOptionsButtons.on("click", function onClick() {
-                DimensionOptionsButtons.removeClass("btn-success");
-                $(this).addClass("btn-success");
-            });
-        };
-        const orientationEvents = function orientationEvents() {
-            OrientationOptionsButtons.on("click", function onClick() {
-                OrientationOptionsButtons.removeClass("btn-success");
-                $(this).addClass("btn-success");
-            });
-        };
-        const setupEvents = function setupEvents() {
-            dimensionEvents();
-            orientationEvents();
-        };
-        const getWidth = function getWidth(dimensions) {
-            return dimensions.localeCompare("Max") === 0 ? document.documentElement.clientWidth * 0.75 : dimensions.split("x")[0];
-        };
-        const getHeight = function getHeight(dimensions) {
-            return dimensions.localeCompare("Max") === 0 ? document.documentElement.clientHeight - 4 : dimensions.split("x")[1];
-        };
-        const getQueryValue = function getQueryValue(orientation, width, height) {
-            return orientation.localeCompare("landscape") === 0 ? `${width}x${height}` : `${height}x${width}`;
-        };
-        const conditionalURI = function conditionalURI(originalUri, queryPrefix, queryValue) {
-            localStorage.setItem("dimensionsWxH", queryValue);
-            return originalUri + queryPrefix + queryValue;
-        };
-        const newUri = function newUri(receiver) {
-            const originalUri = receiver.attr("href");
-            const queryPrefix = "?dimension=";
-            const SelectedDimensionsButton = $(".dimension-options button.btn-success");
-            const SelectedOrientationsButton = $(".orientation-options button.btn-success");
-            const dimensions = SelectedDimensionsButton.attr("id");
-            const width = getWidth(dimensions);
-            const height = getHeight(dimensions);
-            const orientation = SelectedOrientationsButton.attr("id");
-            const queryValue = getQueryValue(orientation, width, height);
-
-            return conditionalURI(originalUri, queryPrefix, queryValue);
-        };
-        const goToPaint = function goToPaint(uri) {
-            window.location = uri;
-        };
-        const deferAction = function deferAction(e) {
-            e.preventDefault();
-        };
-        const setup = function setup() {
-            setupEvents();
-            $("#jspaint-action").on("click", function onClick(e) {
-                deferAction(e);
-                goToPaint(newUri($(this)));
-            });
-        };
-        const initOrientationAndDimension = function initOrientationAndDimension() {
-            const defaultOrientationButton = $("#landscape");
-            const defaultDimensionButton = $("#Max");
-
-            defaultDimensionButton.trigger("click");
-            defaultOrientationButton.trigger("click");
-        };
-        const init = function init() {
-            initOrientationAndDimension();
-        };
-        const mustRunInSequence = function mustRunInSequence() {
-            setup();
-            init();
-        };
-
-        mustRunInSequence();
-    });
-}(jQuery));
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Pencil = exports.Point2d = exports.Square = exports.Circle = void 0;
+var Circle_1 = require("./Circle");
+Object.defineProperty(exports, "Circle", { enumerable: true, get: function () { return Circle_1.Circle; } });
+var Square_1 = require("./Square");
+Object.defineProperty(exports, "Square", { enumerable: true, get: function () { return Square_1.Square; } });
+var Point2d_1 = require("./Point2d");
+Object.defineProperty(exports, "Point2d", { enumerable: true, get: function () { return Point2d_1.Point2d; } });
+var Pencil_1 = require("./Pencil");
+Object.defineProperty(exports, "Pencil", { enumerable: true, get: function () { return Pencil_1.Pencil; } });
+//# sourceMappingURL=index.js.map

@@ -1,6 +1,6 @@
 {
   "name": "jspaint",
-  "version": "2022.0.0-alpha3",
+  "version": "2024.2.0-r1",
   "description": "Online paint application in JavaScript",
   "main": "index.js",
   "directories": {

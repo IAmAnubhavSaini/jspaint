@@ -44,8 +44,7 @@ header.page-header a {
 #jspaint-paint-area {
     box-sizing: border-box;
     height: 100vh;
-    border-left: thin dashed #333;
-    box-shadow: 0 0 4px black;
+    box-shadow: -1px -1px 6px black;
 }
 
 #jspaint-canvas.working-with-tools {

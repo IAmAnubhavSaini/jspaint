@@ -1,6 +1,6 @@
 module.exports = {
     env: {
-        browser: true, commonjs: true, es2021: true, jasmine: true,
+        browser: true, commonjs: true, es2021: true, jasmine: true, jquery: true,
     },
     extends: "airbnb-base",
     overrides: [
